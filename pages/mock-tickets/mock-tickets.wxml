@@ -125,12 +125,12 @@
 
       <!-- 二维码显示区域 -->
       <view class="mock-tickets__qr-container">
-        <canvas
-          class="mock-tickets__qr-canvas"
-          canvas-id="qrCanvas"
-          id="qrCanvas"
-          type="2d"
-        ></canvas>
+        <image
+          class="mock-tickets__qr-image"
+          src="{{qrCodeUrl}}"
+          mode="aspectFit"
+          wx:if="{{!qrLoading && qrCodeUrl}}"
+        ></image>
         <view class="mock-tickets__qr-loading" wx:if="{{qrLoading}}">
           <text class="mock-tickets__qr-loading-text">生成中...</text>
         </view>

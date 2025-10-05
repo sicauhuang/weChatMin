@@ -15,6 +15,12 @@ const WECHAT_CONFIG = {
     appSecret: '9ba9f298109e8fc3f11c327ece2c6df3'
 };
 
+// 微信access_token缓存
+let wechatAccessToken = {
+    token: null,
+    expiresAt: 0
+};
+
 // 确保上传目录存在
 const uploadsDir = path.join(__dirname, 'uploads');
 const avatarsDir = path.join(uploadsDir, 'avatars');
@@ -291,6 +297,47 @@ function verifyRefreshToken(token) {
     } catch (error) {
         console.error('验证刷新令牌失败:', error);
         return null;
+    }
+}
+
+/**
+ * 获取微信access_token
+ * @returns {Promise<string>} 返回access_token
+ */
+async function getWechatAccessToken() {
+    try {
+        // 检查缓存的token是否还有效
+        const now = Date.now();
+        if (wechatAccessToken.token && now < wechatAccessToken.expiresAt) {
+            console.log('使用缓存的access_token');
+            return wechatAccessToken.token;
+        }
+
+        console.log('获取新的access_token...');
+
+        // 调用微信接口获取access_token
+        const response = await axios.get('https://api.weixin.qq.com/cgi-bin/token', {
+            params: {
+                grant_type: 'client_credential',
+                appid: WECHAT_CONFIG.appId,
+                secret: WECHAT_CONFIG.appSecret
+            }
+        });
+
+        if (response.data.errcode) {
+            throw new Error(`获取access_token失败: ${response.data.errmsg}`);
+        }
+
+        // 缓存token，提前5分钟过期以确保安全
+        wechatAccessToken.token = response.data.access_token;
+        wechatAccessToken.expiresAt = now + (response.data.expires_in - 300) * 1000;
+
+        console.log('access_token获取成功，有效期至:', new Date(wechatAccessToken.expiresAt).toLocaleString());
+
+        return wechatAccessToken.token;
+    } catch (error) {
+        console.error('获取微信access_token失败:', error);
+        throw error;
     }
 }
 
@@ -656,6 +703,115 @@ app.get('/api/mock-tickets', (req, res) => {
     res.json(mockTicketsData);
 });
 
+// 生成模拟票二维码接口
+app.post('/api/generate-ticket-qrcode', async (req, res) => {
+    console.log('=== 生成模拟票二维码请求 ===');
+    console.log('请求时间:', new Date().toISOString());
+    console.log('请求数据:', JSON.stringify(req.body, null, 2));
+
+    try {
+        const { ticketId, studentPhone, orderNumber } = req.body;
+
+        // 验证必需参数
+        if (!ticketId || !studentPhone) {
+            return res.status(400).json({
+                success: false,
+                message: '缺少必需参数：ticketId 或 studentPhone'
+            });
+        }
+
+        console.log('开始生成二维码，票据ID:', ticketId, '学员手机:', studentPhone);
+
+        // 获取微信access_token
+        const accessToken = await getWechatAccessToken();
+        console.log('获取到access_token');
+
+        // 构建scene参数（微信小程序二维码参数限制32个字符）
+        const scene = `t=${ticketId}&p=${studentPhone.slice(-4)}`;
+        console.log('二维码scene参数:', scene);
+
+        // 调用微信getUnlimitedQRCode接口
+        const qrResponse = await axios.post(
+            `https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=${accessToken}`,
+            {
+                scene: scene,
+                page: 'pages/ticket-verify/ticket-verify', // 核销页面路径
+                width: 430,
+                auto_color: false,
+                line_color: { r: 0, g: 0, b: 0 },
+                is_hyaline: false
+            },
+            {
+                responseType: 'arraybuffer' // 重要：设置响应类型为arraybuffer
+            }
+        );
+
+        console.log('微信二维码接口调用成功');
+
+        // 检查是否返回错误
+        if (qrResponse.headers['content-type'].includes('application/json')) {
+            const errorData = JSON.parse(Buffer.from(qrResponse.data).toString());
+            console.error('微信二维码接口返回错误:', errorData);
+            return res.status(400).json({
+                success: false,
+                message: '生成二维码失败',
+                error: errorData
+            });
+        }
+
+        // 保存二维码图片到本地
+        const qrcodesDir = path.join(uploadsDir, 'qrcodes');
+        if (!fs.existsSync(qrcodesDir)) {
+            fs.mkdirSync(qrcodesDir, { recursive: true });
+        }
+
+        const filename = `qr_${ticketId}_${Date.now()}.png`;
+        const filePath = path.join(qrcodesDir, filename);
+
+        fs.writeFileSync(filePath, qrResponse.data);
+        console.log('二维码图片保存成功:', filePath);
+
+        // 获取本地IP用于构建访问URL
+        const os = require('os');
+        const interfaces = os.networkInterfaces();
+        let localIP = 'localhost';
+
+        for (const name of Object.keys(interfaces)) {
+            for (const interface of interfaces[name]) {
+                if (interface.family === 'IPv4' && !interface.internal) {
+                    localIP = interface.address;
+                    break;
+                }
+            }
+        }
+
+        const qrCodeUrl = `http://${localIP}:${PORT}/uploads/qrcodes/${filename}`;
+
+        console.log('二维码生成成功，URL:', qrCodeUrl);
+        console.log('=== 生成模拟票二维码请求结束 ===\n');
+
+        res.json({
+            success: true,
+            data: {
+                qrCodeUrl: qrCodeUrl,
+                scene: scene,
+                ticketId: ticketId,
+                filename: filename
+            }
+        });
+
+    } catch (error) {
+        console.error('生成二维码失败:', error);
+        console.log('=== 生成模拟票二维码请求结束（失败）===\n');
+
+        res.status(500).json({
+            success: false,
+            message: '生成二维码失败',
+            error: error.message
+        });
+    }
+});
+
 // 健康检查接口
 app.get('/api/health', (req, res) => {
     console.log('=== 健康检查请求 ===');
@@ -700,6 +856,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`健康检查: http://localhost:${PORT}/api/health`);
     console.log(`首页数据: http://localhost:${PORT}/api/home-info`);
     console.log(`模拟票列表: http://localhost:${PORT}/api/mock-tickets`);
+    console.log(`生成二维码: http://localhost:${PORT}/api/generate-ticket-qrcode`);
     console.log(`统一登录接口: http://localhost:${PORT}/api/login`);
     console.log(`刷新令牌: http://localhost:${PORT}/api/auth/refresh`);
     console.log(`头像上传: http://localhost:${PORT}/api/upload-avatar`);
@@ -709,6 +866,7 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`健康检查: http://${localIP}:${PORT}/api/health`);
     console.log(`首页数据: http://${localIP}:${PORT}/api/home-info`);
     console.log(`模拟票列表: http://${localIP}:${PORT}/api/mock-tickets`);
+    console.log(`生成二维码: http://${localIP}:${PORT}/api/generate-ticket-qrcode`);
     console.log(`统一登录接口: http://${localIP}:${PORT}/api/login`);
     console.log(`刷新令牌: http://${localIP}:${PORT}/api/auth/refresh`);
     console.log(`头像上传: http://${localIP}:${PORT}/api/upload-avatar`);

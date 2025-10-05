@@ -416,7 +416,7 @@
     border: 1rpx solid var(--theme-border-light);
 }
 
-.mock-tickets__qr-canvas {
+.mock-tickets__qr-image {
     width: 400rpx;
     height: 400rpx;
     border-radius: var(--theme-radius-sm);

@@ -12,7 +12,8 @@ Page({
         refreshing: false, // 下拉刷新状态
         showQRModal: false, // 是否显示二维码弹窗
         currentTicket: null, // 当前选中的票据
-        qrLoading: false // 二维码生成加载状态
+        qrLoading: false, // 二维码生成加载状态
+        qrCodeUrl: '' // 二维码图片URL
     },
 
     /**
@@ -204,27 +205,30 @@ Page({
         try {
             console.log('开始生成二维码:', ticket);
 
-            // 格式化票据数据为二维码内容
-            const qrData = qrcode.formatTicketQRData(ticket);
-            console.log('二维码数据:', qrData);
-
-            // 等待一下确保DOM渲染完成
-            await new Promise((resolve) => setTimeout(resolve, 100));
-
-            // 生成二维码
-            await qrcode.generateSimpleQRCode({
-                text: qrData,
-                canvasId: 'qrCanvas',
-                size: 400,
-                context: this
+            // 调用后端接口生成微信官方二维码
+            const response = await request.post('/api/generate-ticket-qrcode', {
+                ticketId: ticket.id,
+                studentPhone: ticket.studentPhone,
+                orderNumber: ticket.orderNumber
+            }, {
+                needAuth: false,
+                showLoading: false
             });
 
-            console.log('二维码生成成功');
+            console.log('二维码生成接口响应:', response);
 
-            // 隐藏加载状态
-            this.setData({
-                qrLoading: false
-            });
+            if (response && response.success && response.data) {
+                // 设置二维码图片URL
+                this.setData({
+                    qrCodeUrl: response.data.qrCodeUrl,
+                    qrLoading: false
+                });
+
+                console.log('二维码生成成功，URL:', response.data.qrCodeUrl);
+            } else {
+                throw new Error(response?.message || '生成二维码失败');
+            }
+
         } catch (error) {
             console.error('生成二维码失败:', error);
 
@@ -233,7 +237,7 @@ Page({
             });
 
             wx.showToast({
-                title: '二维码生成失败',
+                title: error.message || '二维码生成失败',
                 icon: 'none',
                 duration: 2000
             });
@@ -266,26 +270,68 @@ Page({
         try {
             console.log('保存二维码到相册');
 
+            if (!this.data.qrCodeUrl) {
+                wx.showToast({
+                    title: '二维码未生成',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return;
+            }
+
             wx.showLoading({
                 title: '保存中...',
                 mask: true
             });
 
-            await qrcode.saveQRCodeToAlbum('qrCanvas', this);
+            // 下载二维码图片到本地
+            const downloadResult = await new Promise((resolve, reject) => {
+                wx.downloadFile({
+                    url: this.data.qrCodeUrl,
+                    success: resolve,
+                    fail: reject
+                });
+            });
+
+            // 保存到相册
+            await new Promise((resolve, reject) => {
+                wx.saveImageToPhotosAlbum({
+                    filePath: downloadResult.tempFilePath,
+                    success: resolve,
+                    fail: reject
+                });
+            });
 
             wx.hideLoading();
 
+            wx.showToast({
+                title: '保存成功',
+                icon: 'success',
+                duration: 2000
+            });
+
             console.log('二维码保存成功');
+
         } catch (error) {
             console.error('保存二维码失败:', error);
 
             wx.hideLoading();
 
-            wx.showToast({
-                title: '保存失败',
-                icon: 'none',
-                duration: 2000
-            });
+            // 处理权限问题
+            if (error.errMsg && error.errMsg.includes('auth deny')) {
+                wx.showModal({
+                    title: '提示',
+                    content: '需要授权访问相册才能保存图片，请在设置中开启相册权限',
+                    showCancel: false,
+                    confirmText: '知道了'
+                });
+            } else {
+                wx.showToast({
+                    title: '保存失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
         }
     },
 
