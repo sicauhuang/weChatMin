@@ -1,0 +1,529 @@
+/* 引入主题样式 */
+@import '../../assets/styles/theme.wxss';
+
+/* 页面容器 */
+.profile-page {
+    min-height: calc(100vh - 50px);
+    background-color: var(--theme-bg-page);
+    position: relative;
+}
+
+/* 渐变背景层（绝对定位，不占据文档流） */
+.profile-page__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60vh;
+    background: linear-gradient(180deg, #e8cc77 0%, var(--theme-bg-page) 100%);
+    z-index: 1;
+}
+
+/* 内容区域 */
+.profile-page__content {
+    position: relative;
+    z-index: 2;
+    padding: var(--theme-spacing-xxxl) var(--theme-spacing-lg);
+    max-height: 100%;
+}
+
+/* 用户信息卡片容器 */
+.profile-page__user-card {
+    width: 100%;
+    max-width: 680rpx;
+    margin: 0 auto;
+    margin-bottom: var(--theme-spacing-xl);
+    margin-top: 170rpx;
+    position: relative;
+}
+
+/* 用户卡片 */
+.user-card {
+    background-color: transparent;
+    border-radius: var(--theme-radius-xl);
+    padding: 50rpx;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    gap: 30rpx;
+    position: relative;
+}
+
+/* 用户头像容器 */
+.user-card__avatar {
+    flex-shrink: 0;
+}
+
+/* 用户头像图片 */
+.user-card__avatar-image {
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: var(--theme-radius-round);
+    border: 6rpx solid var(--theme-border-light);
+    background-color: var(--theme-bg-disabled);
+}
+
+/* 用户信息容器 */
+.user-card__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+}
+
+/* 用户昵称 */
+.user-card__nickname {
+    font-size: 42rpx;
+    font-weight: var(--theme-font-weight-bold);
+    color: var(--theme-text-primary);
+    line-height: var(--theme-line-height-tight);
+}
+
+/* 用户身份 */
+.user-card__identity {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-secondary);
+    line-height: var(--theme-line-height-base);
+}
+
+/* 设置按钮 - 右上角悬浮 */
+.user-card__settings {
+    position: absolute;
+    top: 20rpx;
+    right: 20rpx;
+    width: 60rpx;
+    height: 60rpx;
+    border-radius: var(--theme-radius-round);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+    z-index: 3;
+}
+
+.user-card__settings:active {
+    background-color: rgba(255, 255, 255, 0.8);
+    transform: scale(0.95);
+}
+
+.user-card__settings-icon {
+    font-size: var(--theme-icon-size-md);
+    color: var(--theme-icon-color-secondary);
+    transition: color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.user-card__settings:active .user-card__settings-icon {
+    color: var(--theme-icon-color-primary);
+}
+
+/* 快速操作区域 */
+.profile-page__quick-actions {
+    width: 100%;
+    max-width: 680rpx;
+    margin: 0 auto;
+    margin-bottom: var(--theme-spacing-xl);
+}
+
+/* 快速操作容器 */
+.quick-actions {
+    display: flex;
+    gap: var(--theme-spacing-lg);
+}
+
+/* 快速操作项 */
+.quick-actions__item {
+    flex: 1;
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    /* box-shadow: var(--theme-shadow-xs); */
+    padding: var(--theme-spacing-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--theme-spacing-sm);
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+    min-height: 120rpx;
+}
+
+.quick-actions__item:active {
+    background-color: var(--theme-bg-active);
+    transform: scale(0.98);
+}
+
+/* 快速操作图标 */
+.quick-actions__icon {
+    font-size: var(--theme-icon-size-xl);
+    color: var(--theme-icon-color-primary);
+    transition: transform var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.quick-actions__item:active .quick-actions__icon {
+    transform: scale(1.1);
+}
+
+/* 快速操作文字 */
+.quick-actions__text {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+    line-height: var(--theme-line-height-base);
+    font-weight: var(--theme-font-weight-medium);
+    text-align: center;
+}
+
+/* 功能模块区域 */
+.profile-page__function-modules {
+    padding: var(--theme-spacing-lg) var(--theme-spacing-lg);
+}
+
+/* 功能模块容器 */
+.function-modules {
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    /* box-shadow: var(--theme-shadow-card); */
+    overflow: hidden;
+}
+
+/* 功能模块项 */
+.function-modules__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--theme-spacing-xl) var(--theme-spacing-xxl);
+    border-bottom: 1rpx solid var(--theme-border-light);
+    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.function-modules__item:last-child {
+    border-bottom: none;
+}
+
+.function-modules__item:active {
+    background-color: var(--theme-bg-active);
+}
+
+/* 功能模块左侧内容 */
+.function-modules__item-left {
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-lg);
+    flex: 1;
+}
+
+/* 功能模块图标 */
+.function-modules__item-icon {
+    font-size: var(--theme-icon-size-lg);
+    color: var(--theme-icon-color-primary);
+    width: 48rpx;
+    text-align: center;
+}
+
+/* 功能模块名称 */
+.function-modules__item-name {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+    line-height: var(--theme-line-height-base);
+}
+
+/* 功能模块右侧内容 */
+.function-modules__item-right {
+    display: flex;
+    align-items: center;
+}
+
+/* 功能模块箭头 */
+.function-modules__item-arrow {
+    font-size: var(--theme-font-size-lg);
+    color: var(--theme-text-tertiary);
+    font-weight: var(--theme-font-weight-normal);
+    transition: color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.function-modules__item:active .function-modules__item-arrow {
+    color: var(--theme-text-secondary);
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+    .profile-page__user-card {
+        max-width: 620rpx;
+    }
+
+    .user-card {
+        padding: 40rpx;
+        gap: 24rpx;
+    }
+
+    .user-card__avatar-image {
+        width: 120rpx;
+        height: 120rpx;
+        border: 4rpx solid var(--theme-border-light);
+    }
+
+    .user-card__info {
+        gap: 12rpx;
+    }
+
+    .user-card__nickname {
+        font-size: 38rpx;
+    }
+
+    .user-card__identity {
+        font-size: var(--theme-font-size-md);
+    }
+
+    /* 设置按钮小屏适配 */
+    .user-card__settings {
+        width: 50rpx;
+        height: 50rpx;
+        top: 15rpx;
+        right: 15rpx;
+    }
+
+    .user-card__settings-icon {
+        font-size: var(--theme-icon-size-sm);
+    }
+
+    /* 快速操作小屏适配 */
+    .quick-actions {
+        gap: var(--theme-spacing-md);
+    }
+
+    .quick-actions__item {
+        padding: var(--theme-spacing-lg);
+        min-height: 100rpx;
+    }
+
+    .quick-actions__icon {
+        font-size: var(--theme-icon-size-lg);
+    }
+
+    .quick-actions__text {
+        font-size: var(--theme-font-size-xs);
+    }
+
+    /* 功能模块小屏适配 */
+    .function-modules__item {
+        padding: var(--theme-spacing-lg) var(--theme-spacing-xl);
+    }
+
+    .function-modules__item-icon {
+        font-size: var(--theme-icon-size-md);
+        width: 40rpx;
+    }
+
+    .function-modules__item-name {
+        font-size: var(--theme-font-size-md);
+    }
+
+    .function-modules__item-arrow {
+        font-size: var(--theme-font-size-md);
+    }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .profile-page__background {
+        background: linear-gradient(180deg, #e8cc77 0%, var(--theme-bg-page) 100%);
+    }
+
+    .user-card__avatar-image {
+        border-color: var(--theme-border-medium);
+    }
+}
+
+/* 动画效果 */
+.user-card {
+    transition: transform var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.user-card:active {
+    transform: scale(0.98);
+}
+
+.user-card__avatar-image {
+    transition: transform var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.user-card__avatar-image:active {
+    transform: scale(0.95);
+}
+
+/* ==========================================================================
+   自定义操作弹窗样式 - Custom Action Modal Styles
+   ========================================================================== */
+
+/* 弹窗容器 */
+.action-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 60rpx;
+    z-index: var(--theme-z-index-modal);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: actionModalFadeIn var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 弹窗遮罩 */
+.action-modal__mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+/* 弹窗内容容器 */
+.action-modal__content {
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 750rpx;
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-xl) var(--theme-radius-xl) 0 0;
+    padding: 0;
+    margin: 0 var(--theme-spacing-lg) var(--theme-spacing-lg) var(--theme-spacing-lg);
+    box-shadow: var(--theme-shadow-xl);
+    animation: actionModalSlideUp var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 弹窗头部 */
+.action-modal__header {
+    padding: var(--theme-spacing-xxl) var(--theme-spacing-xxl) var(--theme-spacing-lg)
+        var(--theme-spacing-xxl);
+    border-bottom: 1rpx solid var(--theme-border-light);
+    text-align: center;
+}
+
+/* 弹窗标题 */
+.action-modal__title {
+    font-size: var(--theme-font-size-lg);
+    font-weight: var(--theme-font-weight-medium);
+    color: var(--theme-text-primary);
+    line-height: var(--theme-line-height-base);
+}
+
+/* 弹窗主体 */
+.action-modal__body {
+    padding: var(--theme-spacing-lg) 0;
+}
+
+/* 弹窗底部 */
+.action-modal__footer {
+    padding: var(--theme-spacing-lg) 0 var(--theme-spacing-xxl) 0;
+    border-top: 1rpx solid var(--theme-border-light);
+}
+
+/* 弹窗按钮 */
+.action-modal__button {
+    padding: var(--theme-spacing-xl) var(--theme-spacing-xxl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+    border-bottom: 1rpx solid var(--theme-border-light);
+}
+
+.action-modal__button:last-child {
+    border-bottom: none;
+}
+
+.action-modal__button:active {
+    background-color: var(--theme-bg-active);
+}
+
+/* 按钮文字 */
+.action-modal__button-text {
+    font-size: var(--theme-font-size-lg);
+    font-weight: var(--theme-font-weight-medium);
+    line-height: var(--theme-line-height-base);
+    transition: color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 危险按钮样式（注销账号） */
+.action-modal__button--danger .action-modal__button-text {
+    color: var(--theme-color-error);
+}
+
+.action-modal__button--danger:active {
+    background-color: var(--theme-bg-error);
+}
+
+.action-modal__button--danger:active .action-modal__button-text {
+    color: var(--theme-text-error);
+}
+
+/* 普通按钮样式（退出登录） */
+.action-modal__button--normal .action-modal__button-text {
+    color: var(--theme-text-primary);
+}
+
+/* 取消按钮样式 */
+.action-modal__button--cancel .action-modal__button-text {
+    color: var(--theme-text-secondary);
+}
+
+/* 弹窗动画 */
+@keyframes actionModalFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes actionModalSlideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+    .action-modal__content {
+        margin: 0 var(--theme-spacing-md) var(--theme-spacing-md) var(--theme-spacing-md);
+    }
+
+    .action-modal__header {
+        padding: var(--theme-spacing-xl) var(--theme-spacing-xl) var(--theme-spacing-md)
+            var(--theme-spacing-xl);
+    }
+
+    .action-modal__title {
+        font-size: var(--theme-font-size-md);
+    }
+
+    .action-modal__button {
+        padding: var(--theme-spacing-lg) var(--theme-spacing-xl);
+    }
+
+    .action-modal__button-text {
+        font-size: var(--theme-font-size-md);
+    }
+
+    .action-modal__footer {
+        padding: var(--theme-spacing-md) 0 var(--theme-spacing-xl) 0;
+    }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .action-modal__mask {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+}

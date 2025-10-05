@@ -1,0 +1,70 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="home-page">
+    <!-- 轮播图区域 -->
+    <view class="home-banner">
+      <swiper class="home-banner__swiper"
+              indicator-dots="{{true}}"
+              autoplay="{{true}}"
+              interval="{{3000}}"
+              duration="{{500}}"
+              circular="{{true}}">
+        <swiper-item wx:for="{{homeData.imgList}}" wx:key="index">
+          <image class="home-banner__image" src="{{item}}" mode="aspectFill"></image>
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <!-- 公司信息卡片 -->
+    <view class="home-company">
+      <view class="home-company__header">
+        <text class="iconfont icon-gongsi home-company__icon"></text>
+        <text class="home-company__title">{{homeData.companyName}}</text>
+      </view>
+      <view class="home-company__description">
+        <text>{{homeData.companyDesc}}</text>
+      </view>
+    </view>
+
+    <!-- 联系信息区域 -->
+    <view class="home-contact">
+      <view class="home-contact__title">
+        <text class="iconfont icon-lianxi home-contact__title-icon"></text>
+        <text>联系我们</text>
+      </view>
+
+      <view class="home-contact__item" bindtap="callPhone">
+        <view class="home-contact__item-left">
+          <text class="iconfont icon-dianhua home-contact__item-icon"></text>
+          <text class="home-contact__item-label">联系电话</text>
+        </view>
+        <view class="home-contact__item-right">
+          <text class="home-contact__item-value">{{homeData.companyContact}}</text>
+          <text class="home-contact__item-arrow">></text>
+        </view>
+      </view>
+
+      <view class="home-contact__item" bindtap="openLocation">
+        <view class="home-contact__item-left">
+          <text class="iconfont icon-dizhi home-contact__item-icon"></text>
+          <text class="home-contact__item-label">公司地址</text>
+        </view>
+        <view class="home-contact__item-right">
+          <text class="home-contact__item-value">{{homeData.companyAddress}}</text>
+          <text class="home-contact__item-arrow">></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载状态 -->
+    <view class="home-loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+
+    <!-- 错误提示 -->
+    <view class="home-error" wx:if="{{error}}">
+      <text class="home-error__text">{{error}}</text>
+      <button class="home-error__button" bindtap="loadHomeData">重新加载</button>
+    </view>
+  </view>
+</scroll-view>

@@ -1,0 +1,339 @@
+/**
+ * 主题变量文件 - Theme Variables
+ * 统一管理小程序的设计系统变量
+ * 包含颜色、字体、间距、圆角、阴影等主题样式
+ */
+
+/* ==========================================================================
+   CSS 自定义属性 (CSS Variables) 定义
+   ========================================================================== */
+
+page {
+    /* ==========================================================================
+     颜色系统 - Color System
+     ========================================================================== */
+
+    /* 品牌主色 */
+    --theme-color-primary: #daa520;
+    --theme-color-primary-hover: #b8860b;
+    --theme-color-primary-active: #9a7b0a;
+    --theme-color-primary-light: #e8cc77;
+
+    /* 功能色 */
+    --theme-color-success: #07c160;
+    --theme-color-success-hover: #06ad56;
+    --theme-color-error: #ff4757;
+    --theme-color-warning: #ffa726;
+    --theme-color-info: #2196f3;
+
+    /* 背景色 */
+    --theme-bg-page: #f8f9fa;
+    --theme-bg-card: #ffffff;
+    --theme-bg-secondary: #f8f9fa;
+    --theme-bg-tertiary: #e9ecef;
+    --theme-bg-white: #ffffff;
+    --theme-bg-error: #fef2f2;
+    --theme-bg-active: #f8f9fa;
+    --theme-bg-disabled: #f5f5f5;
+
+    /* 文字颜色 */
+    --theme-text-primary: #333333;
+    --theme-text-secondary: #666666;
+    --theme-text-tertiary: #999999;
+    --theme-text-placeholder: #cccccc;
+    --theme-text-error: #ff4757;
+    --theme-text-white: #ffffff;
+    --theme-text-link: #2196f3;
+
+    /* 边框颜色 */
+    --theme-border-light: #f0f0f0;
+    --theme-border-medium: #e0e0e0;
+    --theme-border-dark: #d0d0d0;
+
+    /* ==========================================================================
+     字体系统 - Typography System
+     ========================================================================== */
+
+    /* 字体大小 */
+    --theme-font-size-xs: 24rpx;
+    --theme-font-size-sm: 28rpx;
+    --theme-font-size-md: 30rpx;
+    --theme-font-size-lg: 32rpx;
+    --theme-font-size-xl: 36rpx;
+    --theme-font-size-xxl: 40rpx;
+    --theme-font-logo-size: 60rpx;
+
+    /* 字重 */
+    --theme-font-weight-light: 300;
+    --theme-font-weight-normal: normal;
+    --theme-font-weight-medium: 500;
+    --theme-font-weight-bold: bold;
+
+    /* 行高 */
+    --theme-line-height-tight: 1.2;
+    --theme-line-height-base: 1.6;
+    --theme-line-height-loose: 1.8;
+
+    /* ==========================================================================
+     间距系统 - Spacing System
+     ========================================================================== */
+
+    /* 基础间距 */
+    --theme-spacing-xs: 8rpx;
+    --theme-spacing-sm: 12rpx;
+    --theme-spacing-md: 16rpx;
+    --theme-spacing-lg: 20rpx;
+    --theme-spacing-xl: 24rpx;
+    --theme-spacing-xxl: 30rpx;
+    --theme-spacing-xxxl: 40rpx;
+
+    /* 特殊间距 */
+    --theme-spacing-section: 60rpx;
+    --theme-spacing-page: 100rpx;
+
+    /* ==========================================================================
+     圆角系统 - Border Radius System
+     ========================================================================== */
+
+    --theme-radius-xs: 4rpx;
+    --theme-radius-sm: 8rpx;
+    --theme-radius-md: 12rpx;
+    --theme-radius-lg: 16rpx;
+    --theme-radius-xl: 20rpx;
+    --theme-radius-xxl: 80rpx;
+    --theme-radius-round: 50%;
+
+    /* ==========================================================================
+     阴影系统 - Shadow System
+     ========================================================================== */
+
+    --theme-shadow-xs: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+    --theme-shadow-sm: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+    --theme-shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+    --theme-shadow-lg: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+    --theme-shadow-xl: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+
+    /* 特定组件阴影 */
+    --theme-shadow-card: var(--theme-shadow-md);
+    --theme-shadow-banner: var(--theme-shadow-lg);
+
+    /* ==========================================================================
+     图标系统 - Icon System
+     ========================================================================== */
+
+    --theme-icon-size-xs: 16rpx;
+    --theme-icon-size-sm: 24rpx;
+    --theme-icon-size-md: 32rpx;
+    --theme-icon-size-lg: 36rpx;
+    --theme-icon-size-xl: 48rpx;
+
+    /* 图标颜色 */
+    --theme-icon-color-primary: var(--theme-color-primary);
+    --theme-icon-color-secondary: var(--theme-text-secondary);
+    --theme-icon-color-tertiary: var(--theme-text-tertiary);
+
+    /* ==========================================================================
+     动画系统 - Animation System
+     ========================================================================== */
+
+    /* 动画时长 */
+    --theme-duration-fast: 0.15s;
+    --theme-duration-base: 0.2s;
+    --theme-duration-slow: 0.3s;
+
+    /* 动画缓动 */
+    --theme-ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --theme-ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    --theme-ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+    /* ==========================================================================
+     Z-index 层级系统 - Z-index System
+     ========================================================================== */
+
+    --theme-z-index-dropdown: 1000;
+    --theme-z-index-sticky: 1020;
+    --theme-z-index-fixed: 1030;
+    --theme-z-index-modal-backdrop: 1040;
+    --theme-z-index-modal: 1050;
+    --theme-z-index-popover: 1060;
+    --theme-z-index-tooltip: 1070;
+}
+
+/* ==========================================================================
+   深色模式变量 - Dark Mode Variables
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    page {
+        /* 深色模式背景色 */
+        --theme-bg-page: #1a1a1a;
+        --theme-bg-card: #2d2d2d;
+        --theme-bg-active: #404040;
+        --theme-bg-disabled: #333333;
+
+        /* 深色模式文字颜色 */
+        --theme-text-primary: #ffffff;
+        --theme-text-secondary: #cccccc;
+        --theme-text-tertiary: #999999;
+        --theme-text-placeholder: #666666;
+
+        /* 深色模式边框颜色 */
+        --theme-border-light: #404040;
+        --theme-border-medium: #555555;
+        --theme-border-dark: #666666;
+    }
+}
+
+/* ==========================================================================
+   主题工具类 - Theme Utility Classes
+   ========================================================================== */
+
+/* 文字颜色工具类 */
+.theme-text-primary {
+    color: var(--theme-text-primary) !important;
+}
+.theme-text-secondary {
+    color: var(--theme-text-secondary) !important;
+}
+.theme-text-tertiary {
+    color: var(--theme-text-tertiary) !important;
+}
+.theme-text-error {
+    color: var(--theme-text-error) !important;
+}
+.theme-text-white {
+    color: var(--theme-text-white) !important;
+}
+
+/* 背景色工具类 */
+.theme-bg-primary {
+    background-color: var(--theme-color-primary) !important;
+}
+.theme-bg-card {
+    background-color: var(--theme-bg-card) !important;
+}
+.theme-bg-page {
+    background-color: var(--theme-bg-page) !important;
+}
+
+/* 字体大小工具类 */
+.theme-font-xs {
+    font-size: var(--theme-font-size-xs) !important;
+}
+.theme-font-sm {
+    font-size: var(--theme-font-size-sm) !important;
+}
+.theme-font-md {
+    font-size: var(--theme-font-size-md) !important;
+}
+.theme-font-lg {
+    font-size: var(--theme-font-size-lg) !important;
+}
+.theme-font-xl {
+    font-size: var(--theme-font-size-xl) !important;
+}
+
+/* 字重工具类 */
+.theme-font-normal {
+    font-weight: var(--theme-font-weight-normal) !important;
+}
+.theme-font-medium {
+    font-weight: var(--theme-font-weight-medium) !important;
+}
+.theme-font-bold {
+    font-weight: var(--theme-font-weight-bold) !important;
+}
+
+/* 间距工具类 */
+.theme-margin-xs {
+    margin: var(--theme-spacing-xs) !important;
+}
+.theme-margin-sm {
+    margin: var(--theme-spacing-sm) !important;
+}
+.theme-margin-md {
+    margin: var(--theme-spacing-md) !important;
+}
+.theme-margin-lg {
+    margin: var(--theme-spacing-lg) !important;
+}
+
+.theme-padding-xs {
+    padding: var(--theme-spacing-xs) !important;
+}
+.theme-padding-sm {
+    padding: var(--theme-spacing-sm) !important;
+}
+.theme-padding-md {
+    padding: var(--theme-spacing-md) !important;
+}
+.theme-padding-lg {
+    padding: var(--theme-spacing-lg) !important;
+}
+
+/* 圆角工具类 */
+.theme-radius-sm {
+    border-radius: var(--theme-radius-sm) !important;
+}
+.theme-radius-md {
+    border-radius: var(--theme-radius-md) !important;
+}
+.theme-radius-lg {
+    border-radius: var(--theme-radius-lg) !important;
+}
+
+/* 阴影工具类 */
+.theme-shadow-card {
+    box-shadow: var(--theme-shadow-card) !important;
+}
+.theme-shadow-banner {
+    box-shadow: var(--theme-shadow-banner) !important;
+}
+
+/* ==========================================================================
+   主题组件样式 - Theme Component Styles
+   ========================================================================== */
+
+/* 通用卡片样式 */
+.theme-card {
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    box-shadow: var(--theme-shadow-card);
+    padding: var(--theme-spacing-xxl);
+    margin: var(--theme-spacing-lg);
+}
+
+/* 通用按钮样式 */
+.theme-button {
+    background-color: var(--theme-color-primary);
+    color: var(--theme-text-white);
+    border-radius: var(--theme-radius-sm);
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xxxl);
+    font-size: var(--theme-font-size-sm);
+    font-weight: var(--theme-font-weight-medium);
+    border: none;
+    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.theme-button:active {
+    background-color: var(--theme-color-primary-hover);
+}
+
+/* 通用图标样式 */
+.theme-icon {
+    font-size: var(--theme-icon-size-md);
+    color: var(--theme-icon-color-primary);
+}
+
+.theme-icon--sm {
+    font-size: var(--theme-icon-size-sm);
+}
+.theme-icon--lg {
+    font-size: var(--theme-icon-size-lg);
+}
+.theme-icon--secondary {
+    color: var(--theme-icon-color-secondary);
+}
+.theme-icon--tertiary {
+    color: var(--theme-icon-color-tertiary);
+}

@@ -1,0 +1,50 @@
+@import '../assets/fonts/iconfont.wxss';
+
+.tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100rpx;
+    background: #ffffff;
+    display: flex;
+    border-top: 1px solid #e5e5e5;
+    z-index: 1000;
+}
+
+.tab-bar-item {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.tab-bar-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab-bar-icon .iconfont {
+    font-size: 20px;
+    color: #999999;
+}
+
+.tab-bar-icon .icon-active {
+    color: #daa520;
+}
+
+.tab-bar-text {
+    font-size: 10px;
+    color: #999999;
+}
+
+.tab-bar-text.text-active {
+    color: #daa520;
+}

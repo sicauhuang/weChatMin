@@ -1,0 +1,17 @@
+<view class="my-favorites-page">
+  <!-- 页面头部 -->
+  <view class="page-header">
+    <text class="iconfont icon-shoucang page-header__icon"></text>
+    <text class="page-header__title">我的收藏</text>
+  </view>
+
+  <!-- 页面内容 -->
+  <view class="page-content">
+    <view class="placeholder-content">
+      <text class="iconfont icon-shoucang placeholder-content__icon"></text>
+      <text class="placeholder-content__title">我的收藏</text>
+      <text class="placeholder-content__desc">收藏您感兴趣的车源和模拟票信息</text>
+      <text class="placeholder-content__note">功能开发中，敬请期待...</text>
+    </view>
+  </view>
+</view>

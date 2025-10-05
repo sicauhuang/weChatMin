@@ -1,0 +1,94 @@
+/* 引入主题样式 */
+@import '../../assets/styles/theme.wxss';
+
+/* 页面容器 */
+.my-footprints-page {
+    min-height: 100vh;
+    background-color: var(--theme-bg-page);
+    padding: var(--theme-spacing-lg);
+}
+
+/* 页面头部 */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--theme-spacing-xxxl) 0;
+    margin-bottom: var(--theme-spacing-xl);
+}
+
+.page-header__icon {
+    font-size: var(--theme-icon-size-xl);
+    color: var(--theme-icon-color-primary);
+    margin-right: var(--theme-spacing-md);
+}
+
+.page-header__title {
+    font-size: var(--theme-font-size-xxl);
+    font-weight: var(--theme-font-weight-bold);
+    color: var(--theme-text-primary);
+}
+
+/* 页面内容 */
+.page-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+/* 占位内容 */
+.placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--theme-spacing-xxxl);
+}
+
+.placeholder-content__icon {
+    font-size: 120rpx;
+    color: var(--theme-icon-color-tertiary);
+    margin-bottom: var(--theme-spacing-xl);
+}
+
+.placeholder-content__title {
+    font-size: var(--theme-font-size-xl);
+    font-weight: var(--theme-font-weight-bold);
+    color: var(--theme-text-primary);
+    margin-bottom: var(--theme-spacing-md);
+}
+
+.placeholder-content__desc {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-secondary);
+    line-height: var(--theme-line-height-base);
+    margin-bottom: var(--theme-spacing-lg);
+}
+
+.placeholder-content__note {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-tertiary);
+    line-height: var(--theme-line-height-base);
+    padding: var(--theme-spacing-md) var(--theme-spacing-xl);
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-md);
+    border: 1rpx solid var(--theme-border-light);
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+    .placeholder-content__icon {
+        font-size: 100rpx;
+    }
+
+    .placeholder-content__title {
+        font-size: var(--theme-font-size-lg);
+    }
+
+    .placeholder-content__desc {
+        font-size: var(--theme-font-size-sm);
+    }
+}

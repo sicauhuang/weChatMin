@@ -1,0 +1,63 @@
+<view class="login-page">
+  <!-- Logo区域 -->
+  <view class="login-page__logo-section">
+      <image class="login-page__logo" src="/assets/imgs/logo.png" mode="aspectFit"></image>
+  </view>
+
+  <!-- 公司信息区域 -->
+  <view class="login-page__company-section">
+    <text class="login-page__company-name">{{companyName}}</text>
+  </view>
+
+  <!-- 登录区域 -->
+  <view class="login-page__login-section">
+    <!-- 用户协议勾选 -->
+    <view class="login-page__agreement">
+      <view class="login-page__checkbox" bindtap="onToggleAgreement">
+        <view class="login-page__checkbox-icon {{agreeProtocol ? 'login-page__checkbox-icon--checked' : ''}}">
+          <text class="iconfont icon-check" wx:if="{{agreeProtocol}}"></text>
+        </view>
+        <text class="login-page__agreement-text">
+          <text>我已阅读并同意 </text>
+          <text class="login-page__agreement-link" bindtap="onShowUserAgreement">《用户协议》</text>
+          <text> 和</text>
+          <text class="login-page__agreement-link" bindtap="onShowPrivacyPolicy">《隐私政策》</text>
+          <text>，请使用车小禾账号登录，若本机号码尚未注册则将自动创建账号</text>
+        </text>
+      </view>
+    </view>
+
+    <!-- 手机号快捷登录按钮 -->
+    <view class="login-page__button-container">
+      <button
+        class="login-page__login-button {{isLogging ? 'login-page__login-button--loading' : ''}}"
+        open-type="getPhoneNumber"
+        bindgetphonenumber="onQuickLogin"
+        disabled="{{isLogging}}"
+      >
+        {{isLogging ? '登录中...' : '手机号快捷登录'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 自定义弹窗组件 -->
+  <view class="login-page__modal {{showAgreementModal ? 'login-page__modal--show' : ''}}" wx:if="{{showAgreementModal}}" bindtap="onCloseModal">
+    <view class="login-page__modal-mask"></view>
+    <view class="login-page__modal-content" catchtap="onModalContentTap">
+      <view class="login-page__modal-body">
+        <text class="login-page__modal-text">我已阅读并同意</text>
+        <text class="login-page__modal-text-weight">《用户协议》</text>
+        <text class="login-page__modal-text">和</text>
+        <text class="login-page__modal-text-weight">《隐私政策》</text>
+      </view>
+      <view class="login-page__modal-footer">
+        <button class="login-page__modal-button login-page__modal-button--cancel" bindtap="onDisagreeAgreement">
+          不同意
+        </button>
+        <button class="login-page__modal-button login-page__modal-button--confirm" bindtap="onAgreeAgreement">
+          同意
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

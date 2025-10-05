@@ -1,0 +1,45 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/vehicles/vehicles",
+        "pages/mock-tickets/mock-tickets",
+        "pages/profile/profile",
+        "pages/login/login",
+        "pages/my-footprints/my-footprints",
+        "pages/my-favorites/my-favorites"
+    ],
+    "window": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "Weixin",
+        "navigationBarBackgroundColor": "#ffffff"
+    },
+    "tabBar": {
+        "custom": true,
+        "color": "#999999",
+        "selectedColor": "#FF8C00",
+        "backgroundColor": "#ffffff",
+        "borderStyle": "black",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/vehicles/vehicles",
+                "text": "车源"
+            },
+            {
+                "pagePath": "pages/mock-tickets/mock-tickets",
+                "text": "模拟票"
+            },
+            {
+                "pagePath": "pages/profile/profile",
+                "text": "我的"
+            }
+        ]
+    },
+    "style": "v2",
+    "componentFramework": "glass-easel",
+    "sitemapLocation": "sitemap.json",
+    "lazyCodeLoading": "requiredComponents"
+}

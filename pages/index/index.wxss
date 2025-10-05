@@ -1,0 +1,395 @@
+/**index.wxss - 使用主题变量的BEM规范版本**/
+
+/* ==========================================================================
+   页面基础样式
+   ========================================================================== */
+
+.scrollarea {
+    height: calc(100vh - 50px);
+    overflow-y: hidden;
+}
+
+/* ==========================================================================
+   首页容器 - Block: home-page
+   ========================================================================== */
+
+.home-page {
+    padding: 0;
+    background-color: var(--theme-bg-page);
+    min-height: 100%;
+}
+
+/* ==========================================================================
+   轮播图区域 - Block: home-banner
+   ========================================================================== */
+
+.home-banner {
+    width: 100%;
+    overflow: hidden;
+    box-shadow: var(--theme-shadow-xs);
+}
+
+.home-banner__swiper {
+    width: 100%;
+    height: 600rpx;
+}
+
+.home-banner__image {
+    width: 100%;
+    height: 100%;
+}
+
+/* 轮播图修饰符 */
+.home-banner--loading {
+    opacity: 0.6;
+}
+
+.home-banner--small .home-banner__swiper {
+    height: 280rpx;
+}
+
+/* ==========================================================================
+   公司信息卡片 - Block: home-company
+   ========================================================================== */
+
+.home-company {
+    margin: var(--theme-spacing-lg);
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    padding: var(--theme-spacing-xxl);
+    box-shadow: var(--theme-shadow-xs);
+}
+
+.home-company__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--theme-spacing-lg);
+}
+
+.home-company__icon {
+    font-size: var(--theme-icon-size-lg);
+    color: var(--theme-icon-color-primary);
+    margin-right: var(--theme-spacing-md);
+}
+
+.home-company__title {
+    font-size: var(--theme-font-size-xl);
+    font-weight: var(--theme-font-weight-bold);
+    color: var(--theme-text-primary);
+}
+
+.home-company__description {
+    line-height: var(--theme-line-height-base);
+    color: var(--theme-text-secondary);
+    font-size: var(--theme-font-size-sm);
+}
+
+/* ==========================================================================
+   联系信息区域 - Block: home-contact
+   ========================================================================== */
+
+.home-contact {
+    margin: var(--theme-spacing-lg);
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    padding: var(--theme-spacing-xxl);
+    box-shadow: var(--theme-shadow-xs);
+}
+
+/* 联系信息标题 */
+.home-contact__title {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--theme-spacing-xxl);
+    font-size: var(--theme-font-size-lg);
+    font-weight: var(--theme-font-weight-bold);
+    color: var(--theme-text-primary);
+}
+
+.home-contact__title-icon {
+    font-size: var(--theme-icon-size-lg);
+    color: var(--theme-icon-color-primary);
+    margin-right: var(--theme-spacing-md);
+}
+
+/* 联系信息条目 */
+.home-contact__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--theme-spacing-xl) 0;
+    border-bottom: 1rpx solid var(--theme-border-light);
+    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.home-contact__item:last-child {
+    border-bottom: none;
+}
+
+.home-contact__item:active,
+.home-contact__item--active {
+    background-color: var(--theme-bg-active);
+    border-radius: var(--theme-radius-sm);
+}
+
+/* 联系信息条目左侧 */
+.home-contact__item-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.home-contact__item-icon {
+    font-size: var(--theme-icon-size-md);
+    color: var(--theme-icon-color-primary);
+    margin-right: var(--theme-spacing-md);
+}
+
+.home-contact__item-label {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-primary);
+    font-weight: var(--theme-font-weight-medium);
+}
+
+/* 联系信息条目右侧 */
+.home-contact__item-right {
+    display: flex;
+    align-items: center;
+    max-width: 60%;
+}
+
+.home-contact__item-value {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-secondary);
+    margin-right: var(--theme-spacing-sm);
+    text-align: right;
+    word-break: break-all;
+}
+
+.home-contact__item-arrow {
+    font-size: var(--theme-font-size-xs);
+    color: var(--theme-text-placeholder);
+    font-weight: var(--theme-font-weight-bold);
+}
+
+/* ==========================================================================
+   加载状态 - Block: home-loading
+   ========================================================================== */
+
+.home-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--theme-spacing-section) 0;
+    color: var(--theme-text-tertiary);
+    font-size: var(--theme-font-size-sm);
+}
+
+/* 加载状态修饰符 */
+.home-loading--large {
+    padding: var(--theme-spacing-page) 0;
+    font-size: var(--theme-font-size-lg);
+}
+
+/* ==========================================================================
+   错误提示 - Block: home-error
+   ========================================================================== */
+
+.home-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--theme-spacing-section) var(--theme-spacing-xxl);
+    margin: var(--theme-spacing-lg);
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    box-shadow: var(--theme-shadow-xs);
+}
+
+.home-error__text {
+    color: var(--theme-text-error);
+    font-size: var(--theme-font-size-sm);
+    margin-bottom: var(--theme-spacing-xxl);
+    text-align: center;
+}
+
+.home-error__button {
+    background-color: var(--theme-color-primary);
+    color: var(--theme-text-white);
+    border-radius: var(--theme-radius-sm);
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xxxl);
+    font-size: var(--theme-font-size-sm);
+    border: none;
+    min-width: 200rpx;
+    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.home-error__button:active {
+    background-color: var(--theme-color-primary-hover);
+}
+
+/* ==========================================================================
+   页面修饰符 - Page Modifiers
+   ========================================================================== */
+
+/* 错误状态页面 */
+.home-page--error {
+    background-color: var(--theme-bg-error);
+}
+
+/* 加载状态页面 */
+.home-page--loading .home-banner,
+.home-page--loading .home-company,
+.home-page--loading .home-contact {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   响应式设计 - Responsive Design
+   ========================================================================== */
+
+@media screen and (max-width: 375px) {
+    .home-company,
+    .home-contact {
+        margin: var(--theme-spacing-md);
+        padding: var(--theme-spacing-xl);
+    }
+
+    .home-banner {
+        margin: var(--theme-spacing-md);
+    }
+
+    .home-banner__swiper {
+        height: 280rpx;
+    }
+
+    /* 小屏幕修饰符 */
+    .home-page--small .home-company__title {
+        font-size: var(--theme-font-size-lg);
+    }
+
+    .home-page--small .home-contact__title {
+        font-size: var(--theme-font-size-sm);
+    }
+}
+
+/* ==========================================================================
+   深色模式适配 - Dark Mode
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    page {
+        background-color: var(--theme-bg-page);
+    }
+
+    .home-page {
+        background-color: var(--theme-bg-page);
+    }
+
+    /* 深色模式修饰符 */
+    .home-page--dark {
+        background-color: var(--theme-bg-page);
+    }
+
+    .home-page--dark .home-company,
+    .home-page--dark .home-contact,
+    .home-page--dark .home-error {
+        background-color: var(--theme-bg-card);
+    }
+
+    .home-company,
+    .home-contact,
+    .home-error {
+        background-color: var(--theme-bg-card);
+    }
+
+    .home-company__title,
+    .home-contact__title,
+    .home-contact__item-label {
+        color: var(--theme-text-primary);
+    }
+
+    .home-company__description,
+    .home-contact__item-value {
+        color: var(--theme-text-secondary);
+    }
+
+    .home-contact__item {
+        border-bottom-color: var(--theme-border-light);
+    }
+
+    .home-contact__item:active,
+    .home-contact__item--active {
+        background-color: var(--theme-bg-active);
+    }
+}
+
+/* ==========================================================================
+   工具类 - Utility Classes
+   ========================================================================== */
+
+/* 隐藏元素 */
+.home-page__hidden {
+    display: none !important;
+}
+
+/* 禁用交互 */
+.home-page__disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* 动画效果 */
+.home-page__fade-in {
+    animation: fadeIn var(--theme-duration-slow) var(--theme-ease-out);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(var(--theme-spacing-lg));
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   主题兼容性 - Theme Compatibility
+   ========================================================================== */
+
+/* 为不支持CSS变量的环境提供回退样式 */
+@supports not (color: var(--theme-color-primary)) {
+    .home-company__icon,
+    .home-contact__title-icon,
+    .home-contact__item-icon {
+        color: #f8ca4f;
+    }
+
+    .home-error__button {
+        background-color: #f8ca4f;
+    }
+
+    .home-page {
+        background-color: #f8f9fa;
+    }
+
+    .home-company,
+    .home-contact,
+    .home-error {
+        background-color: #ffffff;
+    }
+
+    .home-company__title,
+    .home-contact__title,
+    .home-contact__item-label {
+        color: #333333;
+    }
+
+    .home-company__description,
+    .home-contact__item-value {
+        color: #666666;
+    }
+}
