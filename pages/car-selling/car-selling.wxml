@@ -1,0 +1,121 @@
+<view class="car-selling-page">
+  <!-- 页面头部 -->
+  <view class="car-selling-page__header">
+    <view class="header">
+      <text class="header__title">我的车辆</text>
+      <text class="header__subtitle">管理您发布的车辆信息</text>
+    </view>
+  </view>
+
+  <!-- 新建车辆按钮 -->
+  <view class="car-selling-page__action">
+    <button class="action-button" bindtap="onCreateVehicle">
+      <text class="iconfont icon-tianjia action-button__icon"></text>
+      <text class="action-button__text">新建车辆</text>
+    </button>
+  </view>
+
+  <!-- 车辆列表 -->
+  <view class="car-selling-page__list">
+    <scroll-view 
+      class="vehicle-list" 
+      scroll-y="true"
+      enhanced="true"
+      show-scrollbar="false">
+      
+      <!-- 车辆卡片 -->
+      <view 
+        class="vehicle-card" 
+        wx:for="{{vehicleList}}" 
+        wx:key="carId"
+        bindtap="onVehicleCardTap"
+        data-car-id="{{item.carId}}">
+        
+        <!-- 车辆图片 -->
+        <view class="vehicle-card__image">
+          <image 
+            class="vehicle-card__image-pic" 
+            src="{{item.images[0] || '/assets/imgs/car-placeholder.jpg'}}" 
+            mode="aspectFill">
+          </image>
+          <!-- 状态标签 -->
+          <view class="vehicle-card__status vehicle-card__status--{{item.status}}">
+            <text class="vehicle-card__status-text">
+              {{item.status === 'ON_SALE' ? '在售中' : (item.status === 'RESERVED' ? '已预订' : (item.status === 'SOLD' ? '已售出' : '已下架'))}}
+            </text>
+          </view>
+        </view>
+
+        <!-- 车辆信息 -->
+        <view class="vehicle-card__content">
+          <!-- 基本信息 -->
+          <view class="vehicle-card__basic">
+            <text class="vehicle-card__model">{{item.carModel}}</text>
+            <text class="vehicle-card__price">{{item.price}}万元</text>
+          </view>
+
+          <!-- 详细信息 -->
+          <view class="vehicle-card__details">
+            <view class="vehicle-card__detail-item">
+              <text class="iconfont icon-chepai vehicle-card__detail-icon"></text>
+              <text class="vehicle-card__detail-text">{{item.licensePlate}}</text>
+            </view>
+            <view class="vehicle-card__detail-item">
+              <text class="iconfont icon-weizhi vehicle-card__detail-icon"></text>
+              <text class="vehicle-card__detail-text">{{item.location}}</text>
+            </view>
+          </view>
+
+          <!-- 联系信息 -->
+          <view class="vehicle-card__contact">
+            <view class="vehicle-card__contact-item">
+              <text class="iconfont icon-yonghu vehicle-card__contact-icon"></text>
+              <text class="vehicle-card__contact-text">{{item.ownerName}}</text>
+            </view>
+            <view class="vehicle-card__contact-item">
+              <text class="iconfont icon-dianhua vehicle-card__contact-icon"></text>
+              <text class="vehicle-card__contact-text">{{item.contactPhone}}</text>
+            </view>
+          </view>
+
+          <!-- 车况和时间 -->
+          <view class="vehicle-card__meta">
+            <text class="vehicle-card__condition">{{item.condition}}</text>
+            <text class="vehicle-card__time">{{item.updatedAt}}</text>
+          </view>
+        </view>
+
+        <!-- 箭头指示器 -->
+        <view class="vehicle-card__arrow">
+          <text class="iconfont icon-arrow-right vehicle-card__arrow-icon"></text>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{vehicleList.length === 0 && !loading}}">
+        <view class="empty-state__icon">
+          <text class="iconfont icon-kongzhuangtai"></text>
+        </view>
+        <text class="empty-state__text">暂无车辆信息</text>
+        <text class="empty-state__subtitle">点击上方按钮添加您的第一辆车</text>
+      </view>
+
+      <!-- 加载状态 -->
+      <view class="loading-state" wx:if="{{loading}}">
+        <view class="loading-state__spinner">
+          <text class="loading-state__text">加载中...</text>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="load-more" wx:if="{{hasMore && vehicleList.length > 0}}">
+        <text class="load-more__text">上拉加载更多</text>
+      </view>
+
+      <!-- 没有更多 -->
+      <view class="no-more" wx:if="{{!hasMore && vehicleList.length > 0}}">
+        <text class="no-more__text">没有更多数据了</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

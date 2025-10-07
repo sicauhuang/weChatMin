@@ -1,6 +1,5 @@
 // pages/mock-tickets/mock-tickets.js
 const request = require('../../utils/request.js');
-const qrcode = require('../../utils/qrcode.js');
 const auth = require('../../utils/auth.js');
 
 Page({

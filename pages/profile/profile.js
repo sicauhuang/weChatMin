@@ -425,13 +425,23 @@ Page({
     },
 
     /**
-     * 我要买车
+     * 我要卖车
      */
     handleBuyCar() {
-        wx.showToast({
-            title: '我要买车功能待开发',
-            icon: 'none',
-            duration: 2000
+        console.log('跳转到卖车管理页面');
+        wx.navigateTo({
+            url: '/pages/car-selling/car-selling',
+            success: () => {
+                console.log('成功跳转到卖车管理页面');
+            },
+            fail: (error) => {
+                console.error('跳转到卖车管理页面失败:', error);
+                wx.showToast({
+                    title: '页面跳转失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
         });
     },
 

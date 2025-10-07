@@ -1,0 +1,309 @@
+/* pages/car-form/car-form.wxss */
+
+.car-form-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  position: relative;
+}
+
+/* 加载遮罩 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-text {
+  font-size: 32rpx;
+  color: #666666;
+}
+
+/* 表单容器 */
+.form-container {
+  height: calc(100vh - 120rpx);
+  padding: 0 40rpx;
+}
+
+/* 表单区块 */
+.form-section {
+  margin-bottom: 40rpx;
+}
+
+/* 区块标题 */
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding: 0 8rpx;
+}
+
+.section-title__text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.section-title__required {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.section-title__subtitle {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* 表单项 */
+.form-item {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.form-item__label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.form-item__label-text {
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.form-item__required {
+  font-size: 28rpx;
+  color: #ff4d4f;
+  margin-left: 8rpx;
+}
+
+/* 输入框 */
+.form-item__input {
+  width: 100%;
+  height: 88rpx;
+  border: 2rpx solid #e5e5e5;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  color: #333333;
+  background: #fafafa;
+}
+
+.form-item__input:focus {
+  border-color: #FF8C00;
+  background: #ffffff;
+}
+
+/* 选择器 */
+.form-item__picker {
+  width: 100%;
+}
+
+.picker-display {
+  height: 88rpx;
+  border: 2rpx solid #e5e5e5;
+  border-radius: 12rpx;
+  padding: 0 24rpx;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.picker-display.placeholder .picker-text {
+  color: #cccccc;
+}
+
+.picker-text {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.picker-arrow {
+  font-size: 24rpx;
+  color: #cccccc;
+}
+
+/* 文本域 */
+.form-item__textarea {
+  width: 100%;
+  min-height: 200rpx;
+  border: 2rpx solid #e5e5e5;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  color: #333333;
+  background: #fafafa;
+  line-height: 1.6;
+}
+
+.form-item__textarea:focus {
+  border-color: #FF8C00;
+  background: #ffffff;
+}
+
+/* 错误信息 */
+.form-item__error {
+  display: block;
+  font-size: 24rpx;
+  color: #ff4d4f;
+  margin-top: 16rpx;
+  padding-left: 8rpx;
+}
+
+/* 图片上传 */
+.image-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.image-upload__item {
+  width: 200rpx;
+  height: 200rpx;
+  position: relative;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.image-upload__image {
+  width: 100%;
+  height: 100%;
+}
+
+.image-upload__delete {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  width: 48rpx;
+  height: 48rpx;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-upload__delete-icon {
+  font-size: 24rpx;
+  color: #ffffff;
+}
+
+.image-upload__add {
+  width: 200rpx;
+  height: 200rpx;
+  border: 2rpx dashed #cccccc;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+}
+
+.image-upload__add:active {
+  background: #f0f0f0;
+}
+
+.image-upload__add-icon {
+  font-size: 48rpx;
+  color: #cccccc;
+  margin-bottom: 8rpx;
+}
+
+.image-upload__add-text {
+  font-size: 24rpx;
+  color: #cccccc;
+}
+
+/* 表单占位空间 */
+.form-spacer {
+  height: 120rpx;
+}
+
+/* 底部操作按钮 */
+.form-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120rpx;
+  background: #ffffff;
+  border-top: 1rpx solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  padding: 0 40rpx;
+  gap: 24rpx;
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.form-actions__button {
+  flex: 1;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.form-actions__button::after {
+  border: none;
+}
+
+.form-actions__button--secondary {
+  background: #f5f5f5;
+  color: #666666;
+}
+
+.form-actions__button--secondary:active {
+  background: #e8e8e8;
+}
+
+.form-actions__button--primary {
+  background: #FF8C00;
+  color: #ffffff;
+  box-shadow: 0 4rpx 12rpx rgba(255, 140, 0, 0.3);
+}
+
+.form-actions__button--primary:active {
+  background: #e67e00;
+}
+
+.form-actions__button--primary[loading] {
+  background: #ffb366;
+}
+
+/* 适配不同屏幕 */
+@media screen and (max-height: 800px) {
+  .form-container {
+    height: calc(100vh - 100rpx);
+  }
+  
+  .form-actions {
+    height: 100rpx;
+  }
+  
+  .form-actions__button {
+    height: 68rpx;
+  }
+  
+  .form-spacer {
+    height: 100rpx;
+  }
+}

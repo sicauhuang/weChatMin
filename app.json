@@ -8,7 +8,10 @@
         "pages/my-footprints/my-footprints",
         "pages/my-favorites/my-favorites",
         "pages/assist-exam/assist-exam",
-        "pages/ticket-verification/ticket-verification"
+        "pages/ticket-verification/ticket-verification",
+        "pages/car-selling/car-selling",
+        "pages/car-form/car-form",
+        "pages/car-detail/car-detail"
     ],
     "window": {
         "navigationBarTextStyle": "black",
