@@ -1,0 +1,109 @@
+<!--模拟票核销页面-->
+<view class="ticket-verification">
+  <!-- 固定的统计头部 - 不参与滚动 -->
+  <view class="ticket-verification__fixed-header" wx:if="{{scannedTickets.length > 0}}">
+    <view class="ticket-verification__scanned-title-group">
+      <text class="ticket-verification__scanned-title">待核销票据</text>
+      <text class="ticket-verification__scanned-count">{{studentTicketCount}}张</text>
+    </view>
+    <text class="iconfont icon-shanchu ticket-verification__clear-icon"
+          bindtap="onClearScannedTickets"></text>
+  </view>
+
+  <!-- 可滚动的票据列表 -->
+  <scroll-view class="ticket-verification__list" scroll-y enhanced="{{true}}" show-scrollbar="{{false}}">
+    <!-- 票据列表 -->
+    <view class="ticket-verification__ticket-list" wx:if="{{scannedTickets.length > 0}}">
+      <view class="ticket-verification__ticket-item" wx:for="{{scannedTickets}}" wx:key="index">
+        <!-- 助考员票 -->
+        <view class="ticket-verification__assistant-card" wx:if="{{item.type === 'assist-ticket'}}">
+          <view class="ticket-verification__assistant-header">
+            <view class="ticket-verification__assistant-title-group">
+              <view class="ticket-verification__assistant-badge">
+                <text class="iconfont icon-zhukao"></text>
+              </view>
+              <text class="ticket-verification__assistant-title">助考员信息</text>
+            </view>
+            <text class="iconfont icon-shanchu ticket-verification__delete-icon"
+                  bindtap="onDeleteTicket"
+                  data-index="{{index}}"></text>
+          </view>
+          <view class="ticket-verification__assistant-info">
+            <view class="ticket-verification__assistant-name">{{item.assistantName}}</view>
+            <view class="ticket-verification__assistant-phone">{{item.assistantPhone}}</view>
+          </view>
+        </view>
+
+        <!-- 学员票 -->
+        <view class="ticket-verification__student-card" wx:if="{{item.type === 'mock-ticket'}}">
+          <view class="ticket-verification__student-header">
+            <view class="ticket-verification__student-title-group">
+              <view class="ticket-verification__student-badge">
+                <text class="iconfont icon-piao"></text>
+              </view>
+              <text class="ticket-verification__student-title">{{item.packageName}}</text>
+            </view>
+            <text class="iconfont icon-shanchu ticket-verification__delete-icon"
+                  bindtap="onDeleteTicket"
+                  data-index="{{index}}"></text>
+          </view>
+          <view class="ticket-verification__student-info">
+            <view class="ticket-verification__student-row">
+              <text class="ticket-verification__student-label">学员姓名：</text>
+              <text class="ticket-verification__student-value">{{item.studentName}}</text>
+            </view>
+            <view class="ticket-verification__student-row">
+              <text class="ticket-verification__student-label">证件号码：</text>
+              <text class="ticket-verification__student-value">{{item.idCard}}</text>
+            </view>
+            <view class="ticket-verification__student-row">
+              <text class="ticket-verification__student-label">模拟场区：</text>
+              <text class="ticket-verification__student-value">{{item.simulationArea}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态提示 -->
+    <view class="ticket-verification__empty" wx:if="{{scannedTickets.length === 0}}">
+      <text class="ticket-verification__empty-icon iconfont icon-saoma"></text>
+      <text class="ticket-verification__empty-text">请点击下方按钮扫描票据二维码</text>
+    </view>
+
+  </scroll-view>
+
+  <!-- 开发模式切换按钮 -->
+  <view class="ticket-verification__dev-toggle" wx:if="{{isDevelopMode || scannedTickets.length === 0}}">
+    <button class="ticket-verification__dev-button" bindtap="toggleDevelopMode">
+      <text class="iconfont icon-shezhi"></text>
+      <text class="ticket-verification__dev-text">{{isDevelopMode ? '关闭Mock' : '开启Mock'}}</text>
+    </button>
+  </view>
+
+  <!-- 底部核销按钮区域 -->
+  <view class="ticket-verification__footer">
+    <!-- 装饰性元素 -->
+    <view class="ticket-verification__decoration ticket-verification__decoration--left"></view>
+    <view class="ticket-verification__decoration ticket-verification__decoration--right"></view>
+
+    <!-- 按钮容器 -->
+    <view class="ticket-verification__buttons">
+      <!-- 扫码核销按钮 -->
+      <button class="ticket-verification__button ticket-verification__button--scan" bindtap="onVerifyTap" hover-class="ticket-verification__button--hover">
+        <text class="iconfont icon-saoma"></text>
+      </button>
+
+      <!-- 确认核销按钮 -->
+      <button
+        class="ticket-verification__button ticket-verification__button--confirm {{canVerify ? 'ticket-verification__button--active' : 'ticket-verification__button--disabled'}}"
+        bindtap="onConfirmVerifyTap"
+        hover-class="{{canVerify ? 'ticket-verification__button--hover' : ''}}"
+        disabled="{{!canVerify || verifyLoading}}"
+      >
+        <text wx:if="{{verifyLoading}}" class="ticket-verification__loading">核销中...</text>
+        <text wx:else>确认核销</text>
+      </button>
+    </view>
+  </view>
+</view>

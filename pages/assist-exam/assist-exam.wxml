@@ -1,0 +1,71 @@
+<!--pages/assist-exam/assist-exam.wxml-->
+<view class="assist-exam">
+  <!-- 加载状态 -->
+  <view class="assist-exam__loading" wx:if="{{loading}}">
+    <text class="assist-exam__loading-text">加载中...</text>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="assist-exam__login-prompt" wx:if="{{!isLoggedIn && !loading}}">
+    <view class="assist-exam__login-card">
+      <text class="iconfont icon-zhukao assist-exam__login-icon"></text>
+      <text class="assist-exam__login-text">登录后查看助考票据</text>
+      <button class="assist-exam__login-btn" bindtap="onGoLogin">
+        现在登录
+      </button>
+    </view>
+  </view>
+
+  <!-- 助考票据列表 -->
+  <scroll-view
+    class="assist-exam__scroll"
+    scroll-y="{{true}}"
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{refreshing}}"
+    bindrefresherrefresh="onRefresh"
+    wx:elif="{{isLoggedIn}}"
+  >
+    <view class="assist-exam__list">
+      <view
+        class="assist-exam__card"
+        wx:for="{{ticketList}}"
+        wx:key="id"
+        data-item="{{item}}"
+        bindtap="onTicketTap"
+      >
+        <!-- 卡片头部 - 统一设计 -->
+        <view class="assist-exam__card-header">
+          <view class="assist-exam__title-group">
+            <view class="assist-exam__badge">
+              <text class="iconfont icon-piao"></text>
+            </view>
+            <text class="assist-exam__title">{{item.packageName}}</text>
+          </view>
+        </view>
+
+        <!-- 票据信息区域 -->
+        <view class="assist-exam__info">
+          <view class="assist-exam__info-row">
+            <text class="assist-exam__label">学员姓名：</text>
+            <text class="assist-exam__value">{{item.studentName}}</text>
+          </view>
+          <view class="assist-exam__info-row">
+            <text class="assist-exam__label">核销人：</text>
+            <text class="assist-exam__value">{{item.verifyOperator || '暂无'}}</text>
+          </view>
+          <view class="assist-exam__info-row" wx:if="{{item.verifyTime}}">
+            <text class="assist-exam__label">核销时间：</text>
+            <text class="assist-exam__value">{{item.verifyTime}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="assist-exam__empty" wx:if="{{!ticketList.length && !loading}}">
+      <text class="iconfont icon-piao assist-exam__empty-icon"></text>
+      <text class="assist-exam__empty-text">暂无助考票据</text>
+      <text class="assist-exam__empty-desc">下拉刷新试试</text>
+    </view>
+  </scroll-view>
+</view>

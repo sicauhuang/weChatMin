@@ -1,0 +1,181 @@
+/* 引入主题样式 */
+@import '../../assets/styles/theme.wxss';
+
+/* ==========================================================================
+   二维码组件样式 - QR Code Component Styles
+   ========================================================================== */
+
+/* 二维码组件容器 */
+.qr-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 460rpx;
+  position: relative;
+}
+
+/* 加载状态覆盖层 */
+.qr-code__loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--theme-radius-lg);
+  z-index: 10;
+}
+
+.qr-code__loading-text {
+  font-size: var(--theme-font-size-md);
+  color: var(--theme-color-primary);
+  text-align: center;
+  font-weight: var(--theme-font-weight-medium);
+}
+
+/* 错误状态覆盖层 */
+.qr-code__error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--theme-bg-secondary);
+  border-radius: var(--theme-radius-lg);
+  border: 2rpx dashed var(--theme-border-light);
+  z-index: 10;
+}
+
+.qr-code__error-text {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-danger);
+  text-align: center;
+}
+
+/* 二维码容器 */
+.qr-code__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 二维码画布包装器 */
+.qr-code__canvas-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--theme-spacing-lg);
+  border-radius: var(--theme-radius-lg);
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+  position: relative;
+  min-width: 420rpx;
+  min-height: 420rpx;
+}
+
+.qr-code__canvas-wrapper:active {
+  background-color: var(--theme-bg-active);
+  border-color: var(--theme-border-medium);
+  transform: scale(0.98);
+}
+
+/* 二维码画布 */
+.qr-code__canvas {
+  width: 400rpx;
+  height: 400rpx;
+  border-radius: var(--theme-radius-sm);
+  background-color: #ffffff;
+  display: block;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  border: 1rpx solid var(--theme-border-light);
+}
+
+/* 刷新提示 */
+.qr-code__refresh-hint {
+  margin-top: var(--theme-spacing-sm);
+  opacity: 0.7;
+  transition: opacity var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.qr-code__canvas-wrapper:hover .qr-code__refresh-hint,
+.qr-code__canvas-wrapper:active .qr-code__refresh-hint {
+  opacity: 1;
+}
+
+.qr-code__refresh-text {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-secondary);
+  text-align: center;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+  .qr-code__canvas-wrapper {
+    padding: var(--theme-spacing-md);
+    min-width: 360rpx;
+    min-height: 360rpx;
+  }
+
+  .qr-code__canvas {
+    width: 300rpx;
+    height: 300rpx;
+  }
+
+  .qr-code__refresh-text {
+    font-size: var(--theme-font-size-xxs);
+  }
+}
+
+/* 大屏幕优化 */
+@media screen and (min-width: 768px) {
+  .qr-code__canvas-wrapper {
+    min-width: 480rpx;
+    min-height: 480rpx;
+  }
+
+  .qr-code__canvas {
+    width: 460rpx;
+    height: 460rpx;
+  }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .qr-code__canvas-wrapper {
+    background-color: var(--theme-bg-secondary);
+    border-color: var(--theme-border-medium);
+  }
+
+  .qr-code__canvas-wrapper:active {
+    background-color: var(--theme-bg-active);
+    border-color: var(--theme-border-strong);
+  }
+
+  .qr-code__error {
+    background-color: var(--theme-bg-tertiary);
+    border-color: var(--theme-border-medium);
+  }
+}
+
+/* 动画效果 */
+@keyframes qrCodeFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.qr-code__container {
+  animation: qrCodeFadeIn var(--theme-duration-base) var(--theme-ease-out);
+}

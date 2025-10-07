@@ -1,0 +1,561 @@
+/**
+ * 模拟票核销页面样式
+ * 遵循BEM命名规范，使用主题变量
+ */
+
+/* 页面容器 */
+.ticket-verification {
+  height: 100vh;
+  background-color: var(--theme-bg-page);
+  position: relative;
+}
+
+/* 固定头部样式 - 不参与滚动 */
+.ticket-verification__fixed-header {
+  position: relative;
+  z-index: var(--theme-z-index-sticky);
+  background: var(--theme-bg-page);
+  padding: var(--theme-spacing-lg) 50rpx;
+  padding-bottom: var(--theme-spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1rpx solid var(--theme-border-light);
+}
+
+/* 核销优化：扫码票据区域 */
+.ticket-verification__scanned {
+  margin: var(--theme-spacing-lg);
+}
+
+.ticket-verification__scanned-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--theme-spacing-lg);
+}
+
+.ticket-verification__scanned-title {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+}
+
+.ticket-verification__scanned-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-sm);
+  flex: 1;
+}
+
+.ticket-verification__scanned-count {
+  color: var(--theme-text-secondary);
+  font-size: var(--theme-font-size-md);
+}
+
+.ticket-verification__clear-icon {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46rpx;
+  color: var(--theme-color-error);
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ticket-verification__clear-icon:active {
+  color: var(--theme-color-error-hover);
+  transform: scale(0.95);
+}
+
+/* 票据列表容器 */
+.ticket-verification__ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-lg);
+  padding: var(--theme-spacing-lg);
+}
+
+.ticket-verification__ticket-item {
+  width: 100%;
+}
+
+/* 助考员票样式 - 与学员票保持一致 */
+.ticket-verification__assistant-card {
+  background: var(--theme-bg-card);
+  border-radius: var(--theme-radius-lg);
+  padding: var(--theme-spacing-xxl);
+  margin-bottom: var(--theme-spacing-lg);
+  border: 2rpx solid var(--theme-border-light);
+}
+
+.ticket-verification__assistant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--theme-spacing-lg);
+  padding-bottom: var(--theme-spacing-md);
+  border-bottom: 2rpx solid var(--theme-border-light);
+}
+
+.ticket-verification__assistant-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-sm);
+  flex: 1;
+}
+
+.ticket-verification__assistant-title {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-color-primary);
+}
+
+.ticket-verification__assistant-badge {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ticket-verification__assistant-badge .iconfont {
+  font-size: 42rpx;
+  color: var(--theme-color-primary);
+}
+
+.ticket-verification__assistant-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--theme-spacing-sm);
+}
+
+.ticket-verification__assistant-name {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-color-primary);
+}
+
+.ticket-verification__assistant-phone {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-color-primary);
+  font-weight: var(--theme-font-weight-normal);
+}
+
+/* 学员票样式 */
+.ticket-verification__student-card {
+  background: var(--theme-bg-card);
+  border-radius: var(--theme-radius-lg);
+  padding: var(--theme-spacing-xxl);
+  border: 2rpx solid var(--theme-border-light);
+}
+
+.ticket-verification__student-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--theme-spacing-lg);
+  padding-bottom: var(--theme-spacing-md);
+  border-bottom: 2rpx solid var(--theme-border-light);
+}
+
+.ticket-verification__student-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-sm);
+  flex: 1;
+}
+
+.ticket-verification__student-title {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+}
+
+.ticket-verification__student-badge {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ticket-verification__student-badge .iconfont {
+  font-size: 42rpx;
+  color: var(--theme-color-primary);
+}
+
+/* 删除图标样式 */
+.ticket-verification__delete-icon {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46rpx;
+  color: var(--theme-color-error);
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ticket-verification__delete-icon:active {
+  color: var(--theme-color-error-hover);
+  transform: scale(0.95);
+}
+
+.ticket-verification__student-row {
+  display: flex;
+  /* margin-bottom: var(--theme-spacing-sm); */
+}
+.ticket-verification__student-row:last-child {
+  margin-bottom: 0;
+}
+
+.ticket-verification__student-label {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.ticket-verification__student-value {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+  flex: 1;
+}
+
+/* 列表容器 */
+.ticket-verification__list {
+  height: calc(100vh - 120rpx); /* 减去底部按钮区域高度 */
+  box-sizing: border-box;
+}
+
+/* 当有固定头部时，调整滚动区域高度 */
+.ticket-verification__fixed-header + .ticket-verification__list {
+  height: calc(100vh - 120rpx - 80rpx); /* 减去底部按钮和固定头部高度 */
+}
+
+.ticket-verification__list-header {
+  margin-bottom: var(--theme-spacing-lg);
+}
+
+.ticket-verification__list-title {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+}
+
+/* 列表项 */
+.ticket-verification__item {
+  margin-bottom: var(--theme-spacing-lg);
+}
+
+/* 票据卡片 */
+.ticket-verification__card {
+  background-color: var(--theme-bg-card);
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-card);
+  padding: var(--theme-spacing-xxl);
+  border: 1rpx solid var(--theme-border-light);
+}
+
+/* 卡片头部 */
+.ticket-verification__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--theme-spacing-lg);
+  padding-bottom: var(--theme-spacing-lg);
+  border-bottom: 1rpx solid var(--theme-border-light);
+}
+
+/* 套餐名称 */
+.ticket-verification__package-name {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  flex: 1;
+  margin-right: var(--theme-spacing-lg);
+}
+
+/* 状态标签 */
+.ticket-verification__status {
+  padding: var(--theme-spacing-xs) var(--theme-spacing-md);
+  border-radius: var(--theme-radius-sm);
+  font-size: var(--theme-font-size-xs);
+}
+
+.ticket-verification__status--verified {
+  background-color: var(--theme-color-success);
+}
+
+.ticket-verification__status-text {
+  color: var(--theme-text-white);
+  font-weight: var(--theme-font-weight-medium);
+}
+
+/* 信息区块 */
+.ticket-verification__section {
+  margin-bottom: var(--theme-spacing-lg);
+}
+
+.ticket-verification__section:last-child {
+  margin-bottom: 0;
+}
+
+/* 信息行 */
+.ticket-verification__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--theme-spacing-sm);
+}
+
+.ticket-verification__row:last-child {
+  margin-bottom: 0;
+}
+
+/* 标签 */
+.ticket-verification__label {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  min-width: 140rpx;
+  flex-shrink: 0;
+}
+
+/* 值 */
+.ticket-verification__value {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-primary);
+  flex: 1;
+}
+
+/* 底部安全区域 */
+.ticket-verification__safe-area {
+  height: 40rpx;
+}
+
+/* 底部核销按钮区域 */
+.ticket-verification__footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: var(--theme-z-index-fixed);
+}
+
+/* 按钮容器 */
+.ticket-verification__buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--theme-spacing-xxl);
+}
+
+/* 装饰性元素 */
+.ticket-verification__decoration {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ticket-verification__decoration--left {
+  left: 60rpx;
+  width: 8rpx;
+  height: 8rpx;
+}
+
+.ticket-verification__decoration--right {
+  right: 60rpx;
+  width: 12rpx;
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 核销按钮基础样式 */
+.ticket-verification__button {
+  width:260rpx !important;
+  background: var(--theme-bg-white);
+  border: 3rpx solid var(--theme-color-primary);
+  border-radius: var(--theme-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 扫码按钮样式 */
+.ticket-verification__button--scan {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+/* 确认核销按钮样式 */
+.ticket-verification__button--confirm {
+  width: 140rpx;
+  height: 80rpx;
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-color-primary);
+}
+
+/* 按钮状态样式 */
+.ticket-verification__button--active {
+  background: var(--theme-color-success);
+  border-color: var(--theme-color-success);
+  color: var(--theme-text-white);
+}
+
+.ticket-verification__button--disabled {
+  background: var(--theme-bg-disabled);
+  border-color: var(--theme-border-medium);
+  color: var(--theme-text-tertiary);
+  opacity: 0.6;
+}
+
+/* 按钮悬停效果 */
+.ticket-verification__button--hover {
+  transform: scale(0.95);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.2);
+}
+
+/* 扫码图标 */
+.ticket-verification__button .icon-saoma {
+  font-size: 40rpx;
+  color: var(--theme-color-primary);
+}
+
+/* 加载状态 */
+.ticket-verification__loading {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-white);
+}
+
+/* 空状态 */
+.ticket-verification__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+  color: var(--theme-text-tertiary);
+}
+
+.ticket-verification__empty-icon {
+  font-size: 80rpx;
+  margin-bottom: var(--theme-spacing-lg);
+  color: var(--theme-text-placeholder);
+}
+
+.ticket-verification__empty-text {
+  font-size: var(--theme-font-size-md);
+  color: var(--theme-text-tertiary);
+}
+
+/* 开发模式切换按钮 */
+.ticket-verification__dev-toggle {
+  position: fixed;
+  top: 100rpx;
+  right: var(--theme-spacing-lg);
+  z-index: var(--theme-z-index-popup);
+}
+
+.ticket-verification__dev-button {
+  display: flex;
+  align-items: center;
+  gap: var(--theme-spacing-xs);
+  padding: var(--theme-spacing-sm) var(--theme-spacing-md);
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--theme-text-white);
+  border: none;
+  border-radius: var(--theme-radius-lg);
+  font-size: var(--theme-font-size-xs);
+  backdrop-filter: blur(10rpx);
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.3);
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.ticket-verification__dev-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(0.95);
+}
+
+.ticket-verification__dev-button .iconfont {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-white);
+}
+
+.ticket-verification__dev-text {
+  color: var(--theme-text-white);
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-medium);
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+  .ticket-verification__card {
+    padding: var(--theme-spacing-lg);
+  }
+
+  .ticket-verification__package-name {
+    font-size: var(--theme-font-size-md);
+  }
+
+  .ticket-verification__button--scan {
+    width: 70rpx;
+    height: 70rpx;
+  }
+
+  .ticket-verification__button--confirm {
+    width: 120rpx;
+    height: 70rpx;
+    font-size: var(--theme-font-size-xs);
+  }
+
+  .ticket-verification__button .icon-saoma {
+    font-size: 36rpx;
+  }
+
+  .ticket-verification__buttons {
+    gap: var(--theme-spacing-lg);
+  }
+
+  .ticket-verification__assistant-card {
+    padding: var(--theme-spacing-lg);
+  }
+
+  .ticket-verification__assistant-name {
+    font-size: var(--theme-font-size-md);
+  }
+
+  .ticket-verification__assistant-phone {
+    font-size: var(--theme-font-size-sm);
+  }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .ticket-verification__footer {
+    box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3);
+  }
+
+  .ticket-verification__button {
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.25);
+  }
+}

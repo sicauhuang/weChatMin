@@ -1,0 +1,29 @@
+<!-- 二维码组件 -->
+<view class="qr-code">
+  <!-- 二维码显示区域 - 始终存在 -->
+  <view class="qr-code__container">
+    <view class="qr-code__canvas-wrapper" bindtap="onQRCodeTap">
+      <canvas
+        class="qr-code__canvas"
+        canvas-id="{{canvasId}}"
+        width="{{size}}"
+        height="{{size}}">
+      </canvas>
+
+      <!-- 刷新提示（仅在可刷新且非加载状态时显示） -->
+      <view class="qr-code__refresh-hint" wx:if="{{refreshable}}">
+        <text class="qr-code__refresh-text">点击刷新</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态覆盖层 -->
+  <view class="qr-code__loading-overlay" wx:if="{{loading}}">
+    <text class="qr-code__loading-text">生成中...</text>
+  </view>
+
+  <!-- 错误状态覆盖层 -->
+  <view class="qr-code__error-overlay" wx:if="{{error}}">
+    <text class="qr-code__error-text">{{errorMessage}}</text>
+  </view>
+</view>

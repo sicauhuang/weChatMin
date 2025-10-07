@@ -1,0 +1,284 @@
+/* pages/assist-exam/assist-exam.wxss */
+@import '../../assets/fonts/iconfont.wxss';
+@import '../../assets/styles/theme.wxss';
+
+/* 页面容器 */
+.assist-exam {
+    background-color: var(--theme-bg-page);
+}
+
+/* 加载状态 */
+.assist-exam__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--theme-spacing-page);
+}
+
+.assist-exam__loading-text {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-secondary);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 滚动容器 */
+.assist-exam__scroll {
+    height: 100vh;
+}
+
+/* 列表容器 */
+.assist-exam__list {
+    padding: var(--theme-spacing-lg) 0;
+}
+
+/* 助考票据卡片 - 统一设计 */
+.assist-exam__card {
+    background: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    padding: var(--theme-spacing-xxl);
+    margin: 0 var(--theme-spacing-lg) var(--theme-spacing-lg);
+    border: 2rpx solid var(--theme-border-light);
+    transition: box-shadow var(--theme-duration-base) var(--theme-ease-out);
+    animation: fadeInUp var(--theme-duration-slow) var(--theme-ease-out);
+}
+
+.assist-exam__card:active {
+    box-shadow: var(--theme-shadow-lg);
+}
+
+/* 卡片头部 - 统一设计 */
+.assist-exam__card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--theme-spacing-lg);
+    padding-bottom: var(--theme-spacing-md);
+    border-bottom: 2rpx solid var(--theme-border-light);
+}
+
+.assist-exam__title-group {
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-sm);
+    flex: 1;
+}
+
+.assist-exam__title {
+    font-size: var(--theme-font-size-lg);
+    font-weight: var(--theme-font-weight-medium);
+    color: var(--theme-text-primary);
+}
+
+.assist-exam__badge {
+    width: 48rpx;
+    height: 48rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.assist-exam__badge .iconfont {
+    font-size: 42rpx;
+    color: var(--theme-color-primary);
+}
+
+/* 票据信息区域 */
+.assist-exam__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--theme-spacing-sm);
+}
+
+.assist-exam__info-row {
+    display: flex;
+    /* margin-bottom: var(--theme-spacing-sm); */
+}
+
+.assist-exam__info-row:last-child {
+    margin-bottom: 0;
+}
+
+.assist-exam__label {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-secondary);
+    width: 160rpx;
+    flex-shrink: 0;
+}
+
+.assist-exam__value {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+    flex: 1;
+}
+
+/* 空状态 */
+.assist-exam__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--theme-spacing-page);
+    text-align: center;
+}
+
+.assist-exam__empty-icon {
+    font-size: 120rpx;
+    color: var(--theme-text-placeholder);
+    margin-bottom: var(--theme-spacing-xl);
+}
+
+.assist-exam__empty-text {
+    font-size: var(--theme-font-size-lg);
+    color: var(--theme-text-secondary);
+    margin-bottom: var(--theme-spacing-sm);
+}
+
+.assist-exam__empty-desc {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-tertiary);
+}
+
+/* 未登录状态样式 */
+.assist-exam__login-prompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.assist-exam__login-card {
+    background: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    box-shadow: var(--theme-shadow-card);
+    padding: var(--theme-spacing-xxl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 500rpx;
+    width: 100%;
+    margin: 0 var(--theme-spacing-lg);
+    animation: fadeInUp var(--theme-duration-slow) var(--theme-ease-out);
+}
+
+.assist-exam__login-icon {
+    font-size: 120rpx;
+    color: var(--theme-color-primary);
+    margin-bottom: var(--theme-spacing-xl);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.assist-exam__login-text {
+    font-size: var(--theme-font-size-lg);
+    color: var(--theme-text-secondary);
+    margin-bottom: var(--theme-spacing-xxl);
+    line-height: 1.5;
+}
+
+.assist-exam__login-btn {
+    width: 100% !important;
+    background: var(--theme-color-primary);
+    color: var(--theme-text-white);
+    border: none;
+    border-radius: var(--theme-radius-sm);
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xl);
+    font-size: var(--theme-font-size-md);
+    font-weight: var(--theme-font-weight-medium);
+    box-shadow: 0 2rpx 8rpx rgba(218, 165, 32, 0.3);
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.assist-exam__login-btn::after {
+    border: none;
+}
+
+.assist-exam__login-btn:active {
+    background: var(--theme-color-primary-hover);
+    transform: translateY(1rpx);
+    box-shadow: 0 1rpx 4rpx rgba(218, 165, 32, 0.4);
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20rpx);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 加载动画 */
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+    .assist-exam__card {
+        margin: 0 var(--theme-spacing-md) var(--theme-spacing-md);
+        padding: var(--theme-spacing-lg);
+    }
+
+    .assist-exam__card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .assist-exam__status {
+        margin-top: var(--theme-spacing-sm);
+        align-self: flex-end;
+    }
+
+    .assist-exam__login-card {
+        margin: 0 var(--theme-spacing-md);
+        padding: var(--theme-spacing-xl);
+    }
+
+    .assist-exam__login-icon {
+        font-size: 100rpx;
+    }
+
+    .assist-exam__login-text {
+        font-size: var(--theme-font-size-md);
+    }
+}
+
+/* 小屏幕适配 */
+@media (max-width: 600rpx) {
+    .assist-exam__order-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .assist-exam__login-card {
+        margin: 0 var(--theme-spacing-sm);
+        padding: var(--theme-spacing-lg);
+    }
+
+    .assist-exam__login-icon {
+        font-size: 80rpx;
+        margin-bottom: var(--theme-spacing-lg);
+    }
+
+    .assist-exam__login-text {
+        font-size: var(--theme-font-size-sm);
+        margin-bottom: var(--theme-spacing-xl);
+    }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .assist-exam__status--used {
+        background: linear-gradient(135deg, #059142, #048a3d);
+    }
+}
