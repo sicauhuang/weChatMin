@@ -1,5 +1,7 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "我的模拟票",
-  "navigationStyle": "custom"
+    "navigationBarTitleText": "我的模拟票",
+    "enablePullDownRefresh": true,
+    "usingComponents": {
+        "qr-code": "../../components/qr-code/qr-code"
+    }
 }

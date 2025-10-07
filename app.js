@@ -37,11 +37,13 @@ App({
 
       if (isLoggedIn) {
         const loginData = storage.getLoginData();
+        const userInfo = storage.getUserInfo();
+
         this.globalData.isLoggedIn = true;
-        this.globalData.userInfo = loginData.userInfo;
+        this.globalData.userInfo = userInfo;
         this.globalData.openid = loginData.openid;
-        this.globalData.phoneNumber = loginData.phoneNumber;
-        console.log('用户已登录:', loginData.userInfo);
+        this.globalData.phoneNumber = userInfo ? userInfo.phoneNumber : '';
+        console.log('用户已登录:', userInfo);
       } else {
         this.globalData.isLoggedIn = false;
         this.globalData.userInfo = null;
@@ -67,7 +69,7 @@ App({
       this.globalData.isLoggedIn = true;
       this.globalData.userInfo = loginData.userInfo;
       this.globalData.openid = loginData.openid;
-      this.globalData.phoneNumber = loginData.phoneNumber;
+      this.globalData.phoneNumber = loginData.userInfo ? loginData.userInfo.phoneNumber : '';
       console.log('全局登录状态已更新:', loginData);
     } else {
       this.globalData.isLoggedIn = false;

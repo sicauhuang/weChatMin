@@ -1,4 +1,7 @@
 {
+  "usingComponents": {
+    "qr-code": "../../components/qr-code/qr-code"
+  },
   "navigationBarTitleText": "我的",
   "navigationStyle": "custom",
   "backgroundColor": "#f8f9fa",

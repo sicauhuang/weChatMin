@@ -319,6 +319,7 @@ function updateUserInfo(updates) {
         ...updates,
         updateTime: new Date().toISOString()
     };
+    console.log('更新用户信息，添加时间戳:', newInfo.updateTime);
     return setUserInfo(newInfo);
 }
 

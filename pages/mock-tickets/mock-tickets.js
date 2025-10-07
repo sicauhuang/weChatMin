@@ -1,6 +1,7 @@
 // pages/mock-tickets/mock-tickets.js
 const request = require('../../utils/request.js');
 const qrcode = require('../../utils/qrcode.js');
+const auth = require('../../utils/auth.js');
 
 Page({
     /**
@@ -11,9 +12,8 @@ Page({
         loading: true, // 加载状态
         refreshing: false, // 下拉刷新状态
         showQRModal: false, // 是否显示二维码弹窗
-        currentTicket: null, // 当前选中的票据
-        qrLoading: false, // 二维码生成加载状态
-        qrCodeUrl: '' // 二维码图片URL
+        currentTicketQRData: null, // 当前票据的二维码数据
+        isLoggedIn: false // 登录状态
     },
 
     /**
@@ -21,7 +21,7 @@ Page({
      */
     onLoad(options) {
         console.log('模拟票页面加载');
-        this.loadTicketList();
+        this.checkLoginAndLoadData();
     },
 
     /**
@@ -36,12 +36,25 @@ Page({
      */
     onShow() {
         console.log('模拟票页面显示');
+
+        // 页面显示时检查并关闭弹窗（避免tabBar切换时的闪屏问题）
+        if (this.data.showQRModal) {
+            console.log('页面显示时关闭二维码弹窗');
+            this.setData({
+                showQRModal: false,
+                currentTicketQRData: null
+            });
+        }
+
         // 设置tabBar选中状态
         if (typeof this.getTabBar === 'function' && this.getTabBar()) {
             this.getTabBar().setData({
                 selected: 2
             });
         }
+
+        // 重新检查登录状态（用户可能从登录页面返回）
+        this.checkLoginAndLoadData();
     },
 
     /**
@@ -49,6 +62,7 @@ Page({
      */
     onHide() {
         console.log('模拟票页面隐藏');
+        // 移除弹窗关闭逻辑，避免tabBar切换时的闪屏问题
     },
 
     /**
@@ -113,7 +127,7 @@ Page({
                 '/api/mock-tickets',
                 {},
                 {
-                    needAuth: false, // 暂时不需要认证
+                    needAuth: true, // 需要认证
                     showLoading: false // 使用自定义加载状态
                 }
             );
@@ -186,62 +200,23 @@ Page({
         const { item } = event.currentTarget.dataset;
         console.log('点击使用模拟票，生成二维码:', item);
 
-        // 设置当前票据并显示二维码弹窗
+        // 构造票据二维码数据
+        const ticketQRData = {
+            type: 'mock-ticket',
+            ticketId: item.id,
+            packageName: item.packageName,
+            orderNumber: item.orderNumber,
+            studentName: item.studentName,
+            studentPhone: item.studentPhone,
+            appointmentDate: item.appointmentDate,
+            simulationArea: item.simulationArea
+        };
+
+        // 设置二维码数据并显示弹窗
         this.setData({
-            currentTicket: item,
-            showQRModal: true,
-            qrLoading: true
+            currentTicketQRData: ticketQRData,
+            showQRModal: true
         });
-
-        // 生成二维码
-        this.generateQRCode(item);
-    },
-
-    /**
-     * 生成二维码
-     * @param {Object} ticket 票据信息
-     */
-    async generateQRCode(ticket) {
-        try {
-            console.log('开始生成二维码:', ticket);
-
-            // 调用后端接口生成微信官方二维码
-            const response = await request.post('/api/generate-ticket-qrcode', {
-                ticketId: ticket.id,
-                studentPhone: ticket.studentPhone,
-                orderNumber: ticket.orderNumber
-            }, {
-                needAuth: false,
-                showLoading: false
-            });
-
-            console.log('二维码生成接口响应:', response);
-
-            if (response && response.success && response.data) {
-                // 设置二维码图片URL
-                this.setData({
-                    qrCodeUrl: response.data.qrCodeUrl,
-                    qrLoading: false
-                });
-
-                console.log('二维码生成成功，URL:', response.data.qrCodeUrl);
-            } else {
-                throw new Error(response?.message || '生成二维码失败');
-            }
-
-        } catch (error) {
-            console.error('生成二维码失败:', error);
-
-            this.setData({
-                qrLoading: false
-            });
-
-            wx.showToast({
-                title: error.message || '二维码生成失败',
-                icon: 'none',
-                duration: 2000
-            });
-        }
     },
 
     /**
@@ -249,10 +224,10 @@ Page({
      */
     onCloseQRModal() {
         console.log('关闭二维码弹窗');
+
         this.setData({
             showQRModal: false,
-            currentTicket: null,
-            qrLoading: false
+            currentTicketQRData: null
         });
     },
 
@@ -261,78 +236,6 @@ Page({
      */
     onQRContentTap() {
         // 阻止事件冒泡，防止关闭弹窗
-    },
-
-    /**
-     * 保存二维码到相册
-     */
-    async onSaveQRCode() {
-        try {
-            console.log('保存二维码到相册');
-
-            if (!this.data.qrCodeUrl) {
-                wx.showToast({
-                    title: '二维码未生成',
-                    icon: 'none',
-                    duration: 2000
-                });
-                return;
-            }
-
-            wx.showLoading({
-                title: '保存中...',
-                mask: true
-            });
-
-            // 下载二维码图片到本地
-            const downloadResult = await new Promise((resolve, reject) => {
-                wx.downloadFile({
-                    url: this.data.qrCodeUrl,
-                    success: resolve,
-                    fail: reject
-                });
-            });
-
-            // 保存到相册
-            await new Promise((resolve, reject) => {
-                wx.saveImageToPhotosAlbum({
-                    filePath: downloadResult.tempFilePath,
-                    success: resolve,
-                    fail: reject
-                });
-            });
-
-            wx.hideLoading();
-
-            wx.showToast({
-                title: '保存成功',
-                icon: 'success',
-                duration: 2000
-            });
-
-            console.log('二维码保存成功');
-
-        } catch (error) {
-            console.error('保存二维码失败:', error);
-
-            wx.hideLoading();
-
-            // 处理权限问题
-            if (error.errMsg && error.errMsg.includes('auth deny')) {
-                wx.showModal({
-                    title: '提示',
-                    content: '需要授权访问相册才能保存图片，请在设置中开启相册权限',
-                    showCancel: false,
-                    confirmText: '知道了'
-                });
-            } else {
-                wx.showToast({
-                    title: '保存失败',
-                    icon: 'none',
-                    duration: 2000
-                });
-            }
-        }
     },
 
     /**
@@ -364,5 +267,56 @@ Page({
      */
     getStatusClass(status) {
         return status === '已核销' ? 'used' : 'unused';
+    },
+
+    /**
+     * 检查登录状态并加载数据
+     */
+    checkLoginAndLoadData() {
+        console.log('检查登录状态并加载数据');
+
+        // 检查登录状态
+        const isLoggedIn = auth.checkLoginStatus();
+        console.log('当前登录状态:', isLoggedIn);
+
+        this.setData({
+            isLoggedIn: isLoggedIn,
+            loading: false
+        });
+
+        if (isLoggedIn) {
+            // 已登录，加载模拟票数据
+            console.log('用户已登录，开始加载模拟票数据');
+            this.loadTicketList();
+        } else {
+            // 未登录，显示登录提示
+            console.log('用户未登录，显示登录提示');
+            this.setData({
+                ticketList: [],
+                loading: false
+            });
+        }
+    },
+
+    /**
+     * 点击现在登录按钮
+     */
+    onGoLogin() {
+        console.log('点击现在登录按钮，跳转到登录页面');
+
+        wx.navigateTo({
+            url: '/pages/login/login',
+            success: () => {
+                console.log('成功跳转到登录页面');
+            },
+            fail: (error) => {
+                console.error('跳转到登录页面失败:', error);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
+        });
     }
 });

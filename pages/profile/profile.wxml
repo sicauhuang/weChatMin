@@ -74,4 +74,25 @@
       </view>
     </view>
   </view>
+
+  <!-- 用户二维码弹窗 -->
+  <view class="profile-page__qr-modal" wx:if="{{showQRModal}}" bindtap="onCloseQRModal">
+    <view class="profile-page__qr-content" catchtap="onQRContentTap">
+      <!-- 弹窗头部（只有关闭按钮） -->
+      <view class="profile-page__qr-header">
+        <text class="profile-page__qr-title">助考二维码</text>
+        <text class="iconfont icon-guanbi profile-page__qr-close" bindtap="onCloseQRModal"></text>
+      </view>
+
+      <!-- 二维码显示区域 -->
+      <view class="profile-page__qr-container">
+        <qr-code
+          qr-data="{{userQRData}}"
+          qr-type="user-profile"
+          size="200"
+          refreshable="{{true}}">
+        </qr-code>
+      </view>
+    </view>
+  </view>
 </view>

@@ -1,5 +1,6 @@
 const auth = require('../../utils/auth.js');
 const storage = require('../../utils/storage.js');
+const qrcode = require('../../utils/qrcode.js');
 
 Page({
     /**
@@ -13,6 +14,9 @@ Page({
         openid: '', // 用户openid
         phoneNumber: '', // 手机号
         showActionModal: false, // 自定义操作弹窗显示状态
+        // 二维码弹窗相关
+        showQRModal: false, // 二维码弹窗显示状态
+        userQRData: null, // 用户二维码数据
         // 功能模块列表
         functionModules: [
             {
@@ -60,6 +64,22 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
+        // 页面显示时检查并关闭弹窗（避免tabBar切换时的闪屏问题）
+        if (this.data.showQRModal) {
+            console.log('页面显示时关闭二维码弹窗');
+            this.setData({
+                showQRModal: false,
+                userQRData: null
+            });
+        }
+
+        if (this.data.showActionModal) {
+            console.log('页面显示时关闭操作弹窗');
+            this.setData({
+                showActionModal: false
+            });
+        }
+
         // 设置tabBar选中状态
         if (typeof this.getTabBar === 'function' && this.getTabBar()) {
             this.getTabBar().setData({
@@ -72,44 +92,39 @@ Page({
     },
 
     /**
-     * 初始化用户信息
+     * 生命周期函数--监听页面隐藏
      */
-    async initUserInfo() {
+    onHide() {
+        console.log('我的页面隐藏');
+        // 移除弹窗关闭逻辑，避免tabBar切换时的闪屏问题
+    },
+
+    /**
+     * 初始化用户信息（方案1：只从本地存储读取）
+     */
+    initUserInfo() {
         try {
-            console.log('初始化用户信息...');
+            console.log('初始化用户信息（本地存储优先）...');
 
             // 检查登录状态
             const isLoggedIn = auth.checkLoginStatus();
-            console.warn('-----isLoggedIn:', isLoggedIn);
+            console.log('登录状态:', isLoggedIn);
+
             if (isLoggedIn) {
-                // 已登录状态，获取用户信息
-                const loginData = storage.getLoginData();
-                const userInfo = loginData.userInfo || {};
+                // 已登录状态，直接从本地存储获取用户信息
+                const userInfo = storage.getUserInfo() || {};
 
                 this.setData({
                     avatarUrl: userInfo.avatarUrl || '/assets/imgs/logo.png',
-                    nickname: userInfo.nickName || loginData.phoneNumber || '微信用户',
+                    nickname: userInfo.phoneNumber || '微信用户',
                     identity: userInfo.identity || '游客',
                     isLogin: true,
-                    openid: loginData.openid || '',
-                    phoneNumber: loginData.phoneNumber || ''
+                    openid: storage.getOpenId() || '',
+                    phoneNumber: userInfo.phoneNumber || ''
                 });
 
-                console.log('用户已登录，显示用户信息和设置按钮:', loginData);
-
-                // 尝试刷新用户信息
-                try {
-                    await auth.refreshUserInfo();
-                    const updatedLoginData = storage.getLoginData();
-                    const updatedUserInfo = updatedLoginData.userInfo || {};
-
-                    this.setData({
-                        avatarUrl: updatedUserInfo.avatarUrl || this.data.avatarUrl,
-                        nickname: updatedUserInfo.nickName || this.data.nickname
-                    });
-                } catch (refreshError) {
-                    console.log('刷新用户信息失败，使用本地信息:', refreshError);
-                }
+                console.log('用户已登录，显示本地用户信息:', userInfo);
+                console.log('依赖app.js启动时的刷新来保证数据新鲜度');
             } else {
                 // 未登录状态，设置默认用户信息
                 this.setDefaultUserInfo();
@@ -381,10 +396,31 @@ Page({
      * 我的二维码
      */
     handleQRCode() {
-        wx.showToast({
-            title: '我的二维码功能待开发',
-            icon: 'none',
-            duration: 2000
+        console.log('点击我的二维码按钮');
+
+        // 获取用户信息
+        const userInfo = storage.getUserInfo();
+        if (!userInfo || !userInfo.phoneNumber) {
+            wx.showToast({
+                title: '用户信息不完整',
+                icon: 'none',
+                duration: 2000
+            });
+            return;
+        }
+
+        // 构造用户数据
+        const userData = {
+            type: 'assist-ticket',
+            assistantName: userInfo.name || userInfo.nickName || '微信用户',
+            assistantPhone: userInfo.phoneNumber || '',
+            userId: userInfo.openid || 'anonymous'
+        };
+
+        // 设置二维码数据并显示弹窗
+        this.setData({
+            userQRData: userData,
+            showQRModal: true
         });
     },
 
@@ -414,10 +450,20 @@ Page({
      * 模拟票核销
      */
     handleVerifyTicket() {
-        wx.showToast({
-            title: '模拟票核销功能待开发',
-            icon: 'none',
-            duration: 2000
+        console.log('跳转到模拟票核销页面');
+        wx.navigateTo({
+            url: '/pages/ticket-verification/ticket-verification',
+            success: () => {
+                console.log('成功跳转到模拟票核销页面');
+            },
+            fail: (error) => {
+                console.error('跳转到模拟票核销页面失败:', error);
+                wx.showToast({
+                    title: '页面跳转失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
         });
     },
 
@@ -425,23 +471,27 @@ Page({
      * 模拟票助考
      */
     handleAssistExam() {
-        wx.showToast({
-            title: '模拟票助考功能待开发',
-            icon: 'none',
-            duration: 2000
+        console.log('跳转到模拟票助考页面');
+        wx.navigateTo({
+            url: '/pages/assist-exam/assist-exam',
+            success: () => {
+                console.log('成功跳转到模拟票助考页面');
+            },
+            fail: (error) => {
+                console.error('跳转到模拟票助考页面失败:', error);
+                wx.showToast({
+                    title: '页面跳转失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
         });
     },
 
     /**
      * 设置
      */
-    handleSettings() {
-        wx.showToast({
-            title: '设置功能待开发',
-            icon: 'none',
-            duration: 2000
-        });
-    },
+    handleSettings() {},
 
     /**
      * 处理注销账号
@@ -496,5 +546,24 @@ Page({
                 }
             }
         });
+    },
+
+    /**
+     * 关闭二维码弹窗
+     */
+    onCloseQRModal() {
+        console.log('关闭用户二维码弹窗');
+
+        this.setData({
+            showQRModal: false,
+            userQRData: null
+        });
+    },
+
+    /**
+     * 阻止二维码弹窗内容区域的点击事件冒泡
+     */
+    onQRContentTap() {
+        // 阻止事件冒泡，防止关闭弹窗
     }
 });

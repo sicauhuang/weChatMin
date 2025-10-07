@@ -6,7 +6,9 @@
         "pages/profile/profile",
         "pages/login/login",
         "pages/my-footprints/my-footprints",
-        "pages/my-favorites/my-favorites"
+        "pages/my-favorites/my-favorites",
+        "pages/assist-exam/assist-exam",
+        "pages/ticket-verification/ticket-verification"
     ],
     "window": {
         "navigationBarTextStyle": "black",
