@@ -1,5 +1,9 @@
 {
-  "navigationBarTitleText": "车小禾",
-  "navigationBarBackgroundColor": "#ffffff",
-  "navigationBarTextStyle": "black"
+    "navigationBarTitleText": "车小禾",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "usingComponents": {
+        "van-checkbox": "/@vant/weapp/checkbox/index",
+        "van-dialog": "/@vant/weapp/dialog/index"
+    }
 }

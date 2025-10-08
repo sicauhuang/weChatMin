@@ -2,6 +2,9 @@
     "navigationBarTitleText": "我的模拟票",
     "enablePullDownRefresh": true,
     "usingComponents": {
-        "qr-code": "../../components/qr-code/qr-code"
+        "qr-code": "../../components/qr-code/qr-code",
+        "van-card": "/@vant/weapp/card/index",
+        "van-tag": "/@vant/weapp/tag/index",
+        "van-popup": "/@vant/weapp/popup/index"
     }
 }

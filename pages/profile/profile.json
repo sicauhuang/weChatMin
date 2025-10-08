@@ -1,10 +1,15 @@
 {
-  "usingComponents": {
-    "qr-code": "../../components/qr-code/qr-code"
-  },
-  "navigationBarTitleText": "我的",
-  "navigationStyle": "custom",
-  "backgroundColor": "#f8f9fa",
-  "backgroundTextStyle": "dark",
-  "enablePullDownRefresh": false
+    "usingComponents": {
+        "qr-code": "../../components/qr-code/qr-code",
+        "van-cell": "/@vant/weapp/cell/index",
+        "van-cell-group": "/@vant/weapp/cell-group/index",
+        "van-image": "/@vant/weapp/image/index",
+        "van-grid": "/@vant/weapp/grid/index",
+        "van-grid-item": "/@vant/weapp/grid-item/index"
+    },
+    "navigationBarTitleText": "我的",
+    "navigationStyle": "custom",
+    "backgroundColor": "#f8f9fa",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
 }

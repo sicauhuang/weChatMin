@@ -1,0 +1,163 @@
+/* pages/vehicle-approval/vehicle-approval.wxss */
+
+.vehicle-approval-container {
+  min-height: 100vh;
+  background-color: var(--theme-bg-white);
+  padding: 0;
+}
+
+/* 加载状态样式 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200rpx;
+  background-color: var(--theme-bg-card);
+}
+
+.loading-text {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-tertiary);
+}
+
+/* 车辆列表样式 */
+.vehicle-list {
+  height: 100vh; /* 减去导航栏高度 */
+  padding: var(--theme-spacing-lg);
+  box-sizing: border-box;
+}
+
+.vehicle-item {
+  margin-bottom: var(--theme-spacing-lg);
+}
+
+.vehicle-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 加载更多样式 */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80rpx;
+  margin-top: var(--theme-spacing-lg);
+}
+
+.load-more-text {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-tertiary);
+}
+
+/* 没有更多数据样式 */
+.no-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80rpx;
+  margin-top: var(--theme-spacing-lg);
+}
+
+.no-more-text {
+  font-size: var(--theme-font-size-xs);
+  color: var(--theme-text-placeholder);
+}
+
+/* 空状态样式 */
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  background-color: var(--theme-bg-card);
+  margin: var(--theme-spacing-lg);
+  border-radius: var(--theme-radius-lg);
+  padding: var(--theme-spacing-section) var(--theme-spacing-xxxl);
+  box-sizing: border-box;
+  box-shadow: var(--theme-shadow-card);
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: var(--theme-spacing-xxl);
+  opacity: 0.6;
+  color: var(--theme-text-tertiary);
+}
+
+.empty-title {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  margin-bottom: var(--theme-spacing-md);
+}
+
+.empty-desc {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  line-height: var(--theme-line-height-base);
+  margin-bottom: var(--theme-spacing-xxxl);
+}
+
+.empty-action {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.refresh-btn {
+  background-color: var(--theme-color-primary);
+  color: var(--theme-text-white);
+  font-size: var(--theme-font-size-sm);
+  font-weight: var(--theme-font-weight-medium);
+  border-radius: var(--theme-radius-xxl);
+  padding: var(--theme-spacing-lg) var(--theme-spacing-section);
+  border: none;
+  box-shadow: var(--theme-shadow-md);
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.refresh-btn:active {
+  background-color: var(--theme-color-primary-hover);
+  transform: scale(0.98);
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+  .vehicle-list {
+    padding: var(--theme-spacing-md);
+  }
+
+  .vehicle-item {
+    margin-bottom: var(--theme-spacing-md);
+  }
+
+  .empty-container {
+    margin: var(--theme-spacing-md);
+    padding: var(--theme-spacing-xxxl) var(--theme-spacing-xxl);
+  }
+
+  .empty-icon {
+    font-size: 100rpx;
+  }
+
+  .empty-title {
+    font-size: var(--theme-font-size-md);
+  }
+
+  .empty-desc {
+    font-size: var(--theme-font-size-xs);
+  }
+}
+
+/* 适配更大屏幕 */
+@media (min-width: 414px) {
+  .vehicle-list {
+    padding: var(--theme-spacing-xl);
+  }
+
+  .vehicle-item {
+    margin-bottom: var(--theme-spacing-xl);
+  }
+}

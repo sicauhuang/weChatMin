@@ -1,5 +1,10 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "车源",
-  "navigationStyle": "custom"
+    "usingComponents": {
+        "van-card": "/@vant/weapp/card/index",
+        "van-search": "/@vant/weapp/search/index",
+        "van-tag": "/@vant/weapp/tag/index",
+        "van-empty": "/@vant/weapp/empty/index"
+    },
+    "navigationBarTitleText": "车源",
+    "navigationStyle": "custom"
 }

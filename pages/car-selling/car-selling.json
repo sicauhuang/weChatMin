@@ -1,6 +1,12 @@
 {
-  "navigationBarTitleText": "卖车管理",
-  "enablePullDownRefresh": true,
-  "onReachBottomDistance": 50,
-  "backgroundTextStyle": "dark"
+    "navigationBarTitleText": "卖车管理",
+    "enablePullDownRefresh": true,
+    "onReachBottomDistance": 50,
+    "backgroundTextStyle": "dark",
+    "usingComponents": {
+        "car-card": "/components/car-card/car-card",
+        "van-card": "/@vant/weapp/card/index",
+        "van-checkbox": "/@vant/weapp/checkbox/index",
+        "van-action-sheet": "/@vant/weapp/action-sheet/index"
+    }
 }

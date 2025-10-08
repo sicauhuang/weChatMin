@@ -1,4 +1,11 @@
 {
-  "navigationBarTitleText": "新建车辆",
-  "navigationStyle": "default"
+    "navigationBarTitleText": "新建车辆",
+    "navigationStyle": "default",
+    "usingComponents": {
+        "van-field": "/@vant/weapp/field/index",
+        "van-picker": "/@vant/weapp/picker/index",
+        "van-popup": "/@vant/weapp/popup/index",
+        "van-uploader": "/@vant/weapp/uploader/index",
+        "van-datetime-picker": "/@vant/weapp/datetime-picker/index"
+    }
 }

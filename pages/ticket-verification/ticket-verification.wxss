@@ -6,7 +6,7 @@
 /* 页面容器 */
 .ticket-verification {
   height: 100vh;
-  background-color: var(--theme-bg-page);
+  background-color: var(--theme-bg-white);
   position: relative;
 }
 
@@ -14,7 +14,7 @@
 .ticket-verification__fixed-header {
   position: relative;
   z-index: var(--theme-z-index-sticky);
-  background: var(--theme-bg-page);
+  background: var(--theme-bg-white);
   padding: var(--theme-spacing-lg) 50rpx;
   padding-bottom: var(--theme-spacing-md);
   display: flex;
@@ -350,7 +350,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   z-index: var(--theme-z-index-fixed);
 }
 

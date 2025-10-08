@@ -1,0 +1,10 @@
+{
+    "navigationBarTitleText": "审批车辆",
+    "enablePullDownRefresh": true,
+    "onReachBottomDistance": 50,
+    "backgroundTextStyle": "dark",
+    "usingComponents": {
+        "car-card": "../../components/car-card/car-card",
+        "van-card": "/@vant/weapp/card/index"
+    }
+}

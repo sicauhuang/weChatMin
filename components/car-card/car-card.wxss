@@ -1,0 +1,288 @@
+/* components/car-card/car-card.wxss - 车辆卡片组件样式 */
+@import '../../assets/fonts/iconfont.wxss';
+@import '../../assets/styles/theme.wxss';
+
+/* 车辆卡片根容器 */
+.vehicle-card {
+  background: var(--theme-bg-card);
+  border-radius: var(--theme-radius-lg);
+  margin-bottom: var(--theme-spacing-xl);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--theme-spacing-xl);
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+  position: relative;
+  overflow: hidden;
+  min-height: 170rpx;
+  height: 170rpx;
+  padding-left: var(--theme-spacing-xxl);
+}
+
+.vehicle-card:active {
+  background-color: var(--theme-bg-active);
+  transform: scale(0.99);
+}
+
+.vehicle-card--selected {
+  /* 选中状态样式可选择性添加 */
+}
+
+/* 选择框样式 */
+.vehicle-card__checkbox {
+  position: absolute;
+  left: var(--theme-spacing-lg);
+  top: 42%;
+  transform: translateY(-50%);
+  z-index: 2;
+  opacity: 0;
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+  pointer-events: none;
+}
+
+.vehicle-card__checkbox--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vehicle-card__checkbox-icon {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  border: 3rpx solid var(--theme-color-primary);
+  background-color: var(--theme-bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.vehicle-card__checkbox-icon--selected {
+  background-color: var(--theme-color-primary);
+  transform: scale(1.1);
+}
+
+.vehicle-card__checkbox-icon--selected .iconfont {
+  color: var(--theme-text-white);
+  font-size: var(--theme-font-size-lg);
+  animation: checkboxSelectIn var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 选择框选中动画 */
+@keyframes checkboxSelectIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 左侧图片区域 */
+.vehicle-card__image-container {
+  width: 30%;
+  min-width: 200rpx;
+  aspect-ratio: 4/3;
+  border-radius: var(--theme-radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.vehicle-card__preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 右侧信息区域 */
+.vehicle-card__info-container {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: space-around;
+}
+
+/* 第一行：品牌+车系+款式 */
+.vehicle-card__title-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+.vehicle-card__title {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  line-height: var(--theme-line-height-tight);
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+/* 第二行：上牌时间|里程|颜色|过户次数 */
+.vehicle-card__params-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.vehicle-card__param-item {
+  font-size: var(--theme-font-size-xs);
+  font-weight: var(--theme-font-weight-normal);
+  color: var(--theme-text-secondary);
+  white-space: nowrap;
+}
+
+/* 分割线设计 */
+.vehicle-card__divider {
+  width: 1rpx;
+  height: var(--theme-font-size-md);
+  background-color: var(--theme-border-light);
+  margin: 0 var(--theme-spacing-xs);
+  flex-shrink: 0;
+}
+
+/* 第三行：价格收藏行 */
+.vehicle-card__price-favorite-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--theme-spacing-lg);
+  overflow: hidden;
+}
+
+.vehicle-card__price {
+  font-size: var(--theme-font-size-xl);
+  font-weight: var(--theme-font-weight-bold);
+  color: var(--theme-color-primary-light);
+  flex: 1;
+}
+
+/* 收藏按钮区域 */
+.vehicle-card__favorite-button {
+  max-width: 88rpx;
+  max-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+  padding: var(--theme-spacing-lg);
+  opacity: 1;
+}
+
+.vehicle-card__favorite-button--hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+}
+
+.vehicle-card__favorite-button:active {
+  transform: scale(0.9);
+}
+
+/* 收藏图标 */
+.vehicle-card__favorite-icon {
+  font-size: var(--theme-icon-size-lg);
+  color: var(--theme-color-primary);
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 已收藏状态图标 */
+.icon-yishoucang {
+  color: var(--theme-color-primary) !important;
+  animation: favoriteScaleIn var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 未收藏状态图标 */
+.icon-shoucang {
+  color: var(--theme-color-primary);
+  opacity: 0.7;
+}
+
+.vehicle-card__favorite-button:active .vehicle-card__favorite-icon {
+  transform: scale(1.1);
+}
+
+/* 收藏动画效果 */
+@keyframes favoriteScaleIn {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 动画效果 */
+.vehicle-card {
+  animation: fadeInUp var(--theme-duration-slow) var(--theme-ease-out);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 - 小屏幕适配 */
+@media (max-width: 750rpx) {
+  .vehicle-card {
+    padding: var(--theme-spacing-xl);
+    gap: var(--theme-spacing-lg);
+  }
+
+  .vehicle-card__image-container {
+    min-width: 180rpx;
+  }
+
+  .vehicle-card__title {
+    font-size: var(--theme-font-size-md);
+  }
+
+  .vehicle-card__param-item {
+    font-size: var(--theme-font-size-sm);
+  }
+
+  .vehicle-card__price {
+    font-size: var(--theme-font-size-lg);
+  }
+
+  .vehicle-card__params-row {
+    gap: var(--theme-spacing-sm);
+  }
+
+  .vehicle-card__divider {
+    margin: 0 var(--theme-spacing-xs);
+  }
+}
+
+@media (max-width: 600rpx) {
+  .vehicle-card {
+    flex-direction: column;
+    gap: var(--theme-spacing-lg);
+  }
+
+  .vehicle-card__image-container {
+    width: 100%;
+    max-width: 300rpx;
+    align-self: center;
+  }
+
+  .vehicle-card__info-container {
+    gap: var(--theme-spacing-md);
+  }
+}

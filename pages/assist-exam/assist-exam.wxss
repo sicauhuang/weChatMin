@@ -4,7 +4,7 @@
 
 /* 页面容器 */
 .assist-exam {
-    background-color: var(--theme-bg-page);
+    background-color: var(--theme-bg-white);
 }
 
 /* 加载状态 */

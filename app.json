@@ -11,7 +11,8 @@
         "pages/ticket-verification/ticket-verification",
         "pages/car-selling/car-selling",
         "pages/car-form/car-form",
-        "pages/car-detail/car-detail"
+        "pages/car-detail/car-detail",
+        "pages/vehicle-approval/vehicle-approval"
     ],
     "window": {
         "navigationBarTextStyle": "black",
@@ -43,8 +44,13 @@
             }
         ]
     },
-    "style": "v2",
     "componentFramework": "glass-easel",
     "sitemapLocation": "sitemap.json",
-    "lazyCodeLoading": "requiredComponents"
+    "lazyCodeLoading": "requiredComponents",
+    "usingComponents": {
+        "van-button": "/@vant/weapp/button/index",
+        "van-icon": "/@vant/weapp/icon/index",
+        "van-loading": "/@vant/weapp/loading/index",
+        "van-toast": "/@vant/weapp/toast/index"
+    }
 }

@@ -449,10 +449,20 @@ Page({
      * 审批车辆
      */
     handleApproveCar() {
-        wx.showToast({
-            title: '审批车辆功能待开发',
-            icon: 'none',
-            duration: 2000
+        console.log('跳转到审批车辆页面');
+        wx.navigateTo({
+            url: '/pages/vehicle-approval/vehicle-approval',
+            success: () => {
+                console.log('成功跳转到审批车辆页面');
+            },
+            fail: (error) => {
+                console.error('跳转到审批车辆页面失败:', error);
+                wx.showToast({
+                    title: '页面跳转失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
         });
     },
 

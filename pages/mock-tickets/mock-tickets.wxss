@@ -4,7 +4,7 @@
 
 /* 页面容器 */
 .mock-tickets {
-    background-color: var(--theme-bg-page);
+    background-color: var(--theme-bg-white);
     height: calc(100vh - 100rpx);
 }
 

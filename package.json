@@ -1,0 +1,16 @@
+{
+  "name": "miniprogram-1",
+  "version": "1.0.0",
+  "description": "车小禾微信小程序",
+  "main": "app.js",
+  "dependencies": {
+    "@vant/weapp": "^1.11.7"
+  },
+  "scripts": {},
+  "keywords": [
+    "miniprogram",
+    "wechat"
+  ],
+  "author": "",
+  "license": "MIT"
+}

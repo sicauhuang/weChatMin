@@ -14,7 +14,7 @@ const development = {
 
 // 生产环境配置（如果有的话）
 const production = {
-    server: 'https://your-domain.com' // 正式服务器地址
+    server: 'https://mp.api.sccdhm.com' // 正式服务器地址
 };
 
 // 当前使用的环境配置
