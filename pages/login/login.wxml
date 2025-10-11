@@ -19,9 +19,9 @@
         </view>
         <text class="login-page__agreement-text">
           <text>我已阅读并同意 </text>
-          <text class="login-page__agreement-link" bindtap="onShowUserAgreement">《用户协议》</text>
+          <text class="login-page__agreement-link" catchtap="onShowUserAgreement">《用户协议》</text>
           <text> 和</text>
-          <text class="login-page__agreement-link" bindtap="onShowPrivacyPolicy">《隐私政策》</text>
+          <text class="login-page__agreement-link" catchtap="onShowPrivacyPolicy">《隐私政策》</text>
           <text>，请使用车小禾账号登录，若本机号码尚未注册则将自动创建账号</text>
         </text>
       </view>

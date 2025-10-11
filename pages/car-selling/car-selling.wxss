@@ -15,7 +15,6 @@
 /* 页面头部 */
 .car-selling-page__header {
   padding: var(--theme-spacing-sm) var(--theme-spacing-xxxl) var(--theme-spacing-lg);
-  margin-bottom: var(--theme-spacing-xxl);
   border-bottom: 1rpx solid var(--theme-border-light);
 }
 
@@ -32,12 +31,20 @@
   color: var(--theme-text-tertiary);
 }
 
+/* 过滤菜单 */
+.car-selling-page__filter {
+  margin: 0 var(--theme-spacing-lg) var(--theme-spacing-md);
+  background-color: var(--theme-bg-card);
+  border-radius: var(--theme-radius-lg);
+}
+
 
 /* 车辆列表 */
 .car-selling-page__list {
   flex: 1;
   padding: 0 var(--theme-spacing-lg);
   overflow: hidden;
+  padding-bottom: 100rpx;
 }
 
 .vehicle-list {
@@ -129,29 +136,83 @@
   display: block;
   font-size: var(--theme-font-size-md);
   color: var(--theme-text-tertiary);
+  margin-bottom: var(--theme-spacing-xl);
+}
+
+.empty-state__reset-btn {
+  background: var(--theme-color-primary);
+  color: var(--theme-text-white);
+  border: none;
+  border-radius: var(--theme-radius-sm);
+  padding: var(--theme-spacing-sm) var(--theme-spacing-lg);
+  font-size: var(--theme-font-size-sm);
+  margin-top: var(--theme-spacing-lg);
+}
+
+.empty-state__reset-btn::after {
+  border: none;
+}
+
+.empty-state__reset-text {
+  color: var(--theme-text-white);
 }
 
 /* 加载状态 */
 .loading-state {
   text-align: center;
   padding: var(--theme-spacing-section) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--theme-spacing-lg);
+}
+
+.loading-state__spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .loading-state__text {
   font-size: var(--theme-font-size-md);
   color: var(--theme-text-secondary);
-  animation: pulse 1.5s ease-in-out infinite;
 }
 
 /* 加载更多 */
 .load-more {
   text-align: center;
-  padding: var(--theme-spacing-xxxl) 0;
+  padding: var(--theme-spacing-xl) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--theme-spacing-md);
+}
+
+.load-more__spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .load-more__text {
   font-size: var(--theme-font-size-md);
   color: var(--theme-text-secondary);
+}
+
+/* 底部提示 */
+.bottom-tip {
+  text-align: center;
+  padding: var(--theme-spacing-lg) 0 var(--theme-spacing-xl);
+}
+
+.bottom-tip__text {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-placeholder);
+  opacity: 0.8;
+}
+
+.bottom-tip__text--end {
+  color: var(--theme-text-tertiary);
 }
 
 /* 没有更多 */
@@ -251,10 +312,10 @@
 
 /* 底部按钮区域 */
 .car-selling-page__footer {
-  /* position: fixed;
+  position: fixed;
   bottom: 0;
   left: 0;
-  right: 0; */
+  right: 0;
   flex-shrink: 0;
   height: 120rpx;
   display: flex;
@@ -429,8 +490,8 @@
     padding: var(--theme-spacing-xl) var(--theme-spacing-xl) var(--theme-spacing-md);
   }
 
-  .car-selling-page__list {
-    padding: 0 var(--theme-spacing-xl);
+  .car-selling-page__filter {
+    margin: 0 var(--theme-spacing-xl) var(--theme-spacing-sm);
   }
 
   .vehicle-card {
@@ -472,8 +533,8 @@
     padding: var(--theme-spacing-lg) var(--theme-spacing-lg) var(--theme-spacing-sm);
   }
 
-  .car-selling-page__list {
-    padding: 0 var(--theme-spacing-lg);
+  .car-selling-page__filter {
+    margin: 0 var(--theme-spacing-lg) var(--theme-spacing-xs);
   }
 
   .vehicle-card {
@@ -526,6 +587,7 @@
   .car-selling-page__button {
     box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.25);
   }
+
 }
 
 /* ===========================================
@@ -540,6 +602,13 @@
 /* 进入删除模式时的动画 */
 .vehicle-card__checkbox {
   animation: checkboxFadeIn var(--theme-duration-base) var(--theme-ease-out) forwards;
+}
+
+.van-dropdown-menu {
+  box-shadow: none !important;
+}
+.van-dropdown-menu__item {
+  justify-content: flex-start !important;
 }
 
 /* 选中状态切换动画 */

@@ -1,0 +1,292 @@
+/* vehicle-picker.wxss */
+
+/* 样式隔离保护：重置可能被页面样式污染的Vant组件样式 */
+:host {
+  /* 确保组件内部样式不受外部影响 */
+  contain: style;
+  display: block;
+  box-sizing: border-box !important;
+}
+
+/* 为Vant组件添加特定前缀避免样式冲突 */
+.vehicle-picker-popup .van-popup {
+  border-radius: none !important;
+  box-shadow: none !important;
+}
+
+.vehicle-picker-cell-group,
+.vehicle-picker-cell-group.van-cell-group {
+  margin: 0 !important;
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  /* Vant组件的CSS变量覆盖 */
+  --van-cell-group-background-color: transparent !important;
+  --van-cell-border-color: var(--theme-border-light) !important;
+}
+
+.vehicle-picker-cell-group .van-cell-group__title {
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: transparent !important;
+  border: none !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+}
+
+.vehicle-picker-cell-group .van-cell-group__title::before {
+  display: none !important;
+}
+
+.vehicle-picker-model-item,
+.vehicle-picker-model-item.van-cell {
+  padding: var(--theme-spacing-md) var(--theme-spacing-lg) !important;
+  background-color: var(--theme-bg-white) !important;
+  border-bottom: 1rpx solid var(--theme-border-light) !important;
+  margin: 0 !important;
+  border-radius: var(--theme-radius-sm) !important;
+  margin-bottom: var(--theme-spacing-xs) !important;
+  border: 1px solid transparent !important;
+  transition: all var(--theme-duration-base) var(--theme-ease-out) !important;
+  box-shadow: none !important;
+}
+
+.vehicle-picker-model-item:last-child,
+.vehicle-picker-model-item.van-cell:last-child {
+  border-bottom: none !important;
+}
+
+.vehicle-picker-model-item .van-cell__title {
+  color: var(--theme-text-primary) !important;
+  font-weight: var(--theme-font-weight-normal) !important;
+  margin: 0 !important;
+}
+
+.vehicle-picker-model-item .van-cell__value {
+  color: var(--theme-text-secondary) !important;
+}
+
+.vehicle-picker-model-item .van-cell__right-icon {
+  color: var(--theme-text-tertiary) !important;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  background: var(--theme-bg-white);
+  position: relative;
+}
+
+.header-left {
+  width: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+}
+
+.header-right {
+  width: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-color-primary);
+  font-weight: var(--theme-font-weight-medium);
+  padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
+}
+
+.content {
+  display: flex;
+  height: calc(100% - 88rpx);
+}
+
+/* 左侧品牌菜单 */
+.brand-menu {
+  width: 30%;
+  background: var(--theme-bg-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--theme-spacing-lg);
+}
+
+.brand-item {
+  width: 100%;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 0;
+  transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.brand-item.active {
+  background: var(--theme-bg-white);
+  position: relative;
+}
+
+.vehicle-brand-wrapper{
+  width: 100%;
+}
+
+.brand-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 48rpx;
+  background: var(--theme-color-primary);
+  border-radius: 0 var(--theme-radius-xs) var(--theme-radius-xs) 0;
+}
+
+.brand-item.active .brand-name {
+  color: var(--theme-color-primary);
+  font-weight: var(--theme-font-weight-medium);
+}
+
+.brand-name {
+  font-size: var(--theme-font-size-sm);
+  color: var(--theme-text-secondary);
+  text-align: center;
+  transition: color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 右侧车型列表 */
+.vehicle-list {
+  width: 70%;
+  background: var(--theme-bg-white);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--theme-spacing-lg);
+  padding-left:var(--theme-spacing-lg) ;
+}
+
+.series-container {
+  width: 100%;
+  padding: 0 var(--theme-spacing-xl);
+}
+
+.series-group {
+  margin-bottom: var(--theme-spacing-xl);
+}
+
+.series-title {
+  font-size: var(--theme-font-size-lg);
+  font-weight: var(--theme-font-weight-medium);
+  color: var(--theme-text-primary);
+  padding: var(--theme-spacing-xl) 0 var(--theme-spacing-md) var(--theme-spacing-md);
+  position: relative;
+}
+
+.series-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4rpx;
+  height: 32rpx;
+  background: var(--theme-color-primary);
+  border-radius: var(--theme-radius-xs);
+}
+
+.model-item {
+  border-radius: var(--theme-radius-sm) !important;
+  margin-bottom: var(--theme-spacing-xs) !important;
+  border: 1px solid transparent !important;
+  transition: all var(--theme-duration-base) var(--theme-ease-out) !important;
+  box-shadow: none !important;
+}
+
+/* 去除van-cell-group的默认阴影效果 */
+.series-group .van-cell-group {
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+  /* 覆盖可能的Vant默认样式 */
+  --van-cell-group-background-color: transparent;
+  --van-cell-group-inset-padding: 0;
+  --van-cell-group-inset-border-radius: 0;
+  --van-cell-group-inset-title-padding: 0;
+}
+
+/* 去除van-cell的默认阴影效果 */
+.series-group .van-cell {
+  box-shadow: none !important;
+  border: none !important;
+  background: var(--theme-bg-white) !important;
+  /* 覆盖可能的Vant默认样式 */
+  --van-cell-background-color: var(--theme-bg-white);
+  --van-cell-border-color: transparent;
+  --van-cell-border-width: 0;
+}
+
+.model-item.selected {
+  border-color: var(--theme-color-primary-light) !important;
+  background: var(--theme-color-primary-light) !important;
+  position: relative;
+}
+
+.model-item.selected .van-cell__title,
+.model-item.selected .van-cell__value {
+  color: var(--theme-color-primary) !important;
+  font-weight: var(--theme-font-weight-medium) !important;
+}
+
+.empty-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200rpx;
+  color: var(--theme-text-tertiary);
+  font-size: var(--theme-font-size-sm);
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+  .header-title {
+    font-size: var(--theme-font-size-md);
+  }
+  
+  .brand-name {
+    font-size: var(--theme-font-size-xs);
+  }
+  
+  .series-title {
+    font-size: var(--theme-font-size-md);
+  }
+}
+
+@media screen and (min-width: 414px) {
+  .header {
+    height: 96rpx;
+  }
+  
+  .content {
+    height: calc(100% - 96rpx);
+  }
+  
+  .brand-item {
+    height: 96rpx;
+  }
+}

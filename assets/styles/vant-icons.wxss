@@ -1,0 +1,479 @@
+/**
+ * Vant Weapp 图标系统集成文件
+ * 将项目iconfont图标系统与Vant组件图标统一
+ */
+
+/* ==========================================================================
+   Vant 图标覆盖 - Vant Icon Override
+   ========================================================================== */
+
+/* 覆盖Vant默认图标，使用项目iconfont图标 */
+
+/* Success 成功图标 */
+.van-icon-success::before,
+.van-icon-passed::before {
+    content: '\e6fa' !important; /* icon-seleted */
+    font-family: 'iconfont' !important;
+}
+
+/* Delete 删除图标 */
+.van-icon-delete::before,
+.van-icon-clear::before {
+    content: '\e603' !important; /* icon-shanchu */
+    font-family: 'iconfont' !important;
+}
+
+/* QR Code 二维码图标 */
+.van-icon-qr::before,
+.van-icon-qr-code::before {
+    content: '\e601' !important; /* icon-erweima */
+    font-family: 'iconfont' !important;
+}
+
+/* Scan 扫码图标 */
+.van-icon-scan::before,
+.van-icon-scanning::before {
+    content: '\e60c' !important; /* icon-saoma */
+    font-family: 'iconfont' !important;
+}
+
+/* Settings 设置图标 */
+.van-icon-setting::before,
+.van-icon-setting-o::before {
+    content: '\e60d' !important; /* icon-shezhi */
+    font-family: 'iconfont' !important;
+}
+
+/* Star 收藏图标 */
+.van-icon-star::before {
+    content: '\e602' !important; /* icon-shoucang */
+    font-family: 'iconfont' !important;
+}
+
+.van-icon-star-o::before {
+    content: '\e604' !important; /* icon-yishoucang */
+    font-family: 'iconfont' !important;
+}
+
+/* Contact 联系图标 */
+.van-icon-contact::before,
+.van-icon-phone::before {
+    content: '\e607' !important; /* icon-lianxi */
+    font-family: 'iconfont' !important;
+}
+
+/* Phone 电话图标 */
+.van-icon-phone-o::before {
+    content: '\e64c' !important; /* icon-dianhua */
+    font-family: 'iconfont' !important;
+}
+
+/* Location 地址图标 */
+.van-icon-location::before,
+.van-icon-location-o::before {
+    content: '\e63f' !important; /* icon-dizhi */
+    font-family: 'iconfont' !important;
+}
+
+/* Shop 公司图标 */
+.van-icon-shop::before,
+.van-icon-shop-o::before {
+    content: '\e679' !important; /* icon-gongsi */
+    font-family: 'iconfont' !important;
+}
+
+/* Coupon 票据图标 */
+.van-icon-coupon::before,
+.van-icon-coupon-o::before {
+    content: '\e647' !important; /* icon-piao */
+    font-family: 'iconfont' !important;
+}
+
+/* Car 车源图标 */
+.van-icon-logistics::before {
+    content: '\e600' !important; /* icon-cheyuan */
+    font-family: 'iconfont' !important;
+}
+
+/* Home 首页图标 */
+.van-icon-home-o::before,
+.van-icon-wap-home-o::before {
+    content: '\e698' !important; /* icon-shouye */
+    font-family: 'iconfont' !important;
+}
+
+/* User 我的图标 */
+.van-icon-user-o::before,
+.van-icon-manager-o::before {
+    content: '\e60b' !important; /* icon-wode */
+    font-family: 'iconfont' !important;
+}
+
+/* Buy Car 买车图标 */
+.van-icon-cart-o::before {
+    content: '\e67a' !important; /* icon-maiche */
+    font-family: 'iconfont' !important;
+}
+
+/* Approval 审批图标 */
+.van-icon-passed::before,
+.van-icon-certificate::before {
+    content: '\e670' !important; /* icon-shenpi */
+    font-family: 'iconfont' !important;
+}
+
+/* Assist Exam 助考图标 */
+.van-icon-medal::before,
+.van-icon-award::before {
+    content: '\e73d' !important; /* icon-zhukao */
+    font-family: 'iconfont' !important;
+}
+
+/* Footprint 足迹图标 */
+.van-icon-records::before {
+    content: '\e711' !important; /* icon-zuji */
+    font-family: 'iconfont' !important;
+}
+
+/* ==========================================================================
+   自定义图标类 - Custom Icon Classes
+   ========================================================================== */
+
+/* 为Vant组件提供项目图标的便捷类 */
+.van-icon--theme-success::before {
+    content: '\e6fa';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-delete::before {
+    content: '\e603';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-qr::before {
+    content: '\e601';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-scan::before {
+    content: '\e60c';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-setting::before {
+    content: '\e60d';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-star::before {
+    content: '\e602';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-star-filled::before {
+    content: '\e604';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-contact::before {
+    content: '\e607';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-phone::before {
+    content: '\e64c';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-location::before {
+    content: '\e63f';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-company::before {
+    content: '\e679';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-ticket::before {
+    content: '\e647';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-car::before {
+    content: '\e600';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-home::before {
+    content: '\e698';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-user::before {
+    content: '\e60b';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-buy-car::before {
+    content: '\e67a';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-approval::before {
+    content: '\e670';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-assist::before {
+    content: '\e73d';
+    font-family: 'iconfont';
+}
+
+.van-icon--theme-footprint::before {
+    content: '\e711';
+    font-family: 'iconfont';
+}
+
+/* ==========================================================================
+   Vant 组件图标样式统一 - Vant Component Icon Styling
+   ========================================================================== */
+
+/* 确保所有Vant图标使用项目主题色 */
+.van-icon {
+    color: var(--theme-icon-color-primary);
+    font-size: var(--theme-icon-size-md);
+    transition: color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+/* 图标大小变体 */
+.van-icon--xs {
+    font-size: var(--theme-icon-size-xs);
+}
+
+.van-icon--sm {
+    font-size: var(--theme-icon-size-sm);
+}
+
+.van-icon--md {
+    font-size: var(--theme-icon-size-md);
+}
+
+.van-icon--lg {
+    font-size: var(--theme-icon-size-lg);
+}
+
+.van-icon--xl {
+    font-size: var(--theme-icon-size-xl);
+}
+
+/* 图标颜色变体 */
+.van-icon--primary {
+    color: var(--theme-color-primary);
+}
+
+.van-icon--success {
+    color: var(--theme-color-success);
+}
+
+.van-icon--error,
+.van-icon--danger {
+    color: var(--theme-color-error);
+}
+
+.van-icon--warning {
+    color: var(--theme-color-warning);
+}
+
+.van-icon--info {
+    color: var(--theme-color-info);
+}
+
+.van-icon--secondary {
+    color: var(--theme-icon-color-secondary);
+}
+
+.van-icon--tertiary {
+    color: var(--theme-icon-color-tertiary);
+}
+
+/* ==========================================================================
+   特定组件图标适配 - Specific Component Icon Adaptation
+   ========================================================================== */
+
+/* Button 组件图标 */
+.van-button .van-icon {
+    margin-right: var(--theme-spacing-xs);
+}
+
+.van-button--round .van-icon {
+    margin-right: var(--theme-spacing-sm);
+}
+
+/* Cell 组件图标 */
+.van-cell__left-icon {
+    color: var(--theme-icon-color-primary);
+    font-size: var(--theme-icon-size-md);
+    margin-right: var(--theme-spacing-sm);
+}
+
+.van-cell__right-icon {
+    color: var(--theme-icon-color-tertiary);
+    font-size: var(--theme-icon-size-sm);
+    margin-left: var(--theme-spacing-xs);
+}
+
+/* Dialog 组件图标 */
+.van-dialog__header .van-icon {
+    color: var(--theme-color-primary);
+    font-size: var(--theme-icon-size-lg);
+    margin-bottom: var(--theme-spacing-sm);
+}
+
+/* Toast 组件图标 */
+.van-toast .van-icon {
+    color: var(--theme-text-white);
+    font-size: var(--theme-icon-size-lg);
+    margin-bottom: var(--theme-spacing-xs);
+}
+
+/* Loading 组件图标 */
+.van-loading .van-icon {
+    color: var(--theme-color-primary);
+}
+
+/* Tag 组件图标 */
+.van-tag .van-icon {
+    font-size: var(--theme-font-size-xs);
+    margin-right: 4rpx;
+}
+
+/* Search 组件图标 */
+.van-search .van-icon {
+    color: var(--theme-text-secondary);
+    font-size: var(--theme-icon-size-md);
+}
+
+/* Empty 组件图标 */
+.van-empty .van-icon {
+    color: var(--theme-text-placeholder);
+    font-size: 120rpx;
+    opacity: 0.6;
+}
+
+/* ActionSheet 组件图标 */
+.van-action-sheet__item .van-icon {
+    color: var(--theme-icon-color-secondary);
+    font-size: var(--theme-icon-size-md);
+    margin-right: var(--theme-spacing-sm);
+}
+
+/* Checkbox 组件图标 */
+.van-checkbox__icon .van-icon {
+    color: var(--theme-text-white);
+    font-size: 24rpx;
+}
+
+/* Grid 组件图标 */
+.van-grid-item .van-icon {
+    color: var(--theme-icon-color-primary);
+    font-size: var(--theme-icon-size-xl);
+    margin-bottom: var(--theme-spacing-xs);
+}
+
+/* Popup 组件关闭图标 */
+.van-popup__close-icon {
+    color: var(--theme-text-secondary);
+    font-size: var(--theme-icon-size-lg);
+    transition: color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.van-popup__close-icon:active {
+    color: var(--theme-text-primary);
+}
+
+/* ==========================================================================
+   图标动画效果 - Icon Animation Effects
+   ========================================================================== */
+
+/* 图标悬停效果 */
+.van-icon:active {
+    transform: scale(0.95);
+    transition: transform var(--theme-duration-fast) var(--theme-ease-out);
+}
+
+/* 旋转动画 */
+.van-icon--spin {
+    animation: van-icon-spin 1s linear infinite;
+}
+
+@keyframes van-icon-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 脉冲动画 */
+.van-icon--pulse {
+    animation: van-icon-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes van-icon-pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+/* 弹跳动画 */
+.van-icon--bounce {
+    animation: van-icon-bounce 0.6s ease-in-out;
+}
+
+@keyframes van-icon-bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-6rpx);
+    }
+    60% {
+        transform: translateY(-3rpx);
+    }
+}
+
+/* ==========================================================================
+   响应式图标适配 - Responsive Icon Adaptation
+   ========================================================================== */
+
+@media (max-width: 750rpx) {
+    .van-icon {
+        font-size: var(--theme-icon-size-sm);
+    }
+
+    .van-icon--lg {
+        font-size: var(--theme-icon-size-md);
+    }
+
+    .van-icon--xl {
+        font-size: var(--theme-icon-size-lg);
+    }
+}
+
+@media (max-width: 600rpx) {
+    .van-cell__left-icon {
+        font-size: var(--theme-icon-size-sm);
+        margin-right: var(--theme-spacing-xs);
+    }
+
+    .van-grid-item .van-icon {
+        font-size: var(--theme-icon-size-lg);
+    }
+}

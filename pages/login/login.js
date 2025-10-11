@@ -84,9 +84,6 @@ Page({
      * 显示用户协议
      */
     onShowUserAgreement(e) {
-        // 阻止事件冒泡，避免触发父级的勾选事件
-        e.stopPropagation();
-
         wx.showModal({
             title: '用户协议',
             content: '这里是用户协议的内容，实际项目中应该跳转到协议页面或显示完整的协议内容。',
@@ -99,8 +96,6 @@ Page({
      * 显示隐私政策
      */
     onShowPrivacyPolicy(e) {
-        // 阻止事件冒泡，避免触发父级的勾选事件
-        e.stopPropagation();
 
         wx.showModal({
             title: '隐私政策',

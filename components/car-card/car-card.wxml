@@ -1,11 +1,12 @@
 <!-- 车辆卡片组件模板 -->
-<view class="vehicle-card {{isSelected ? 'vehicle-card--selected' : ''}}"
-      bindtap="onCardTap"
-      role="button"
-      aria-label="{{deleteMode ? (isSelected ? '取消选择' : '选择') + formattedVehicleData.brand + ' ' + formattedVehicleData.series + ' ' + formattedVehicleData.model : '点击查看' + formattedVehicleData.brand + ' ' + formattedVehicleData.series + ' ' + formattedVehicleData.model + '详情'}}">
+<van-swipe-cell right-width="{{ 65 }}" async-close bind:close="onSwipeClose">
+  <view class="vehicle-card {{isSelected ? 'vehicle-card--selected' : ''}}"
+        bindtap="onCardTap"
+        role="button"
+        aria-label="{{deleteMode ? (isSelected ? '取消选择' : '选择') + formattedVehicleData.brand + ' ' + formattedVehicleData.series + ' ' + formattedVehicleData.model : '点击查看' + formattedVehicleData.brand + ' ' + formattedVehicleData.series + ' ' + formattedVehicleData.model + '详情'}}">
 
   <!-- 删除模式下的选择框 -->
-  <view class="vehicle-card__checkbox {{deleteMode ? 'vehicle-card__checkbox--visible' : ''}}" 
+  <view class="vehicle-card__checkbox {{deleteMode ? 'vehicle-card__checkbox--visible' : ''}}"
         wx:if="{{deleteMode}}">
     <view class="vehicle-card__checkbox-icon {{isSelected ? 'vehicle-card__checkbox-icon--selected' : ''}}">
       <text class="iconfont icon-seleted" wx:if="{{isSelected}}"></text>
@@ -24,9 +25,9 @@
 
   <!-- 右侧信息区域 -->
   <view class="vehicle-card__info-container">
-    <!-- 第一行：品牌+车系+款式 -->
+    <!-- 第一行：车辆名称（后端已拼接好）或手动拼接 -->
     <view class="vehicle-card__title-row">
-      <text class="vehicle-card__title">{{vehicleData.brand}} {{vehicleData.series}} {{vehicleData.model}}</text>
+      <text class="vehicle-card__title">{{vehicleData.name || (vehicleData.brand + ' ' + vehicleData.series + ' ' + vehicleData.model)}}</text>
     </view>
 
     <!-- 第二行：上牌时间|里程|颜色|过户次数 -->
@@ -40,11 +41,19 @@
       <text class="vehicle-card__param-item">{{formattedVehicleData.formattedTransfer}}</text>
     </view>
 
-    <!-- 第三行：价格收藏行 -->
+    <!-- 第三行：价格状态收藏行 -->
     <view class="vehicle-card__price-favorite-row">
       <text class="vehicle-card__price">{{formattedVehicleData.formattedPrice}}</text>
-      <!-- 在删除模式下隐藏收藏按钮 -->
-      <view class="vehicle-card__favorite-button {{deleteMode ? 'vehicle-card__favorite-button--hidden' : ''}}"
+      <!-- 状态徽标 -->
+      <van-tag
+        wx:if="{{vehicleData.status && vehicleData.statusName}}"
+        class="vehicle-card__status-tag"
+        type="{{vehicleData.status === 'WAIT_APPROVE' ? 'warning' : (vehicleData.status === 'WAIT_RECTIFY' ? 'primary' : (vehicleData.status === 'ON_SALE' ? 'success' : 'default'))}}"
+        size="small">
+        {{vehicleData.statusName}}
+      </van-tag>
+      <!-- 在删除模式下或showFavoriteButton为false时隐藏收藏按钮 -->
+      <view class="vehicle-card__favorite-button {{deleteMode || !showFavoriteButton ? 'vehicle-card__favorite-button--hidden' : ''}}"
             catchtap="onFavoriteToggle"
             role="button"
             aria-label="{{vehicleData.isFavorited ? '取消收藏' : '收藏'}}该车辆">
@@ -53,4 +62,8 @@
     </view>
   </view>
 
-</view>
+  </view>
+
+  <!-- 右侧删除按钮 -->
+  <view slot="right" class="vehicle-card__delete-button">删除</view>
+</van-swipe-cell>

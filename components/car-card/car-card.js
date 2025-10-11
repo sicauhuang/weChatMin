@@ -18,6 +18,11 @@ Component({
     isSelected: {
       type: Boolean,
       value: false
+    },
+    // 是否显示收藏按钮
+    showFavoriteButton: {
+      type: Boolean,
+      value: true
     }
   },
 
@@ -111,6 +116,33 @@ Component({
         vehicleData: this.properties.vehicleData,
         isFavorited: newFavoritedStatus
       });
+    },
+
+    /**
+     * SwipeCell关闭事件处理
+     * @param {Object} e 事件对象
+     */
+    onSwipeClose(e) {
+      const { position, instance } = e.detail;
+      if (position === 'right') {
+        // 显示删除确认对话框
+        wx.showModal({
+          title: '确认删除',
+          content: '删除后无法恢复，是否继续？',
+          confirmText: '确认删除',
+          confirmColor: '#ff4757',
+          success: (res) => {
+            if (res.confirm) {
+              // 触发删除事件
+              this.triggerEvent('onDelete', {
+                vehicleData: this.properties.vehicleData
+              });
+            }
+            // 无论确认还是取消，都关闭SwipeCell
+            instance.close();
+          }
+        });
+      }
     }
   },
 

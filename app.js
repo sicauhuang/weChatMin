@@ -1,6 +1,7 @@
 // app.js
 const auth = require('./utils/auth.js');
 const storage = require('./utils/storage.js');
+const permission = require('./utils/permission.js');
 
 App({
   onLaunch() {
@@ -44,12 +45,34 @@ App({
         this.globalData.openid = loginData.openid;
         this.globalData.phoneNumber = userInfo ? userInfo.phoneNumber : '';
         console.log('用户已登录:', userInfo);
+        
+        // 初始化权限系统
+        try {
+          if (userInfo && userInfo.permissions) {
+            permission.initPermissions(userInfo.permissions, {
+              userId: userInfo.userId,
+              roleId: userInfo.roleId,
+              roleName: userInfo.roleName
+            });
+            console.log('应用启动时权限系统初始化成功');
+          }
+        } catch (permissionError) {
+          console.error('应用启动时权限系统初始化失败:', permissionError);
+        }
       } else {
         this.globalData.isLoggedIn = false;
         this.globalData.userInfo = null;
         this.globalData.openid = null;
         this.globalData.phoneNumber = null;
         console.log('用户未登录');
+        
+        // 清除权限数据
+        try {
+          permission.clearPermissions();
+          console.log('未登录状态，权限数据已清除');
+        } catch (permissionError) {
+          console.error('清除权限数据失败:', permissionError);
+        }
       }
     } catch (error) {
       console.error('检查登录状态失败:', error);

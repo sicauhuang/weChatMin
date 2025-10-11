@@ -1,0 +1,11 @@
+<!--
+  权限包装器组件模板
+  简化版本：有权限显示，无权限隐藏
+-->
+
+<view 
+  class="permission-wrapper"
+  wx:if="{{initialized && hasPermission}}"
+>
+  <slot></slot>
+</view>

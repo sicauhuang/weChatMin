@@ -2,10 +2,17 @@
     "navigationBarTitleText": "新建车辆",
     "navigationStyle": "default",
     "usingComponents": {
+        "van-cell-group": "/@vant/weapp/cell-group/index",
+        "van-cell": "/@vant/weapp/cell/index",
         "van-field": "/@vant/weapp/field/index",
         "van-picker": "/@vant/weapp/picker/index",
         "van-popup": "/@vant/weapp/popup/index",
+        "van-datetime-picker": "/@vant/weapp/datetime-picker/index",
+        "van-button": "/@vant/weapp/button/index",
         "van-uploader": "/@vant/weapp/uploader/index",
-        "van-datetime-picker": "/@vant/weapp/datetime-picker/index"
+        "van-divider": "/@vant/weapp/divider/index",
+        "van-tag": "/@vant/weapp/tag/index",
+        "van-toast": "/@vant/weapp/toast/index",
+        "vehicle-picker": "/components/vehicle-picker/vehicle-picker"
     }
 }

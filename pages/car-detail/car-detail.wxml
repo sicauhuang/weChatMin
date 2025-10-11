@@ -8,7 +8,7 @@
   <scroll-view class="detail-container" scroll-y="true" enhanced="true" wx:if="{{vehicleData}}">
     <!-- 车辆图片轮播 -->
     <view class="detail-images">
-      <swiper 
+      <swiper
         class="images-swiper"
         indicator-dots="true"
         indicator-color="rgba(255,255,255,0.5)"
@@ -18,13 +18,13 @@
         bindchange="onImageSwiperChange"
         bindtap="onImagePreview">
         <swiper-item wx:for="{{vehicleData.images}}" wx:key="index">
-          <image 
-            class="swiper-image" 
-            src="{{item || '/assets/imgs/car-placeholder.jpg'}}" 
+          <image
+            class="swiper-image"
+            src="{{item}}"
             mode="aspectFill" />
         </swiper-item>
       </swiper>
-      
+
       <!-- 状态标签 -->
       <view class="detail-status detail-status--{{vehicleData.status}}">
         <text class="detail-status__text">
@@ -43,7 +43,7 @@
       <view class="detail-card__header">
         <text class="detail-card__title">基本信息</text>
       </view>
-      
+
       <view class="detail-card__content">
         <!-- 车型和价格 -->
         <view class="basic-info">
@@ -66,7 +66,7 @@
             </view>
             <text class="detail-info__value">{{vehicleData.licensePlate}}</text>
           </view>
-          
+
           <view class="detail-info__item">
             <view class="detail-info__label">
               <text class="iconfont icon-weizhi detail-info__icon"></text>
@@ -83,7 +83,7 @@
       <view class="detail-card__header">
         <text class="detail-card__title">联系信息</text>
       </view>
-      
+
       <view class="detail-card__content">
         <view class="contact-info">
           <view class="contact-info__item">
@@ -93,7 +93,7 @@
             </view>
             <text class="contact-info__value">{{vehicleData.ownerName}}</text>
           </view>
-          
+
           <view class="contact-info__item" bindtap="onCallPhone">
             <view class="contact-info__label">
               <text class="iconfont icon-dianhua contact-info__icon"></text>
@@ -113,7 +113,7 @@
       <view class="detail-card__header">
         <text class="detail-card__title">车辆描述</text>
       </view>
-      
+
       <view class="detail-card__content">
         <text class="description-text">{{vehicleData.description}}</text>
       </view>
@@ -124,7 +124,7 @@
       <view class="detail-card__header">
         <text class="detail-card__title">发布信息</text>
       </view>
-      
+
       <view class="detail-card__content">
         <view class="publish-info">
           <view class="publish-info__item">
@@ -145,13 +145,13 @@
 
   <!-- 底部操作按钮 -->
   <view class="detail-actions" wx:if="{{vehicleData}}">
-    <button 
+    <button
       class="detail-actions__button detail-actions__button--secondary"
       bindtap="onCallPhone">
       <text class="iconfont icon-dianhua detail-actions__button-icon"></text>
       联系车主
     </button>
-    <button 
+    <button
       class="detail-actions__button detail-actions__button--primary"
       bindtap="onShowActionSheet">
       <text class="iconfont icon-gengduo detail-actions__button-icon"></text>
@@ -167,9 +167,9 @@
         <text class="action-sheet__title">车辆操作</text>
         <text class="iconfont icon-guanbi action-sheet__close" bindtap="onHideActionSheet"></text>
       </view>
-      
+
       <view class="action-sheet__body">
-        <view 
+        <view
           class="action-sheet__item {{item.danger ? 'danger' : ''}}"
           wx:for="{{actionSheetItems}}"
           wx:key="key"

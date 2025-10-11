@@ -7,6 +7,10 @@
 @import './assets/styles/theme.wxss';
 /* 引入图标字体文件 */
 @import './assets/fonts/iconfont.wxss';
+/* 引入Vant主题配置文件 */
+@import './assets/styles/vant-theme.wxss';
+/* 引入Vant图标配置文件 */
+@import './assets/styles/vant-icons.wxss';
 
 /* ==========================================================================
    全局页面样式 - Global Page Styles

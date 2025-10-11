@@ -42,20 +42,86 @@
     <!-- 功能模块区域 -->
     <view class="profile-page__function-modules">
       <view class="function-modules">
+    <permission-wrapper permission="miniprogram:page.teach">
+        <!-- 我的二维码 -->
         <view class="function-modules__item"
-              wx:for="{{functionModules}}"
-              wx:key="id"
               bindtap="onFunctionModuleTap"
-              data-id="{{item.id}}"
-              data-name="{{item.name}}">
+              data-id="qrcode"
+              data-name="我的二维码">
           <view class="function-modules__item-left">
-            <text class="iconfont {{item.icon}} function-modules__item-icon"></text>
-            <text class="function-modules__item-name">{{item.name}}</text>
+            <text class="iconfont icon-erweima function-modules__item-icon"></text>
+            <text class="function-modules__item-name">我的二维码</text>
           </view>
           <view class="function-modules__item-right">
             <text class="function-modules__item-arrow">></text>
           </view>
         </view>
+        </permission-wrapper>
+
+        <!-- 我要卖车 -->
+        <permission-wrapper permission="miniprogram:page.sell">
+          <view class="function-modules__item"
+                bindtap="onFunctionModuleTap"
+                data-id="buy-car"
+                data-name="我要卖车">
+            <view class="function-modules__item-left">
+              <text class="iconfont icon-maiche function-modules__item-icon"></text>
+              <text class="function-modules__item-name">我要卖车</text>
+            </view>
+            <view class="function-modules__item-right">
+              <text class="function-modules__item-arrow">></text>
+            </view>
+          </view>
+        </permission-wrapper>
+
+        <!-- 审批车辆 -->
+        <permission-wrapper permission="miniprogram:page.approve">
+          <view class="function-modules__item"
+                bindtap="onFunctionModuleTap"
+                data-id="approve-car"
+                data-name="审批车辆">
+            <view class="function-modules__item-left">
+              <text class="iconfont icon-shenpi function-modules__item-icon"></text>
+              <text class="function-modules__item-name">审批车辆</text>
+            </view>
+            <view class="function-modules__item-right">
+              <text class="function-modules__item-arrow">></text>
+            </view>
+          </view>
+        </permission-wrapper>
+
+     <!-- 模拟票核销 -->
+        <permission-wrapper permission="miniprogram:page.check">
+          <view class="function-modules__item"
+                bindtap="onFunctionModuleTap"
+                data-id="verify-ticket"
+                data-name="模拟票核销">
+            <view class="function-modules__item-left">
+              <text class="iconfont icon-saoma function-modules__item-icon"></text>
+              <text class="function-modules__item-name">模拟票核销</text>
+            </view>
+            <view class="function-modules__item-right">
+              <text class="function-modules__item-arrow">></text>
+            </view>
+          </view>
+        </permission-wrapper>
+
+          <!-- 模拟票助考 -->
+        <permission-wrapper permission="miniprogram:page.teach">
+          <view class="function-modules__item"
+                bindtap="onFunctionModuleTap"
+                data-id="assist-exam"
+                data-name="模拟票助考">
+            <view class="function-modules__item-left">
+              <text class="iconfont icon-zhukao function-modules__item-icon"></text>
+              <text class="function-modules__item-name">模拟票助考</text>
+            </view>
+            <view class="function-modules__item-right">
+              <text class="function-modules__item-arrow">></text>
+            </view>
+          </view>
+        </permission-wrapper>
+
       </view>
     </view>
   </view>

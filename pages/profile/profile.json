@@ -1,5 +1,6 @@
 {
     "usingComponents": {
+        "permission-wrapper": "../../components/permission-wrapper/permission-wrapper",
         "qr-code": "../../components/qr-code/qr-code",
         "van-cell": "/@vant/weapp/cell/index",
         "van-cell-group": "/@vant/weapp/cell-group/index",

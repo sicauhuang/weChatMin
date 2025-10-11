@@ -122,8 +122,9 @@ Page({
                 });
             }
 
+            // 调用真实接口
             const response = await request.get(
-                '/api/mock-tickets',
+                '/api/mp/ticket/query-my-ticket-list',
                 {},
                 {
                     needAuth: true, // 需要认证
@@ -133,9 +134,13 @@ Page({
 
             console.log('模拟票列表加载成功:', response);
 
-            if (response && response.success && response.data) {
+            // request.js已经预处理成功响应，直接使用数据
+            if (response) {
+                // 数据映射转换
+                const transformedData = this.transformTicketData(response);
+
                 this.setData({
-                    ticketList: response.data,
+                    ticketList: transformedData,
                     loading: false,
                     refreshing: false
                 });
@@ -149,23 +154,10 @@ Page({
                     });
                 }
             } else {
-                throw new Error(response?.message || '获取模拟票列表失败');
+                throw new Error('获取模拟票列表失败');
             }
         } catch (error) {
-            console.error('加载模拟票列表失败:', error);
-
-            this.setData({
-                loading: false,
-                refreshing: false,
-                ticketList: []
-            });
-
-            // 显示错误提示
-            wx.showToast({
-                title: error.message || '加载失败',
-                icon: 'none',
-                duration: 2000
-            });
+            this.handleLoadError(error, isRefresh);
         } finally {
             // 停止下拉刷新
             if (isRefresh) {
@@ -178,18 +170,7 @@ Page({
      * 点击模拟票卡片
      * @param {Object} event 事件对象
      */
-    onTicketTap(event) {
-        const { item } = event.currentTarget.dataset;
-        console.log('点击模拟票:', item);
-
-        // 暂时只显示详情，后续可以跳转到详情页
-        wx.showModal({
-            title: '模拟票详情',
-            content: `订单号: ${item.orderNumber}\n状态: ${item.status}\n预约时间: ${item.appointmentDate}\n场地: ${item.simulationArea}\n教练: ${item.coachName}`,
-            showCancel: false,
-            confirmText: '知道了'
-        });
-    },
+    onTicketTap(event) {},
 
     /**
      * 点击使用按钮 - 显示二维码
@@ -199,7 +180,7 @@ Page({
         const { item } = event.currentTarget.dataset;
         console.log('点击使用模拟票，生成二维码:', item);
 
-        // 构造票据二维码数据
+        // 构造票据二维码数据（适配新数据结构）
         const ticketQRData = {
             type: 'mock-ticket',
             ticketId: item.id,
@@ -208,7 +189,8 @@ Page({
             studentName: item.studentName,
             studentPhone: item.studentPhone,
             appointmentDate: item.appointmentDate,
-            simulationArea: item.simulationArea
+            simulationArea: item.simulationArea,
+            idCard: item.studentCardNumber
         };
 
         // 设置二维码数据并显示弹窗
@@ -293,6 +275,112 @@ Page({
             this.setData({
                 ticketList: [],
                 loading: false
+            });
+        }
+    },
+
+    /**
+     * 数据转换映射函数
+     * 将API响应数据转换为前端数据结构
+     * @param {Array} apiData API返回的数据数组
+     * @returns {Array} 转换后的数据数组
+     */
+    transformTicketData(apiData) {
+        if (!Array.isArray(apiData)) {
+            console.warn('数据转换失败：输入不是数组:', apiData);
+            return [];
+        }
+
+        return apiData.map((item) => {
+            try {
+                return {
+                    id: item.id ? item.id.toString() : '',
+                    packageName: item.suiteName || '未知套餐',
+                    orderNumber: `MT${item.id ? item.id.toString().padStart(8, '0') : '00000000'}`,
+                    studentName: item.studentName || '',
+                    studentPhone: item.studentPhone || '',
+                    appointmentDate: item.bookDate || '',
+                    simulationArea: item.mockArea || '未分配',
+                    status: item.statusName || '',
+                    coachName: item.coachName || '待分配',
+                    coachPhone: item.coachPhone || '-',
+                    studentCardNumber: item.studentCardNumber || '',
+                    // 保留原始数据以备后续使用
+                    _original: item
+                };
+            } catch (error) {
+                console.error('单条数据转换失败:', error, item);
+                return {
+                    id: '',
+                    packageName: '数据异常',
+                    orderNumber: 'ERROR',
+                    studentName: '',
+                    studentPhone: '',
+                    appointmentDate: '',
+                    simulationArea: '未知',
+                    status: '异常',
+                    coachName: '',
+                    coachPhone: '',
+                    _original: item
+                };
+            }
+        });
+    },
+
+    /**
+     * 处理加载错误
+     * @param {Object} error 错误对象
+     * @param {boolean} isRefresh 是否为刷新操作
+     */
+    handleLoadError(error, isRefresh = false) {
+        console.error('加载模拟票列表失败:', error);
+
+        this.setData({
+            loading: false,
+            refreshing: false,
+            ticketList: []
+        });
+
+        // 停止下拉刷新
+        if (isRefresh) {
+            wx.stopPullDownRefresh();
+        }
+
+        // 根据错误类型显示不同的提示
+        let errorMessage = '加载失败';
+        let showRetry = false;
+
+        if (error.code === 'NETWORK_ERROR') {
+            errorMessage = '网络连接失败，请检查网络后重试';
+            showRetry = true;
+        } else if (error.code === 'NO_REFRESH_TOKEN' || error.code === 'REFRESH_TOKEN_FAILED') {
+            errorMessage = '登录已过期，请重新登录';
+        } else if (error.code === 'LOGOUT_AUTH_FAILED' || error.code === 'UNBIND_AUTH_FAILED') {
+            errorMessage = '认证失败';
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+
+        if (showRetry) {
+            // 显示重试对话框
+            wx.showModal({
+                title: '网络错误',
+                content: errorMessage,
+                showCancel: true,
+                cancelText: '取消',
+                confirmText: '重试',
+                success: (res) => {
+                    if (res.confirm) {
+                        this.loadTicketList();
+                    }
+                }
+            });
+        } else {
+            // 显示错误提示
+            wx.showToast({
+                title: errorMessage,
+                icon: 'none',
+                duration: 2000
             });
         }
     },

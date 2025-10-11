@@ -135,8 +135,9 @@ Page({
                 });
             }
 
+            // 使用新的接口地址
             const response = await request.get(
-                '/api/assist-exam-tickets',
+                '/api/mp/ticket/query-my-assistant-ticket-list',
                 {},
                 {
                     needAuth: true, // 需要认证
@@ -146,14 +147,23 @@ Page({
 
             console.log('助考票据列表加载成功:', response);
 
-            if (response && response.success && response.data) {
-                // 处理数据，只保留需要的字段
-                const processedTickets = response.data.map((ticket) => ({
+            // 适配新的响应数据结构
+            if (response && Array.isArray(response)) {
+                // 处理数据，实现字段映射
+                const processedTickets = response.map((ticket) => ({
                     id: ticket.id,
-                    packageName: ticket.packageName,
-                    studentName: ticket.studentName,
-                    verifyOperator: ticket.assistantName || ticket.verifyOperator,
-                    verifyTime: ticket.verifyTime ? this.formatTime(ticket.verifyTime) : null
+                    packageName: ticket.suiteName || '', // 后端字段映射
+                    studentName: ticket.studentName || '',
+                    verifyOperator: ticket.verifyUserName || '暂无', // 后端字段映射
+                    verifyTime: ticket.verifyTime ? this.formatTime(ticket.verifyTime) : '暂未核销',
+                    // 额外保存后端字段供参考
+                    status: ticket.status,
+                    statusName: ticket.statusName,
+                    bookDate: ticket.bookDate,
+                    coachName: ticket.coachName,
+                    coachPhone: ticket.coachPhone,
+                    mockArea: ticket.mockArea,
+                    studentPhone: ticket.studentPhone
                 }));
 
                 this.setData({
@@ -171,7 +181,21 @@ Page({
                     });
                 }
             } else {
-                throw new Error(response?.message || '获取助考票据列表失败');
+                // 处理空数据情况
+                console.log('接口返回空数据或无效数据');
+                this.setData({
+                    ticketList: [],
+                    loading: false,
+                    refreshing: false
+                });
+
+                if (isRefresh) {
+                    wx.showToast({
+                        title: '暂无数据',
+                        icon: 'none',
+                        duration: 1500
+                    });
+                }
             }
         } catch (error) {
             console.error('加载助考票据列表失败:', error);
@@ -182,12 +206,15 @@ Page({
                 ticketList: []
             });
 
-            // 显示错误提示
-            wx.showToast({
-                title: error.message || '加载失败',
-                icon: 'none',
-                duration: 2000
-            });
+            // 如果是认证失败，更新登录状态
+            if (error.code === 'NO_REFRESH_TOKEN' || error.code === 'REFRESH_TOKEN_FAILED') {
+                this.setData({
+                    isLoggedIn: false
+                });
+            }
+
+            // 通用错误已由request.js处理，这里只处理特殊业务逻辑
+            // 如需自定义错误处理，可传入 showErrorToast: false 在请求选项中
         } finally {
             // 停止下拉刷新
             if (isRefresh) {
@@ -252,14 +279,36 @@ Page({
 
         try {
             const date = new Date(timeStr);
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
+            
+            // 检查日期是否有效
+            if (isNaN(date.getTime())) {
+                console.warn('无效的时间格式:', timeStr);
+                return timeStr;
+            }
 
-            return `${month}-${day} ${hours}:${minutes}`;
+            // 使用UTC时间来避免时区问题，如果是ISO格式且以Z结尾
+            let year, month, day, hours, minutes;
+            
+            if (timeStr.includes('T') && (timeStr.endsWith('Z') || timeStr.includes('+'))) {
+                // ISO格式时间，使用UTC时间
+                year = date.getUTCFullYear();
+                month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+                day = date.getUTCDate().toString().padStart(2, '0');
+                hours = date.getUTCHours().toString().padStart(2, '0');
+                minutes = date.getUTCMinutes().toString().padStart(2, '0');
+            } else {
+                // 普通时间格式，使用本地时间
+                year = date.getFullYear();
+                month = (date.getMonth() + 1).toString().padStart(2, '0');
+                day = date.getDate().toString().padStart(2, '0');
+                hours = date.getHours().toString().padStart(2, '0');
+                minutes = date.getMinutes().toString().padStart(2, '0');
+            }
+
+            // 返回YYYY-MM-DD HH:mm格式
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
         } catch (error) {
-            console.error('时间格式化失败:', error);
+            console.error('时间格式化失败:', error, '原始时间:', timeStr);
             return timeStr;
         }
     }

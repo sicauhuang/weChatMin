@@ -478,3 +478,157 @@ UI设计：
 4.1.3 审批车辆：点击审批车辆按钮，跳转到车辆审批页，车辆审批页目前只设计一个占位就行，不实现具体功能。
 4.1.4 因为新增，编辑，审批功能基本内容，考虑如何在跳转后，让车辆修改页知道当前是新增还是编辑还是审批模式。
 5、需要下拉刷新功能
+
+#### 我要卖车页面功能实现
+
+##### 卖车页面UI优化
+
+1、在不改变原有组件实现的基础上，需要完成：
+1.1 car-card组件，在零售价这一行的中间需要添加当前车辆状态的显示：
+
+- 在后端给的字段中包含：
+status：状态的value值
+statusName：状态的name值
+可能得status与statusName字段的value值对应关系如下：
+枚举值
+WAIT_APPROVE：待审批
+WAIT_RECTIFY：待整改
+ON_SALE：在售
+SOLD：已出售
+显示卡片当前车辆状态需要使用Vant的icon组件进行徽标，徽标在状态文字的左侧只显示对应状态的颜色显示：
+- 待审批：warning
+- 待整改：processing
+- 在售：success
+- 已出售：default
+
+1.2 车辆列表UI优化：
+车辆列表本身不做改动，只是需要在列表上方加一个下拉菜单，该菜单主要是用于根据下拉菜单选择的状态，对车辆列表的卡片进行状态过滤。主要的下拉选项有：
+
+- 全部：显示全部车辆，默认选项，不进行过滤
+- 待审批：显示待审批的车辆
+- 待整改：显示待整改的车辆
+- 在售：显示在售的车辆
+- 已出售：显示已出售的车辆
+在进行下拉菜单切换后，需要根据当前需要显示的状态进行车辆列表的重新查询
+
+##### 新建车辆
+
+新建车辆入口：在卖车列表页面点击新建车辆按钮，跳转到车辆发布页。该功能已实现，本次需求只是完成car-form页面的UI编写，不涉及功能逻辑的实现。
+car-form页面的表单项包括：
+分模块为两部分：1、车辆信息；2、售卖信息
+1、车辆信息
+
+- 车辆名称：输入框；placeholder：请输入
+- 品牌车型：输入框；placeholder：请输入
+- 车龄：数字输入框；placeholder：请输入，单位：年
+- 颜色：输入框；placeholder：请输入
+- 里程：数字输入框；placeholder：请输入，单位：万公里
+- 过户次数：数字输入框；placeholder：请输入，整数
+- 上牌日期：日期选择器；placeholder：请选择
+- 上牌城市：输入框；placeholder：请输入
+- 使用性质：输入框；placeholder：请输入
+- 车况描述：文本输入框；placeholder：请输入，最大200字
+- 加装项目：文本输入框；placeholder：请输入，最大200字
+- 照片资料：图片上传；最大上传数量：5张；
+
+2、售卖信息
+
+- 底价：数字输入框；placeholder：请输入，单位：万元，保留两位小数
+- 售价：数字输入框；placeholder：请输入，单位：万元，保留两位小数
+- 联系方式：输入框：placeholder：请输入
+
+底部按钮：提交，提交按钮，将数据进行后端服务保存。
+
+##### 车型选择器公共组件建设
+
+在新建页面中使用车型表单项，但是车型是一个较为复杂的表单选择器，而且多个地方都会使用，因此要先设计为一个单独的公共组件，方便其他页面使用。
+组件需求：
+1、车型选择器数据来源自后端，目前可以设计一些mock数据用于模拟数据展示。
+2、车型选择器只支持单选
+3、UI设计：
+整体样式是一种外卖平台点单风格，左侧是菜单是显示当前的车辆品牌，右侧是滚动列表, 需要分组显示当前品牌下某车系的所有车型。因此右侧需要按车系分组显示车型。
+在选择后，将选择的车系与款式使用函数进行回调，回调的文本结果："车系 款式"；还需要选择的车型的型号id。
+4、逻辑设计，该公共组件和picker的显示方式类似，需要调用方告知何时显示，还需要注册一个隐藏事件，用于告知调用方该关闭显示了，触发时机是用户选择了款式后，选择器关闭。
+5、整体逻辑：使用时整体如picker一般进行引入，绑定相关事件与显隐props，等待调用方控制显示；需要显示时，全屏遮罩显示车型选择器，选择完成后，将选择结果返回给调用方，并关闭选择器。
+
+##### 编辑车辆
+
+编辑车辆入口：在卖车列表页面点击车辆列表某车辆卡片，跳转到车辆修改页。该功能已实现，本次需求只是完成car-form页面的UI编写，不涉及功能逻辑的实现。
+
+#### 接口对接
+
+##### 用户详情
+
+用处：登录完成，查询当前用户的详情
+
+- url:/api/mp/user/query-user-profile
+- method:GET
+- 请求参数：无
+- 返回参数：
+
+```
+/**
+ * ApiResultMpUserDTO
+ */
+export interface Response {
+    code?: string;
+    data?: MpUserDTO;
+    message?: string; // '200'为成功
+    timestamp?: number;
+    traceId?: string;
+    [property: string]: any;
+}
+
+/**
+ * MpUserDTO
+ */
+export interface MpUserDTO {
+    /**
+     * 小程序操作权限key数组，无权限时为null，如果不存在平台账号时为null。
+     */
+    miniProgramPermList?: string[];
+    /**
+     * 姓名，如果不存在平台账号时为null。
+     */
+    name?: string;
+    /**
+     * 手机号，一定不为null。
+     */
+    phone?: string;
+    /**
+     * 角色ID，如果null就没有任何权限。如果不存在平台账号时为null。
+     */
+    roleId?: number;
+    /**
+     * 角色名称，如果不存在平台账号时为null。
+     */
+    roleName?: string;
+    /**
+     * Web用户ID，如果不存在平台账号时为null。
+     */
+    userId?: number;
+    [property: string]: any;
+}
+```
+
+#### 权限功能对接
+
+在profile页面中，需要使用到获取用户详情接口返回的权限字段：miniProgramPermList
+
+- miniProgramPermList：小程序操作权限key数组，无权限时可能为null或者[]。可能得数据项：
+
+- "miniprogram:page.teach"：profile页面：模拟票助考按钮权限
+- "miniprogram:page.check"：profile页面：模拟票核销按钮权限
+- "miniprogram:page.sell"：profile页面：我要卖车按钮权限
+- "miniprogram:page.sell:action.add"：car-selling页面，新建车辆按钮权限
+- "miniprogram:page.sell:action.edit"：暂无绑定对象，后续添加
+- "miniprogram:page.sell:action.delete"：car-selling页面，删除按钮权限
+- "miniprogram:page.approve"：profile页面：审批车辆按钮权限
+- "miniprogram:page.approve:action.approve"：暂无绑定对象，后续添加
+- "miniprogram:page.approve:action.edit"：暂无绑定对象，后续添加
+- "miniprogram:page.approve:action.delete"：暂无绑定对象，后续添加
+- "miniprogram:action.view-floor-price"：暂无绑定对象，后续添加
+
+需要设计一个按钮权限组件，用于判断当前用户是否有权限显示按钮。如果有则根据传入的权限值显示按钮，如果没有则不显示按钮。
+在miniProgramPermList
+获取成功后，是存储在本地的，校验是从本地获取全部权限值，然后根据传入的权限值进行判断，是否显示按钮等内容

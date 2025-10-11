@@ -1,0 +1,378 @@
+/**
+ * Vant Weapp 主题配置文件
+ * 将Vant组件样式与项目主题系统统一
+ */
+
+/* ==========================================================================
+   Vant 主题变量覆盖 - Vant Theme Variables Override
+   ========================================================================== */
+
+page {
+    /* ==========================================================================
+     颜色系统 - Color System
+     ========================================================================== */
+
+    /* 主色调 - Primary Colors */
+    --van-primary-color: var(--theme-color-primary);
+    --van-primary-color-hover: var(--theme-color-primary-hover);
+    --van-primary-color-active: var(--theme-color-primary-active);
+    --van-primary-color-light: var(--theme-color-primary-light);
+
+    /* 功能色 - Functional Colors */
+    --van-success-color: var(--theme-color-success);
+    --van-danger-color: var(--theme-color-error);
+    --van-warning-color: var(--theme-color-warning);
+    --van-info-color: var(--theme-color-info);
+
+    /* 背景色 - Background Colors */
+    --van-background-color: var(--theme-bg-page);
+    --van-background-color-light: var(--theme-bg-secondary);
+    --van-background-2: var(--theme-bg-tertiary);
+    --van-white: var(--theme-bg-white);
+    --van-gray-1: var(--theme-bg-secondary);
+    --van-gray-2: var(--theme-bg-tertiary);
+    --van-gray-3: var(--theme-border-light);
+    --van-gray-4: var(--theme-border-medium);
+    --van-gray-5: var(--theme-border-dark);
+    --van-gray-6: var(--theme-text-placeholder);
+    --van-gray-7: var(--theme-text-tertiary);
+    --van-gray-8: var(--theme-text-secondary);
+
+    /* 文字颜色 - Text Colors */
+    --van-text-color: var(--theme-text-primary);
+    --van-text-color-2: var(--theme-text-secondary);
+    --van-text-color-3: var(--theme-text-tertiary);
+    --van-text-link-color: var(--theme-text-link);
+
+    /* 边框颜色 - Border Colors */
+    --van-border-color: var(--theme-border-light);
+    --van-border-color-darker: var(--theme-border-medium);
+
+    /* ==========================================================================
+     字体系统 - Typography System
+     ========================================================================== */
+
+    /* 字体大小 - Font Sizes */
+    --van-font-size-xs: var(--theme-font-size-xs);
+    --van-font-size-sm: var(--theme-font-size-sm);
+    --van-font-size-md: var(--theme-font-size-md);
+    --van-font-size-lg: var(--theme-font-size-lg);
+    --van-font-size-xl: var(--theme-font-size-xl);
+
+    /* 字重 - Font Weights */
+    --van-font-weight-normal: var(--theme-font-weight-normal);
+    --van-font-weight-bold: var(--theme-font-weight-bold);
+    --van-font-bold: var(--theme-font-weight-medium);
+
+    /* 行高 - Line Heights */
+    --van-line-height-xs: var(--theme-line-height-tight);
+    --van-line-height-sm: var(--theme-line-height-base);
+    --van-line-height-md: var(--theme-line-height-base);
+    --van-line-height-lg: var(--theme-line-height-loose);
+
+    /* ==========================================================================
+     间距系统 - Spacing System
+     ========================================================================== */
+
+    /* 内边距 - Padding */
+    --van-padding-xs: var(--theme-spacing-xs);
+    --van-padding-sm: var(--theme-spacing-sm);
+    --van-padding-md: var(--theme-spacing-md);
+    --van-padding-lg: var(--theme-spacing-lg);
+    --van-padding-xl: var(--theme-spacing-xl);
+
+    /* 外边距 - Margin */
+    --van-margin-xs: var(--theme-spacing-xs);
+    --van-margin-sm: var(--theme-spacing-sm);
+    --van-margin-md: var(--theme-spacing-md);
+    --van-margin-lg: var(--theme-spacing-lg);
+    --van-margin-xl: var(--theme-spacing-xl);
+
+    /* ==========================================================================
+     圆角系统 - Border Radius System
+     ========================================================================== */
+
+    --van-border-radius-sm: var(--theme-radius-sm);
+    --van-border-radius-md: var(--theme-radius-md);
+    --van-border-radius-lg: var(--theme-radius-lg);
+    --van-border-radius-max: var(--theme-radius-round);
+
+    /* ==========================================================================
+     阴影系统 - Shadow System
+     ========================================================================== */
+
+    --van-shadow-1: var(--theme-shadow-xs);
+    --van-shadow-2: var(--theme-shadow-sm);
+    --van-shadow-3: var(--theme-shadow-md);
+
+    /* ==========================================================================
+     动画系统 - Animation System
+     ========================================================================== */
+
+    --van-animation-duration-base: var(--theme-duration-base);
+    --van-animation-duration-fast: var(--theme-duration-fast);
+    --van-animation-timing-function-enter: var(--theme-ease-out);
+    --van-animation-timing-function-leave: var(--theme-ease-in);
+
+    /* ==========================================================================
+     组件特定变量 - Component Specific Variables
+     ========================================================================== */
+
+    /* Button 按钮 */
+    --van-button-primary-background-color: var(--theme-color-primary);
+    --van-button-primary-border-color: var(--theme-color-primary);
+    --van-button-primary-color: var(--theme-text-white);
+    --van-button-default-background-color: var(--theme-bg-card);
+    --van-button-default-border-color: var(--theme-border-light);
+    --van-button-default-color: var(--theme-text-primary);
+    --van-button-border-radius: var(--theme-radius-sm);
+    --van-button-round-border-radius: var(--theme-radius-xxl);
+
+    /* Card 卡片 */
+    --van-card-background-color: var(--theme-bg-card);
+    --van-card-border-radius: var(--theme-radius-lg);
+    --van-card-padding: var(--theme-spacing-xxl);
+
+    /* Cell 单元格 */
+    --van-cell-background-color: var(--theme-bg-card);
+    --van-cell-border-color: var(--theme-border-light);
+    --van-cell-text-color: var(--theme-text-primary);
+    --van-cell-label-color: var(--theme-text-secondary);
+    --van-cell-value-color: var(--theme-text-secondary);
+    --van-cell-icon-size: var(--theme-icon-size-md);
+    --van-cell-right-icon-color: var(--theme-text-tertiary);
+    --van-cell-large-vertical-padding: var(--theme-spacing-lg);
+    --van-cell-large-title-font-size: var(--theme-font-size-lg);
+
+    /* Dialog 对话框 */
+    --van-dialog-background-color: var(--theme-bg-card);
+    --van-dialog-border-radius: var(--theme-radius-lg);
+    --van-dialog-header-padding-top: var(--theme-spacing-xxxl);
+    --van-dialog-header-font-weight: var(--theme-font-weight-medium);
+    --van-dialog-message-padding: var(--theme-spacing-xxxl);
+    --van-dialog-message-font-size: var(--theme-font-size-md);
+    --van-dialog-message-line-height: var(--theme-line-height-base);
+    --van-dialog-confirm-button-text-color: var(--theme-text-white);
+
+    /* Toast 轻提示 */
+    --van-toast-background-color: rgba(0, 0, 0, 0.8);
+    --van-toast-text-color: var(--theme-text-white);
+    --van-toast-font-size: var(--theme-font-size-md);
+    --van-toast-border-radius: var(--theme-radius-md);
+
+    /* Loading 加载 */
+    --van-loading-spinner-color: var(--theme-color-primary);
+    --van-loading-spinner-size: 60rpx;
+
+    /* Icon 图标 */
+    --van-icon-size: var(--theme-icon-size-md);
+
+    /* Tag 标签 */
+    --van-tag-primary-color: var(--theme-color-primary);
+    --van-tag-success-color: var(--theme-color-success);
+    --van-tag-danger-color: var(--theme-color-error);
+    --van-tag-warning-color: var(--theme-color-warning);
+    --van-tag-default-color: var(--theme-text-secondary);
+    --van-tag-border-radius: var(--theme-radius-sm);
+    --van-tag-padding: 4rpx var(--theme-spacing-sm);
+    --van-tag-font-size: var(--theme-font-size-xs);
+
+    /* Search 搜索 */
+    --van-search-background-color: var(--theme-bg-secondary);
+    --van-search-content-background-color: var(--theme-bg-card);
+    --van-search-input-height: 68rpx;
+    --van-search-label-color: var(--theme-text-secondary);
+    --van-search-action-text-color: var(--theme-text-primary);
+
+    /* Empty 空状态 */
+    --van-empty-image-size: 240rpx;
+    --van-empty-description-color: var(--theme-text-secondary);
+    --van-empty-description-font-size: var(--theme-font-size-md);
+    --van-empty-description-line-height: var(--theme-line-height-base);
+    --van-empty-bottom-margin-top: var(--theme-spacing-xl);
+
+    /* Popup 弹出层 */
+    --van-popup-background-color: var(--theme-bg-card);
+    --van-popup-border-radius: var(--theme-radius-lg);
+    --van-popup-close-icon-size: var(--theme-icon-size-lg);
+    --van-popup-close-icon-color: var(--theme-text-secondary);
+    --van-popup-close-icon-active-color: var(--theme-text-primary);
+
+    /* ActionSheet 动作面板 */
+    --van-action-sheet-background-color: var(--theme-bg-card);
+    --van-action-sheet-border-radius: var(--theme-radius-lg) var(--theme-radius-lg) 0 0;
+    --van-action-sheet-header-height: 96rpx;
+    --van-action-sheet-header-font-size: var(--theme-font-size-lg);
+    --van-action-sheet-description-color: var(--theme-text-secondary);
+    --van-action-sheet-description-font-size: var(--theme-font-size-md);
+    --van-action-sheet-item-background: var(--theme-bg-card);
+    --van-action-sheet-item-font-size: var(--theme-font-size-lg);
+    --van-action-sheet-item-line-height: var(--theme-line-height-base);
+    --van-action-sheet-item-text-color: var(--theme-text-primary);
+    --van-action-sheet-cancel-text-color: var(--theme-text-primary);
+    --van-action-sheet-cancel-padding-top: var(--theme-spacing-sm);
+    --van-action-sheet-cancel-padding-color: var(--theme-bg-secondary);
+
+    /* Checkbox 复选框 */
+    --van-checkbox-size: 40rpx;
+    --van-checkbox-border-color: var(--theme-border-medium);
+    --van-checkbox-transition-duration: var(--theme-duration-base);
+    --van-checkbox-label-margin: var(--theme-spacing-sm);
+    --van-checkbox-label-color: var(--theme-text-primary);
+    --van-checkbox-checked-icon-color: var(--theme-color-primary);
+    --van-checkbox-disabled-icon-color: var(--theme-text-placeholder);
+    --van-checkbox-disabled-label-color: var(--theme-text-placeholder);
+    --van-checkbox-disabled-background-color: var(--theme-bg-disabled);
+
+    /* Grid 宫格 */
+    --van-grid-item-content-padding: var(--theme-spacing-lg) var(--theme-spacing-sm);
+    --van-grid-item-content-background-color: var(--theme-bg-card);
+    --van-grid-item-icon-size: var(--theme-icon-size-xl);
+    --van-grid-item-text-color: var(--theme-text-secondary);
+    --van-grid-item-text-font-size: var(--theme-font-size-sm);
+
+    /* Image 图片 */
+    --van-image-placeholder-text-color: var(--theme-text-tertiary);
+    --van-image-placeholder-font-size: var(--theme-font-size-md);
+    --van-image-placeholder-background-color: var(--theme-bg-secondary);
+    --van-image-loading-icon-size: 64rpx;
+    --van-image-loading-icon-color: var(--theme-text-placeholder);
+    --van-image-error-icon-size: 64rpx;
+    --van-image-error-icon-color: var(--theme-text-placeholder);
+}
+
+/* ==========================================================================
+   深色模式适配 - Dark Mode Adaptation
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    page {
+        /* 深色模式下的特殊调整 */
+        --van-toast-background-color: rgba(255, 255, 255, 0.9);
+        --van-toast-text-color: var(--theme-text-primary);
+    }
+}
+
+/* ==========================================================================
+   组件样式微调 - Component Style Fine-tuning
+   ========================================================================== */
+
+/* Button 按钮微调 */
+.van-button {
+    transition: all var(--theme-duration-base) var(--theme-ease-out) !important;
+}
+
+.van-button--primary {
+    box-shadow: var(--theme-shadow-sm) !important;
+}
+
+.van-button--primary:active {
+    background-color: var(--theme-color-primary-hover) !important;
+    transform: translateY(1rpx) !important;
+}
+
+/* Card 卡片微调 */
+.van-card {
+    box-shadow: var(--theme-shadow-card) !important;
+    transition: box-shadow var(--theme-duration-base) var(--theme-ease-out) !important;
+}
+
+.van-card:active {
+    box-shadow: var(--theme-shadow-lg) !important;
+}
+
+/* Dialog 对话框微调 */
+.van-dialog {
+    box-shadow: var(--theme-shadow-xl) !important;
+}
+
+.van-dialog__header {
+    border-bottom: 1rpx solid var(--theme-border-light) !important;
+}
+
+.van-dialog__footer {
+    border-top: 1rpx solid var(--theme-border-light) !important;
+}
+
+/* Cell 单元格微调 */
+.van-cell:active {
+    background-color: var(--theme-bg-active) !important;
+}
+
+.van-cell__right-icon {
+    transition: transform var(--theme-duration-base) var(--theme-ease-out) !important;
+}
+
+/* Tag 标签微调 */
+.van-tag--primary {
+    background-color: var(--theme-color-primary-light) !important;
+}
+
+/* Loading 加载微调 */
+.van-loading__spinner {
+    animation-duration: 1s !important;
+}
+
+/* Toast 轻提示微调 */
+.van-toast {
+    backdrop-filter: blur(10rpx) !important;
+}
+
+/* Popup 弹出层微调 */
+.van-popup {
+    box-shadow: var(--theme-shadow-xl) !important;
+}
+
+.van-popup--center {
+    animation: van-fade-in var(--theme-duration-base) var(--theme-ease-out) !important;
+}
+
+/* ActionSheet 动作面板微调 */
+.van-action-sheet {
+    box-shadow: var(--theme-shadow-xl) !important;
+}
+
+.van-action-sheet__item:active {
+    background-color: var(--theme-bg-active) !important;
+}
+
+/* Checkbox 复选框微调 */
+.van-checkbox__icon--checked {
+    background-color: var(--theme-color-primary) !important;
+    border-color: var(--theme-color-primary) !important;
+}
+
+/* Grid 宫格微调 */
+.van-grid-item__content:active {
+    background-color: var(--theme-bg-active) !important;
+}
+
+/* Search 搜索微调 */
+.van-search__content {
+    border-radius: var(--theme-radius-sm) !important;
+    box-shadow: var(--theme-shadow-xs) !important;
+}
+
+/* Empty 空状态微调 */
+.van-empty__image {
+    opacity: 0.6 !important;
+}
+
+/* ==========================================================================
+   响应式设计 - Responsive Design
+   ========================================================================== */
+
+@media (max-width: 750rpx) {
+    page {
+        --van-dialog-width: 90vw;
+        --van-popup-close-icon-size: var(--theme-icon-size-md);
+    }
+}
+
+@media (max-width: 600rpx) {
+    page {
+        --van-dialog-width: 95vw;
+        --van-card-padding: var(--theme-spacing-lg);
+        --van-cell-large-vertical-padding: var(--theme-spacing-md);
+    }
+}

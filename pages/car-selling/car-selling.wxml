@@ -1,103 +1,100 @@
-<view class="car-selling-page">
-  <!-- 页面头部 -->
-  <view class="car-selling-page__header">
-    <view class="header">
-      <text class="header__title">我的车辆</text>
-      <text class="header__subtitle">查看和管理您发布的车辆信息</text>
+<permission-wrapper permission="miniprogram:page.sell">
+  <view class="car-selling-page">
+    <!-- 页面头部 -->
+    <view class="car-selling-page__header">
+      <view class="header">
+        <text class="header__title">我的车辆</text>
+        <text class="header__subtitle">查看和管理您发布的车辆信息</text>
+      </view>
     </view>
-  </view>
 
-  <!-- 车辆列表 -->
-  <view class="car-selling-page__list">
-    <scroll-view
-      class="vehicle-list"
-      scroll-y="true"
-      enhanced="true"
-      show-scrollbar="false">
+    <!-- 过滤菜单 -->
+    <view class="car-selling-page__filter">
+      <van-dropdown-menu>
+        <van-dropdown-item
+          value="{{filterStatus}}"
+          options="{{filterOptions}}"
+          bind:change="onFilterChange">
+        </van-dropdown-item>
+      </van-dropdown-menu>
+    </view>
 
-      <!-- 车辆卡片 - 使用新抽离的组件 -->
-      <car-card
-        wx:for="{{vehicleList}}"
-        wx:key="carId"
-        vehicle-data="{{item}}"
-        delete-mode="{{isDeleteMode}}"
-        is-selected="{{item.isSelected}}"
-        bind:onCardTap="handleCardTap"
-        bind:onFavoriteToggle="handleFavoriteToggle"
-        bind:onSelectionChange="handleSelectionChange">
-      </car-card>
+    <!-- 车辆列表 -->
+    <view class="car-selling-page__list">
+      <scroll-view
+        class="vehicle-list"
+        scroll-y="true"
+        enhanced="true"
+        show-scrollbar="false"
+        bindscrolltolower="onScrollToLower"
+        lower-threshold="100">
 
-      <!-- 空状态 -->
-      <view class="empty-state" wx:if="{{vehicleList.length === 0 && !loading}}">
-        <view class="empty-state__icon">
-          <text class="iconfont icon-kongzhuangtai"></text>
+        <!-- 车辆卡片 - 使用新抽离的组件 -->
+        <car-card
+          wx:for="{{vehicleList}}"
+          wx:key="carId"
+          vehicle-data="{{item}}"
+          delete-mode="{{isDeleteMode}}"
+          is-selected="{{item.isSelected}}"
+          show-favorite-button="{{false}}"
+          bind:onCardTap="handleCardTap"
+          bind:onFavoriteToggle="handleFavoriteToggle"
+          bind:onSelectionChange="handleSelectionChange"
+          bind:onDelete="handleDelete">
+        </car-card>
+
+        <!-- 空状态 -->
+        <view class="empty-state" wx:if="{{vehicleList.length === 0 && !loading}}">
+          <view class="empty-state__icon">
+            <text class="iconfont icon-kongzhuangtai"></text>
+          </view>
+          <text class="empty-state__text">{{filterStatus ? '暂无符合条件的车辆' : '暂无车辆信息'}}</text>
+          <text class="empty-state__subtitle">{{filterStatus ? '请尝试调整筛选条件' : '点击底部按钮添加您的第一辆车'}}</text>
         </view>
-        <text class="empty-state__text">暂无车辆信息</text>
-        <text class="empty-state__subtitle">点击底部按钮添加您的第一辆车</text>
-      </view>
 
-      <!-- 加载状态 -->
-      <view class="loading-state" wx:if="{{loading}}">
-        <view class="loading-state__spinner">
-          <text class="loading-state__text">加载中...</text>
+        <!-- 首次加载状态 -->
+        <view class="loading-state" wx:if="{{loading && vehicleList.length === 0}}">
+          <view class="loading-state__spinner">
+            <van-loading color="#DAA520" size="24px" />
+          </view>
+          <text class="loading-state__text">正在加载车辆信息...</text>
         </view>
-      </view>
 
-      <!-- 加载更多 -->
-      <view class="load-more" wx:if="{{hasMore && vehicleList.length > 0}}">
-        <text class="load-more__text">上拉加载更多</text>
-      </view>
+        <!-- 加载更多状态 -->
+        <view class="load-more" wx:if="{{loading && vehicleList.length > 0}}">
+          <view class="load-more__spinner">
+            <van-loading color="#DAA520" size="20px" />
+          </view>
+          <text class="load-more__text">正在加载更多...</text>
+        </view>
 
-    </scroll-view>
-  </view>
+        <!-- 底部提示状态 -->
+        <view class="bottom-tip" wx:if="{{!loading && vehicleList.length > 0}}">
+          <text class="bottom-tip__text" wx:if="{{hasMore}}">上拉加载更多</text>
+          <text class="bottom-tip__text bottom-tip__text--end" wx:if="{{!hasMore}}">已加载全部数据</text>
+        </view>
 
-  <!-- 底部按钮区域 -->
-  <view class="car-selling-page__footer">
-    <!-- 装饰性元素 -->
-    <view class="car-selling-page__decoration car-selling-page__decoration--left"></view>
-    <view class="car-selling-page__decoration car-selling-page__decoration--right"></view>
+      </scroll-view>
+    </view>
 
-    <!-- 按钮容器 -->
-    <view class="car-selling-page__buttons">
-      <!-- 正常模式按钮 -->
-      <block wx:if="{{!isDeleteMode}}">
+    <!-- 底部按钮区域 -->
+    <view class="car-selling-page__footer">
+      <!-- 装饰性元素 -->
+      <view class="car-selling-page__decoration car-selling-page__decoration--left"></view>
+      <view class="car-selling-page__decoration car-selling-page__decoration--right"></view>
+
+      <!-- 按钮容器 -->
+      <view class="car-selling-page__buttons">
         <!-- 新建车辆按钮 -->
-        <button class="car-selling-page__button car-selling-page__button--create" 
-                bindtap="onCreateVehicle" 
-                hover-class="car-selling-page__button--hover">
-          <text class="iconfont icon-tianjia car-selling-page__button-icon"></text>
-          <text class="car-selling-page__button-text">新建车辆</text>
-        </button>
-        
-        <!-- 删除按钮 -->
-        <button class="car-selling-page__button car-selling-page__button--delete" 
-                bindtap="onDeleteButtonTap" 
-                hover-class="car-selling-page__button--hover"
-                disabled="{{vehicleList.length === 0}}">
-          <text class="car-selling-page__button-text">删除</text>
-        </button>
-      </block>
-      
-      <!-- 删除模式按钮 -->
-      <block wx:else>
-        <!-- 取消按钮 -->
-        <button class="car-selling-page__button car-selling-page__button--cancel" 
-                bindtap="onCancelDeleteTap" 
-                hover-class="car-selling-page__button--hover">
-          <text class="iconfont icon-quxiao car-selling-page__button-icon"></text>
-          <text class="car-selling-page__button-text">取消</text>
-        </button>
-        
-        <!-- 确认删除按钮 -->
-        <button class="car-selling-page__button car-selling-page__button--confirm" 
-                bindtap="onConfirmDeleteTap" 
-                hover-class="car-selling-page__button--hover"
-                disabled="{{selectedVehicleIds.length === 0 || isDeleting}}"
-                loading="{{isDeleting}}">
-          <text class="iconfont icon-duihao car-selling-page__button-icon" wx:if="{{!isDeleting}}"></text>
-          <text class="car-selling-page__button-text">{{isDeleting ? '删除中...' : '确认删除(' + selectedVehicleIds.length + ')'}}</text>
-        </button>
-      </block>
+        <permission-wrapper permission="miniprogram:page.sell:action.add">
+          <button class="car-selling-page__button car-selling-page__button--create"
+                  bindtap="onCreateVehicle"
+                  hover-class="car-selling-page__button--hover">
+            <text class="iconfont icon-tianjia car-selling-page__button-icon"></text>
+            <text class="car-selling-page__button-text">新建车辆</text>
+          </button>
+        </permission-wrapper>
+      </view>
     </view>
   </view>
-</view>
+</permission-wrapper>

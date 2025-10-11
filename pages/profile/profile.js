@@ -16,40 +16,7 @@ Page({
         showActionModal: false, // 自定义操作弹窗显示状态
         // 二维码弹窗相关
         showQRModal: false, // 二维码弹窗显示状态
-        userQRData: null, // 用户二维码数据
-        // 功能模块列表
-        functionModules: [
-            {
-                id: 'qrcode',
-                name: '我的二维码',
-                icon: 'icon-erweima',
-                path: ''
-            },
-            {
-                id: 'buy-car',
-                name: '我要卖车',
-                icon: 'icon-maiche',
-                path: ''
-            },
-            {
-                id: 'approve-car',
-                name: '审批车辆',
-                icon: 'icon-shenpi',
-                path: ''
-            },
-            {
-                id: 'verify-ticket',
-                name: '模拟票核销',
-                icon: 'icon-saoma',
-                path: ''
-            },
-            {
-                id: 'assist-exam',
-                name: '模拟票助考',
-                icon: 'icon-zhukao',
-                path: ''
-            }
-        ]
+        userQRData: null // 用户二维码数据
     },
 
     /**
@@ -86,8 +53,6 @@ Page({
                 selected: 3
             });
         }
-
-        // 每次显示页面时刷新用户信息
         this.initUserInfo();
     },
 
@@ -100,7 +65,7 @@ Page({
     },
 
     /**
-     * 初始化用户信息（方案1：只从本地存储读取）
+     * 初始化用户信息（支持新的用户数据模型）
      */
     initUserInfo() {
         try {
@@ -114,16 +79,22 @@ Page({
                 // 已登录状态，直接从本地存储获取用户信息
                 const userInfo = storage.getUserInfo() || {};
 
+                // 更新显示数据，支持新的roleName字段
                 this.setData({
                     avatarUrl: userInfo.avatarUrl || '/assets/imgs/logo.png',
                     nickname: userInfo.phoneNumber || '微信用户',
-                    identity: userInfo.identity || '游客',
+                    // 优先使用roleName，其次使用identity，最后默认为游客
+                    identity: userInfo.roleName || userInfo.identity || '游客',
                     isLogin: true,
                     openid: storage.getOpenId() || '',
                     phoneNumber: userInfo.phoneNumber || ''
                 });
 
-                console.log('用户已登录，显示本地用户信息:', userInfo);
+                console.log('用户已登录，显示本地用户信息:', {
+                    roleName: userInfo.roleName,
+                    identity: userInfo.identity,
+                    显示身份: userInfo.roleName || userInfo.identity || '游客'
+                });
                 console.log('依赖app.js启动时的刷新来保证数据新鲜度');
             } else {
                 // 未登录状态，设置默认用户信息
@@ -516,13 +487,44 @@ Page({
     /**
      * 处理注销账号
      */
-    handleAccountCancellation() {
-        wx.showToast({
-            title: '注销账号功能待开发',
-            icon: 'none',
-            duration: 2000
-        });
-        console.log('用户点击注销账号');
+    async handleAccountCancellation() {
+        try {
+            console.log('用户点击注销账号');
+
+            // 调用认证模块的注销方法
+            const result = await auth.unbindMiniProgram({
+                showConfirm: true,
+                showLoading: true,
+                redirectTo: '/pages/login/login'
+            });
+
+            if (result.success) {
+                console.log('注销成功:', result);
+
+                // 更新全局状态
+                const app = getApp();
+                if (app && app.updateLoginStatus) {
+                    app.updateLoginStatus(null);
+                }
+
+                // 重置页面数据为未登录状态
+                this.setDefaultUserInfo();
+
+                // 如果有警告信息，显示给用户
+                if (result.warning) {
+                    console.warn('注销警告:', result.warning);
+                }
+            } else {
+                console.log('注销操作被取消或失败:', result.message);
+            }
+        } catch (error) {
+            console.error('注销账号失败:', error);
+            wx.showToast({
+                title: '注销失败，请重试',
+                icon: 'none',
+                duration: 2000
+            });
+        }
     },
 
     /**

@@ -9,7 +9,8 @@ const development = {
     localhost: 'http://localhost:3000',
     // 真机调试（需要根据实际局域网IP修改）
     // 启动服务器后，在控制台查看实际的局域网IP地址
-    localNetwork: 'http://192.168.124.8:3000' // 实际的局域网IP
+    // localNetwork: 'http://192.168.124.8:3000' // 实际的局域网IP
+    localNetwork: 'http://139.155.137.226:20881' // 实际的局域网IP
 };
 
 // 生产环境配置（如果有的话）
@@ -55,6 +56,14 @@ module.exports = {
     // 快捷方法
     getLoginUrl() {
         return currentEnv.getApiUrl('/api/login');
+    },
+
+    getLogoutUrl() {
+        return currentEnv.getApiUrl('/api/mp/auth/logout');
+    },
+
+    getUnbindUrl() {
+        return currentEnv.getApiUrl('/api/mp/user/unbind-miniprogram');
     },
 
     getHealthUrl() {

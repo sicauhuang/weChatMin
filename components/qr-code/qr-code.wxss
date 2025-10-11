@@ -5,6 +5,20 @@
    二维码组件样式 - QR Code Component Styles
    ========================================================================== */
 
+/* 组件容器化和样式隔离 */
+:host {
+  contain: style;
+  display: block;
+}
+
+/* 重置可能被页面影响的样式 */
+.qr-code {
+  box-sizing: border-box !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
 /* 二维码组件容器 */
 .qr-code {
   display: flex;

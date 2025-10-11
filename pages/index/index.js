@@ -45,7 +45,7 @@ Page({
         console.warn('-----apiconfi', apiConfig.currentEnv.getApiUrl('/api/home-info'));
 
         wx.request({
-            url: 'http://192.168.124.8:3000/api/home-info',
+            url: 'http://192.168.31.57:3000/api/home-info',
             method: 'GET',
             success: (res) => {
                 console.log('首页数据请求成功:', res.data);

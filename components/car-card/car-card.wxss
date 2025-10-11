@@ -2,6 +2,21 @@
 @import '../../assets/fonts/iconfont.wxss';
 @import '../../assets/styles/theme.wxss';
 
+/* 组件容器化和样式隔离 */
+:host {
+  contain: style;
+  display: block;
+}
+
+/* 重置可能被页面影响的样式 */
+.vehicle-card {
+  box-sizing: border-box !important;
+  font-family: inherit !important;
+  /* 去除可能的阴影和边框干扰 */
+  box-shadow: none !important;
+  border: none !important;
+}
+
 /* 车辆卡片根容器 */
 .vehicle-card {
   background: var(--theme-bg-card);
@@ -146,7 +161,7 @@
   flex-shrink: 0;
 }
 
-/* 第三行：价格收藏行 */
+/* 第三行：价格状态收藏行 */
 .vehicle-card__price-favorite-row {
   display: flex;
   align-items: center;
@@ -160,6 +175,29 @@
   font-weight: var(--theme-font-weight-bold);
   color: var(--theme-color-primary-light);
   flex: 1;
+}
+
+/* 状态徽标样式 */
+.vehicle-card__status-tag {
+  margin: 0 var(--theme-spacing-md);
+  flex-shrink: 0;
+  font-size: var(--theme-font-size-xs) !important;
+  font-weight: var(--theme-font-weight-medium);
+}
+
+/* 响应式设计 - 状态徽标适配 */
+@media (max-width: 750rpx) {
+  .vehicle-card__status-tag {
+    margin: 0 var(--theme-spacing-sm);
+    font-size: calc(var(--theme-font-size-xs) - 2rpx) !important;
+  }
+}
+
+@media (max-width: 600rpx) {
+  .vehicle-card__status-tag {
+    margin: 0 var(--theme-spacing-xs);
+    font-size: calc(var(--theme-font-size-xs) - 2rpx) !important;
+  }
 }
 
 /* 收藏按钮区域 */
@@ -180,6 +218,7 @@
   opacity: 0;
   pointer-events: none;
   transform: scale(0.8);
+  display: none;
 }
 
 .vehicle-card__favorite-button:active {
@@ -236,6 +275,19 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* 右侧删除按钮样式 */
+.vehicle-card__delete-button {
+  width: 65px;
+  height: 100%;
+  background-color: #ff4757;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: var(--theme-font-weight-medium);
 }
 
 /* 响应式设计 - 小屏幕适配 */

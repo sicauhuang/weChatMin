@@ -5,217 +5,234 @@
   </view>
 
   <!-- 表单内容 -->
-  <scroll-view class="form-container" scroll-y="true" enhanced="true">
-    <!-- 基本信息 -->
-    <view class="form-section">
-      <view class="section-title">
-        <text class="section-title__text">基本信息</text>
-        <text class="section-title__required">*必填</text>
-      </view>
+  <scroll-view
+    class="form-container"
+    scroll-y
+    enhanced="true"
+    scroll-top="{{scrollTop}}"
+    scroll-with-animation="true">
+    <!-- 车辆信息 -->
+    <van-cell-group title="车辆信息" border="{{false}}">
+      <!-- 车辆名称 -->
+      <van-field
+        value="{{formData.carName}}"
+        placeholder="请输入"
+        label="车辆名称"
+        border="{{false}}"
+        data-field="carName"
+        bind:change="onInputChange" />
 
-      <!-- 车型选择 -->
-      <view class="form-item">
-        <view class="form-item__label">
-          <text class="form-item__label-text">车型</text>
-          <text class="form-item__required">*</text>
-        </view>
-        <picker 
-          class="form-item__picker" 
-          mode="selector" 
-          range="{{carModels}}" 
-          value="{{carModelIndex}}"
-          bindchange="onCarModelChange">
-          <view class="picker-display {{carModelIndex === -1 ? 'placeholder' : ''}}">
-            <text class="picker-text">{{carModelIndex === -1 ? '请选择车型' : carModels[carModelIndex]}}</text>
-            <text class="iconfont icon-arrow-down picker-arrow"></text>
-          </view>
-        </picker>
-        <text class="form-item__error" wx:if="{{errors.carModel}}">{{errors.carModel}}</text>
-      </view>
+      <!-- 品牌车型 -->
+      <van-cell
+        title="品牌车型"
+        value="{{formData.brandModel || '请选择车型'}}"
+        is-link
+        required
+        class="car-brandModel"
+        bind:click="showVehiclePicker"
+        arrow-direction="down" />
 
-      <!-- 车牌号 -->
-      <view class="form-item">
-        <view class="form-item__label">
-          <text class="form-item__label-text">车牌号</text>
-          <text class="form-item__required">*</text>
-        </view>
-        <input 
-          class="form-item__input"
-          placeholder="请输入车牌号"
-          value="{{formData.licensePlate}}"
-          data-field="licensePlate"
-          bindinput="onInputChange" />
-        <text class="form-item__error" wx:if="{{errors.licensePlate}}">{{errors.licensePlate}}</text>
-      </view>
+      <!-- 车龄 -->
+      <van-field
+        value="{{formData.carAge}}"
+        placeholder="请输入"
+        label="车龄"
+        type="number"
+        required
+        border="{{false}}"
+        data-field="carAge"
+        bind:change="onInputChange"
+        use-button-slot
+      >
+        <view slot="button" class="field-unit">年</view>
+      </van-field>
+
+      <!-- 车辆颜色 -->
+      <van-field
+        value="{{formData.color}}"
+        placeholder="请输入"
+        label="车辆颜色"
+        required
+        border="{{false}}"
+        data-field="color"
+        bind:change="onInputChange" />
+
+      <!-- 里程数 -->
+      <van-field
+        value="{{formData.mileage}}"
+        placeholder="请输入"
+        label="里程数"
+        type="digit"
+        required
+        border="{{false}}"
+        data-field="mileage"
+        bind:change="onInputChange"
+        use-button-slot
+      >
+        <view slot="button" class="field-unit">万公里</view>
+      </van-field>
+
+      <!-- 过户次数 -->
+      <van-field
+        value="{{formData.transferCount}}"
+        placeholder="请输入"
+        label="过户次数"
+        type="number"
+        required
+        border="{{false}}"
+        data-field="transferCount"
+        bind:change="onInputChange" />
+
+      <!-- 上牌日期 -->
+      <van-cell
+        title="上牌日期"
+        value="{{formData.plateDate || '请选择'}}"
+        is-link
+        required
+        class="car-plateDate"
+        bind:click="showDatePicker"
+        arrow-direction="down" />
+
+      <!-- 上牌城市 -->
+      <van-field
+        value="{{formData.plateCity}}"
+        placeholder="请输入"
+        label="上牌城市"
+        required
+        border="{{false}}"
+        data-field="plateCity"
+        bind:change="onInputChange" />
+
+      <!-- 使用性质 -->
+      <van-field
+        value="{{formData.usageType}}"
+        placeholder="请输入"
+        label="使用性质"
+        required
+        border="{{false}}"
+        data-field="usageType"
+        bind:change="onInputChange" />
+
+      <!-- 车况描述 -->
+      <van-field
+        value="{{formData.condition}}"
+        placeholder="请描述车辆状况，如保养记录、事故情况等..."
+        label="车况描述"
+        type="textarea"
+        autosize
+        maxlength="200"
+        show-word-limit
+        border="{{false}}"
+        data-field="condition"
+        bind:change="onInputChange" />
+
+      <!-- 加装项目 -->
+      <van-field
+        value="{{formData.modifications}}"
+        placeholder="请描述加装的项目，如导航、倒车雷达等..."
+        label="加装项目"
+        type="textarea"
+        autosize
+        maxlength="200"
+        show-word-limit
+        border="{{false}}"
+        data-field="modifications"
+        bind:change="onInputChange" />
+    </van-cell-group>
+
+    <!-- 售卖信息 -->
+    <van-cell-group title="售卖信息" border="{{false}}">
+      <!-- 底价 -->
+      <van-field
+        value="{{formData.lowPrice}}"
+        placeholder="请输入"
+        label="底价"
+        type="digit"
+        required
+        border="{{false}}"
+        data-field="lowPrice"
+        bind:change="onInputChange"
+        use-button-slot
+      >
+        <view slot="button" class="field-unit">万元</view>
+      </van-field>
 
       <!-- 售价 -->
-      <view class="form-item">
-        <view class="form-item__label">
-          <text class="form-item__label-text">售价（万元）</text>
-          <text class="form-item__required">*</text>
-        </view>
-        <input 
-          class="form-item__input"
-          placeholder="请输入售价"
-          type="digit"
-          value="{{formData.price}}"
-          data-field="price"
-          bindinput="onInputChange" />
-        <text class="form-item__error" wx:if="{{errors.price}}">{{errors.price}}</text>
-      </view>
+      <van-field
+        value="{{formData.sellPrice}}"
+        placeholder="请输入"
+        label="售价"
+        type="digit"
+        required
+        border="{{false}}"
+        data-field="sellPrice"
+        bind:change="onInputChange"
+        use-button-slot
+      >
+        <view slot="button" class="field-unit">万元</view>
+      </van-field>
 
-      <!-- 车辆状况 -->
-      <view class="form-item">
-        <view class="form-item__label">
-          <text class="form-item__label-text">车辆状况</text>
-          <text class="form-item__required">*</text>
-        </view>
-        <picker 
-          class="form-item__picker" 
-          mode="selector" 
-          range="{{conditions}}" 
-          value="{{conditionIndex}}"
-          bindchange="onConditionChange">
-          <view class="picker-display {{conditionIndex === -1 ? 'placeholder' : ''}}">
-            <text class="picker-text">{{conditionIndex === -1 ? '请选择车辆状况' : conditions[conditionIndex]}}</text>
-            <text class="iconfont icon-arrow-down picker-arrow"></text>
-          </view>
-        </picker>
-        <text class="form-item__error" wx:if="{{errors.condition}}">{{errors.condition}}</text>
-      </view>
-
-      <!-- 所在地区 -->
-      <view class="form-item">
-        <view class="form-item__label">
-          <text class="form-item__label-text">所在地区</text>
-          <text class="form-item__required">*</text>
-        </view>
-        <picker 
-          class="form-item__picker" 
-          mode="selector" 
-          range="{{locations}}" 
-          value="{{locationIndex}}"
-          bindchange="onLocationChange">
-          <view class="picker-display {{locationIndex === -1 ? 'placeholder' : ''}}">
-            <text class="picker-text">{{locationIndex === -1 ? '请选择所在地区' : locations[locationIndex]}}</text>
-            <text class="iconfont icon-arrow-down picker-arrow"></text>
-          </view>
-        </picker>
-        <text class="form-item__error" wx:if="{{errors.location}}">{{errors.location}}</text>
-      </view>
-    </view>
-
-    <!-- 联系信息 -->
-    <view class="form-section">
-      <view class="section-title">
-        <text class="section-title__text">联系信息</text>
-      </view>
-
-      <!-- 车主姓名 -->
-      <view class="form-item">
-        <view class="form-item__label">
-          <text class="form-item__label-text">车主姓名</text>
-          <text class="form-item__required">*</text>
-        </view>
-        <input 
-          class="form-item__input"
-          placeholder="请输入车主姓名"
-          value="{{formData.ownerName}}"
-          data-field="ownerName"
-          bindinput="onInputChange" />
-        <text class="form-item__error" wx:if="{{errors.ownerName}}">{{errors.ownerName}}</text>
-      </view>
-
-      <!-- 联系电话 -->
-      <view class="form-item">
-        <view class="form-item__label">
-          <text class="form-item__label-text">联系电话</text>
-          <text class="form-item__required">*</text>
-        </view>
-        <input 
-          class="form-item__input"
-          placeholder="请输入联系电话"
-          type="number"
-          value="{{formData.contactPhone}}"
-          data-field="contactPhone"
-          bindinput="onInputChange" />
-        <text class="form-item__error" wx:if="{{errors.contactPhone}}">{{errors.contactPhone}}</text>
-      </view>
-    </view>
+      <!-- 联系方式 -->
+      <van-field
+        value="{{formData.contactInfo}}"
+        placeholder="请输入"
+        label="联系方式"
+        type="number"
+        required
+        border="{{false}}"
+        data-field="contactInfo"
+        bind:change="onInputChange" />
+    </van-cell-group>
 
     <!-- 车辆照片 -->
-    <view class="form-section">
-      <view class="section-title">
-        <text class="section-title__text">车辆照片</text>
-        <text class="section-title__subtitle">最多可上传9张</text>
-      </view>
-
-      <view class="image-upload">
-        <!-- 已上传的图片 -->
-        <view 
-          class="image-upload__item"
-          wx:for="{{formData.images}}"
-          wx:key="index">
-          <image 
-            class="image-upload__image"
-            src="{{item}}"
-            mode="aspectFill"
-            data-url="{{item}}"
-            bindtap="onImagePreview" />
-          <view 
-            class="image-upload__delete"
-            data-index="{{index}}"
-            bindtap="onImageDelete">
-            <text class="iconfont icon-guanbi image-upload__delete-icon"></text>
-          </view>
-        </view>
-
-        <!-- 上传按钮 -->
-        <view 
-          class="image-upload__add"
-          wx:if="{{formData.images.length < 9}}"
-          bindtap="onImageUpload">
-          <text class="iconfont icon-tianjia image-upload__add-icon"></text>
-          <text class="image-upload__add-text">添加照片</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 车辆描述 -->
-    <view class="form-section">
-      <view class="section-title">
-        <text class="section-title__text">车辆描述</text>
-        <text class="section-title__subtitle">选填</text>
-      </view>
-
-      <view class="form-item">
-        <textarea 
-          class="form-item__textarea"
-          placeholder="请输入车辆详细描述，如保养记录、事故情况等..."
-          value="{{formData.description}}"
-          data-field="description"
-          bindinput="onInputChange"
-          maxlength="500"
-          auto-height />
-      </view>
-    </view>
+    <van-cell-group title="车辆照片（最多5张）" border="{{false}}">
+      <van-cell>
+        <van-uploader
+          file-list="{{imageList}}"
+          bind:after-read="onImageUpload"
+          bind:delete="onImageDelete"
+          max-count="5"
+          preview-size="180rpx"
+          upload-text="添加照片" />
+      </van-cell>
+    </van-cell-group>
 
     <!-- 占位空间 -->
-    <view class="form-spacer"></view>
+    <view style="height: 140rpx;"></view>
   </scroll-view>
 
-  <!-- 底部操作按钮 -->
+  <!-- 底部提交按钮 -->
   <view class="form-actions">
-    <button 
-      class="form-actions__button form-actions__button--secondary"
-      bindtap="onCancel">
-      取消
-    </button>
-    <button 
-      class="form-actions__button form-actions__button--primary"
-      bindtap="onSave"
-      loading="{{submitting}}">
+    <van-button
+      type="primary"
+      size="large"
+      loading="{{submitting}}"
+      custom-class="submit-button"
+      bind:click="onSave">
       {{mode === 'edit' ? '更新' : '保存'}}
-    </button>
+    </van-button>
   </view>
+
+  <!-- Vant 选择器弹窗 -->
+
+
+  <!-- 日期选择器 -->
+  <van-popup show="{{showDatePopup}}" position="bottom" bind:close="hideDatePicker">
+    <van-datetime-picker
+      type="date"
+      value="{{currentDate}}"
+      bind:confirm="onDateConfirm"
+      bind:cancel="hideDatePicker" />
+  </van-popup>
+
+  <!-- 车型选择器 -->
+  <vehicle-picker
+    show="{{showVehiclePicker}}"
+    title="选择车型"
+    bind:onConfirm="onVehicleConfirm"
+    bind:onCancel="onVehicleCancel"
+    bind:onClose="hideVehiclePicker" />
+
+  <!-- Toast 组件 -->
+  <van-toast id="van-toast" />
 </view>

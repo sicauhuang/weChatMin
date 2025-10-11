@@ -1,309 +1,273 @@
 /* pages/car-form/car-form.wxss */
+@import '../../assets/styles/theme.wxss';
 
+/* 页面容器 */
 .car-form-page {
-  min-height: 100vh;
-  background-color: #f8f9fa;
-  position: relative;
+    background-color: var(--theme-bg-white);
+    min-height: 100vh;
+    position: relative;
+}
+.van-cell--required:before {
+    left: var(--padding-xs, 8rpx) !important;
 }
 
-/* 加载遮罩 */
+/* 加载状态覆盖层 */
 .loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--theme-z-index-modal);
 }
 
 .loading-text {
-  font-size: 32rpx;
-  color: #666666;
+    font-size: var(--theme-font-size-lg);
+    color: var(--theme-text-secondary);
 }
 
 /* 表单容器 */
 .form-container {
-  height: calc(100vh - 120rpx);
-  padding: 0 40rpx;
+    height: calc(100vh - 140rpx);
+    padding: var(--theme-spacing-lg) 0;
+    box-sizing: border-box;
+    background-color: var(--theme-bg-white);
 }
 
-/* 表单区块 */
-.form-section {
-  margin-bottom: 40rpx;
+/* Vant Cell Group 样式优化 - 融合式设计 */
+.van-cell-group {
+    margin: 0 var(--theme-spacing-lg) var(--theme-spacing-xl) var(--theme-spacing-lg);
+    background-color: var(--theme-bg-white) !important;
+    border-radius: var(--theme-radius-lg) !important;
+    overflow: hidden;
+    box-shadow: var(--theme-shadow-xs);
 }
 
-/* 区块标题 */
-.section-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24rpx;
-  padding: 0 8rpx;
+.van-cell-group__title {
+    padding: var(--theme-spacing-xl) var(--theme-spacing-lg) var(--theme-spacing-sm)
+        var(--theme-spacing-lg) !important;
+    margin: 0 !important;
+    background-color: var(--theme-bg-white) !important;
+    color: var(--theme-text-primary) !important;
+    font-size: var(--theme-font-size-lg) !important;
+    font-weight: var(--theme-font-weight-bold) !important;
+    border-bottom: 1rpx solid var(--theme-border-light) !important;
+    position: relative;
 }
 
-.section-title__text {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #333333;
+/* 标题装饰条 */
+.van-cell-group__title::before {
+    content: '';
+    position: absolute;
+    left: var(--theme-spacing-lg);
+    bottom: 0;
+    width: 60rpx;
+    height: 4rpx;
+    background-color: var(--theme-color-primary-light);
+    border-radius: 2rpx;
 }
 
-.section-title__required {
-  font-size: 24rpx;
-  color: #999999;
+/* Vant Field 样式优化 - 与标题融合 */
+.van-field {
+    padding: var(--theme-spacing-lg) var(--theme-spacing-lg) !important;
+    background-color: var(--theme-bg-white) !important;
+    border-bottom: 1rpx solid var(--theme-border-ultra-light) !important;
+    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
 }
 
-.section-title__subtitle {
-  font-size: 24rpx;
-  color: #999999;
+.van-field:last-child {
+    border-bottom: none !important;
 }
 
-/* 表单项 */
-.form-item {
-  background: #ffffff;
-  border-radius: 16rpx;
-  padding: 32rpx;
-  margin-bottom: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+.van-field:active {
+    background-color: var(--theme-bg-secondary) !important;
 }
 
-.form-item__label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16rpx;
+.van-field__label {
+    color: var(--theme-text-primary) !important;
+    font-weight: var(--theme-font-weight-medium) !important;
+    width: 200rpx !important;
+    margin-left: 10rpx;
 }
 
-.form-item__label-text {
-  font-size: 28rpx;
-  color: #333333;
-  font-weight: 500;
+.van-field__control {
+    color: var(--theme-text-primary) !important;
 }
 
-.form-item__required {
-  font-size: 28rpx;
-  color: #ff4d4f;
-  margin-left: 8rpx;
+.van-field__control::placeholder {
+    color: var(--theme-text-placeholder) !important;
 }
 
-/* 输入框 */
-.form-item__input {
-  width: 100%;
-  height: 88rpx;
-  border: 2rpx solid #e5e5e5;
-  border-radius: 12rpx;
-  padding: 0 24rpx;
-  font-size: 28rpx;
-  color: #333333;
-  background: #fafafa;
+/* Vant Cell 样式优化 - 与标题融合 */
+.van-cell {
+    padding: var(--theme-spacing-lg) !important;
+    background-color: var(--theme-bg-white) !important;
+    border-bottom: 1rpx solid var(--theme-border-ultra-light) !important;
+    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
 }
 
-.form-item__input:focus {
-  border-color: #FF8C00;
-  background: #ffffff;
+.van-cell:last-child {
+    border-bottom: none !important;
 }
 
-/* 选择器 */
-.form-item__picker {
-  width: 100%;
+.van-cell:active {
+    background-color: var(--theme-bg-secondary) !important;
 }
 
-.picker-display {
-  height: 88rpx;
-  border: 2rpx solid #e5e5e5;
-  border-radius: 12rpx;
-  padding: 0 24rpx;
-  background: #fafafa;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.van-cell__title {
+    color: var(--theme-text-primary) !important;
+    font-weight: var(--theme-font-weight-medium) !important;
+    margin-left: 10rpx;
 }
 
-.picker-display.placeholder .picker-text {
-  color: #cccccc;
+.van-cell__value {
+    color: var(--theme-text-secondary) !important;
 }
 
-.picker-text {
-  font-size: 28rpx;
-  color: #333333;
+.van-cell__right-icon {
+    color: var(--theme-text-tertiary) !important;
 }
 
-.picker-arrow {
-  font-size: 24rpx;
-  color: #cccccc;
+/* 表单字段单位样式 */
+.field-unit {
+    color: var(--theme-text-secondary);
+    font-size: var(--theme-font-size-md);
+    padding: 0 var(--theme-spacing-sm);
+    display: flex;
+    align-items: center;
+    min-width: fit-content;
+    white-space: nowrap;
 }
 
-/* 文本域 */
-.form-item__textarea {
-  width: 100%;
-  min-height: 200rpx;
-  border: 2rpx solid #e5e5e5;
-  border-radius: 12rpx;
-  padding: 24rpx;
-  font-size: 28rpx;
-  color: #333333;
-  background: #fafafa;
-  line-height: 1.6;
+/* van-toast 组件样式优化 */
+.van-toast {
+    min-width: 200rpx !important;
+    max-width: 400rpx !important;
+    white-space: nowrap !important;
 }
 
-.form-item__textarea:focus {
-  border-color: #FF8C00;
-  background: #ffffff;
+.van-toast__text {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
 }
 
-/* 错误信息 */
-.form-item__error {
-  display: block;
-  font-size: 24rpx;
-  color: #ff4d4f;
-  margin-top: 16rpx;
-  padding-left: 8rpx;
-}
-
-/* 图片上传 */
-.image-upload {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
-}
-
-.image-upload__item {
-  width: 200rpx;
-  height: 200rpx;
-  position: relative;
-  border-radius: 16rpx;
-  overflow: hidden;
-}
-
-.image-upload__image {
-  width: 100%;
-  height: 100%;
-}
-
-.image-upload__delete {
-  position: absolute;
-  top: 8rpx;
-  right: 8rpx;
-  width: 48rpx;
-  height: 48rpx;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image-upload__delete-icon {
-  font-size: 24rpx;
-  color: #ffffff;
-}
-
-.image-upload__add {
-  width: 200rpx;
-  height: 200rpx;
-  border: 2rpx dashed #cccccc;
-  border-radius: 16rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #fafafa;
-}
-
-.image-upload__add:active {
-  background: #f0f0f0;
-}
-
-.image-upload__add-icon {
-  font-size: 48rpx;
-  color: #cccccc;
-  margin-bottom: 8rpx;
-}
-
-.image-upload__add-text {
-  font-size: 24rpx;
-  color: #cccccc;
-}
-
-/* 表单占位空间 */
-.form-spacer {
-  height: 120rpx;
-}
-
-/* 底部操作按钮 */
+/* 底部提交按钮区域 */
 .form-actions {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 120rpx;
-  background: #ffffff;
-  border-top: 1rpx solid #e5e5e5;
-  display: flex;
-  align-items: center;
-  padding: 0 40rpx;
-  gap: 24rpx;
-  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--theme-bg-white);
+    padding: var(--theme-spacing-xl) var(--theme-spacing-lg);
+    border-top: 2rpx solid var(--theme-border-light);
+    z-index: 1;
 }
 
-.form-actions__button {
-  flex: 1;
-  height: 80rpx;
-  border-radius: 40rpx;
-  font-size: 32rpx;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  margin: 0;
-  padding: 0;
+/* Vant Button 样式优化 - 只保留提交按钮 */
+.submit-button {
+    width: 100% !important;
+    background: var(--theme-color-primary) !important;
+    color: var(--theme-text-white) !important;
+    border: none !important;
+    border-radius: var(--theme-radius-sm) !important;
+    padding: var(--theme-spacing-lg) !important;
+    font-size: var(--theme-font-size-md) !important;
+    font-weight: var(--theme-font-weight-medium) !important;
+    box-shadow: 0 2rpx 8rpx rgba(218, 165, 32, 0.3) !important;
+    transition: all var(--theme-duration-base) var(--theme-ease-out) !important;
 }
 
-.form-actions__button::after {
-  border: none;
+.submit-button::after {
+    border: none !important;
 }
 
-.form-actions__button--secondary {
-  background: #f5f5f5;
-  color: #666666;
+.submit-button:active {
+    background: var(--theme-color-primary-hover) !important;
+    transform: translateY(1rpx) !important;
+    box-shadow: 0 1rpx 4rpx rgba(218, 165, 32, 0.4) !important;
 }
 
-.form-actions__button--secondary:active {
-  background: #e8e8e8;
+/* Vant Uploader 样式优化 */
+.van-uploader {
+    padding: var(--theme-spacing-md) 0;
 }
 
-.form-actions__button--primary {
-  background: #FF8C00;
-  color: #ffffff;
-  box-shadow: 0 4rpx 12rpx rgba(255, 140, 0, 0.3);
+.van-uploader__upload {
+    width: 180rpx !important;
+    height: 180rpx !important;
+    border-radius: var(--theme-radius-md) !important;
+    border: 2rpx dashed var(--theme-border-medium) !important;
+    background-color: var(--theme-bg-white) !important;
 }
 
-.form-actions__button--primary:active {
-  background: #e67e00;
+.van-uploader__preview {
+    width: 180rpx !important;
+    height: 180rpx !important;
+    border-radius: var(--theme-radius-md) !important;
+    margin-right: var(--theme-spacing-lg) !important;
+    margin-bottom: var(--theme-spacing-lg) !important;
 }
 
-.form-actions__button--primary[loading] {
-  background: #ffb366;
+.van-uploader__preview-image {
+    border-radius: var(--theme-radius-md) !important;
 }
 
-/* 适配不同屏幕 */
-@media screen and (max-height: 800px) {
-  .form-container {
-    height: calc(100vh - 100rpx);
-  }
-  
-  .form-actions {
-    height: 100rpx;
-  }
-  
-  .form-actions__button {
-    height: 68rpx;
-  }
-  
-  .form-spacer {
-    height: 100rpx;
-  }
+.van-uploader__preview-delete {
+    background-color: var(--theme-text-error) !important;
+    border-radius: var(--theme-radius-round) !important;
+}
+
+.van-picker {
+    background-color: var(--theme-bg-white) !important;
+}
+
+.van-picker__toolbar {
+    border-bottom: 2rpx solid var(--theme-border-light) !important;
+}
+
+.van-picker__confirm {
+    color: var(--theme-color-primary) !important;
+}
+
+.van-picker__cancel {
+    color: var(--theme-text-tertiary) !important;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 320px) {
+    .van-cell-group {
+        margin: var(--theme-spacing-md);
+    }
+
+    .van-uploader__upload,
+    .van-uploader__preview {
+        width: 140rpx !important;
+        height: 140rpx !important;
+    }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .van-cell-group,
+    .van-field,
+    .van-cell,
+    .van-uploader__upload {
+        background-color: var(--theme-bg-card) !important;
+        border-color: var(--theme-border-medium) !important;
+    }
+
+    .van-field__label,
+    .van-field__control,
+    .van-cell__title {
+        color: var(--theme-text-primary) !important;
+    }
+
+    .van-cell__value {
+        color: var(--theme-text-secondary) !important;
+    }
 }
