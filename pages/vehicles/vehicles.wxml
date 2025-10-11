@@ -1,16 +1,260 @@
 <!--pages/vehicles/vehicles.wxml-->
-<view class="container">
-  <view class="header">
-    <text class="iconfont icon-cheyuan header-icon"></text>
-    <text class="header-title">车源</text>
+<view class="vehicles-page">
+  <!-- 搜索模块 -->
+  <view class="vehicles-search">
+    <van-search
+      value="{{filterConditions.keyword}}"
+      placeholder="品牌/车龄/价位等"
+      bind:search="onSearch"
+      bind:change="onSearchChange"
+      bind:clear="onSearchClear"
+      background="var(--theme-bg-card)"
+      shape="round"
+      left-icon="search"
+    />
   </view>
 
-  <view class="content">
-    <view class="placeholder">
-      <text class="iconfont icon-cheyuan placeholder-icon"></text>
-      <text class="placeholder-text">车源信息展示</text>
-      <text class="placeholder-desc">包括车型、车牌号、车主、联系方式等信息</text>
-      <text class="placeholder-note">功能开发中，敬请期待...</text>
+  <!-- 筛选工具栏 -->
+  <view class="vehicles-filter-bar">
+    <van-dropdown-menu class="vehicle-filter-menu">
+      <!-- 排序方式 -->
+      <van-dropdown-item
+        value="{{filterConditions.sortType}}"
+        options="{{sortOptions}}"
+        bind:change="onSortChange"
+      />
+
+      <!-- 品牌车型 -->
+      <van-dropdown-item
+        title="{{brandTitle}}"
+        use-before-toggle="{{true}}"
+        bind:before-toggle="onBrandBeforeToggle"
+      />
+
+      <!-- 车龄筛选 -->
+      <van-dropdown-item
+        title="{{ageTitle}}"
+        bind:open="onAgeDropdownOpen"
+        bind:close="onAgeDropdownClose"
+      >
+        <view class="vehicles-age-panel">
+          <view class="vehicles-age-options">
+            <view
+              wx:for="{{ageOptions}}"
+              wx:key="value"
+              class="vehicles-age-option {{tempAgeSelection === item.value ? 'vehicles-age-option--active' : ''}}"
+              bind:tap="onAgeOptionSelect"
+              data-value="{{item.value}}"
+              data-label="{{item.label}}"
+            >
+              {{item.label}}
+            </view>
+          </view>
+
+          <!-- 自定义车龄 -->
+          <view class="vehicles-custom-age" wx:if="{{tempAgeSelection === 'custom'}}">
+            <view class="vehicles-custom-age__title">自定义车龄</view>
+            <view class="vehicles-custom-age__inputs">
+              <van-field
+                value="{{tempAgeRange.min}}"
+                placeholder="最低车龄"
+                type="number"
+                bind:change="onAgeMinChange"
+              />
+              <text class="vehicles-custom-age__separator">-</text>
+              <van-field
+                value="{{tempAgeRange.max}}"
+                placeholder="最高车龄"
+                type="number"
+                bind:change="onAgeMaxChange"
+              />
+            </view>
+          </view>
+
+          <view class="vehicles-age-panel__actions">
+            <van-button
+              type="default"
+              size="small"
+              bind:click="onResetAge"
+            >
+              重置
+            </van-button>
+            <van-button
+              type="primary"
+              size="small"
+              bind:click="onConfirmAge"
+            >
+              确认
+            </van-button>
+          </view>
+        </view>
+      </van-dropdown-item>
+
+      <!-- 价格筛选 -->
+      <van-dropdown-item
+        title="{{priceTitle}}"
+        bind:open="onPriceDropdownOpen"
+        bind:close="onPriceDropdownClose"
+      >
+        <view class="vehicles-price-panel">
+          <view class="vehicles-price-options">
+            <view
+              wx:for="{{priceOptions}}"
+              wx:key="value"
+              class="vehicles-price-option {{tempPriceSelection === item.value ? 'vehicles-price-option--active' : ''}}"
+              bind:tap="onPriceOptionSelect"
+              data-value="{{item.value}}"
+              data-label="{{item.label}}"
+            >
+              {{item.label}}
+            </view>
+          </view>
+
+          <!-- 自定义价格 -->
+          <view class="vehicles-custom-price" wx:if="{{tempPriceSelection === 'custom'}}">
+            <view class="vehicles-custom-price__title">自定义价格</view>
+            <view class="vehicles-custom-price__inputs">
+              <van-field
+                value="{{tempPriceRange.min}}"
+                placeholder="最低价格"
+                type="number"
+                bind:change="onPriceMinChange"
+              />
+              <text class="vehicles-custom-price__separator">-</text>
+              <van-field
+                value="{{tempPriceRange.max}}"
+                placeholder="最高价格"
+                type="number"
+                bind:change="onPriceMaxChange"
+              />
+            </view>
+          </view>
+
+          <view class="vehicles-price-panel__actions">
+            <van-button
+              type="default"
+              size="small"
+              bind:click="onResetPrice"
+            >
+              重置
+            </van-button>
+            <van-button
+              type="primary"
+              size="small"
+              bind:click="onConfirmPrice"
+            >
+              确认
+            </van-button>
+          </view>
+        </view>
+      </van-dropdown-item>
+    </van-dropdown-menu>
+  </view>
+
+  <!-- 筛选条件回显 -->
+  <view class="vehicles-filter-tags" wx:if="{{hasActiveFilters}}">
+    <van-tag
+      wx:if="{{filterConditions.brandInfo.brandName}}"
+      type="primary"
+      size="medium"
+      closeable
+      bind:close="onClearBrand"
+    >
+      {{filterConditions.brandInfo.brandName}} {{filterConditions.brandInfo.seriesName}}
+    </van-tag>
+
+    <van-tag
+      wx:if="{{filterConditions.ageRange.type && filterConditions.ageRange.type !== 'unlimited'}}"
+      type="primary"
+      size="medium"
+      closeable
+      bind:close="onClearAge"
+    >
+      {{ageDisplayText}}
+    </van-tag>
+
+    <van-tag
+      wx:if="{{filterConditions.priceRange.type && filterConditions.priceRange.type !== 'unlimited'}}"
+      type="primary"
+      size="medium"
+      closeable
+      bind:close="onClearPrice"
+    >
+      {{priceDisplayText}}
+    </van-tag>
+
+    <van-tag
+      type="default"
+      size="medium"
+      bind:click="onClearAllFilters"
+    >
+      清空全部
+    </van-tag>
+  </view>
+
+  <!-- 车辆列表 -->
+  <view class="vehicles-list">
+    <!-- 加载状态 -->
+    <view class="vehicles-loading" wx:if="{{loading && vehicleList.length === 0}}">
+      <van-loading type="spinner" size="24px" vertical>加载中...</van-loading>
+    </view>
+
+    <!-- 车辆卡片列表 -->
+    <view wx:elif="{{vehicleList.length > 0}}" class="vehicles-list__content">
+      <car-card
+        wx:for="{{vehicleList}}"
+        wx:key="id"
+        vehicle-data="{{item}}"
+        show-favorite-button="{{true}}"
+        show-status-tag="{{false}}"
+        bind:onCardTap="onVehicleCardTap"
+        bind:onFavoriteToggle="onVehicleFavoriteToggle"
+      />
+
+      <!-- 加载更多 -->
+      <view class="vehicles-load-more" wx:if="{{hasMore}}">
+        <van-loading
+          wx:if="{{loadingMore}}"
+          type="spinner"
+          size="16px"
+          vertical
+        >
+          加载更多...
+        </van-loading>
+        <text wx:else class="vehicles-load-more__text">上拉加载更多</text>
+      </view>
+
+      <!-- 没有更多 -->
+      <view class="vehicles-no-more" wx:if="{{!hasMore && vehicleList.length > 0}}">
+        <text class="vehicles-no-more__text">没有更多车辆了</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:else class="vehicles-empty">
+      <van-empty
+        image="search"
+        description="{{filterConditions.keyword || hasActiveFilters ? '暂无符合条件的车辆' : '暂无车辆信息'}}"
+      >
+        <van-button
+          wx:if="{{hasActiveFilters}}"
+          round
+          type="primary"
+          class="vehicles-empty__button"
+          bind:click="onClearAllFilters"
+        >
+          清空筛选条件
+        </van-button>
+      </van-empty>
     </view>
   </view>
+
+  <!-- 车型选择器 -->
+  <vehicle-picker
+    show="{{showVehiclePicker}}"
+    title="选择车型"
+    bind:onConfirm="onVehiclePickerConfirm"
+    bind:onCancel="onVehiclePickerCancel"
+    bind:onClose="onVehiclePickerClose"
+  />
 </view>

@@ -1,78 +1,409 @@
 /* pages/vehicles/vehicles.wxss */
+@import '../../assets/styles/theme.wxss';
 @import '../../assets/fonts/iconfont.wxss';
 
-.container {
-  min-height: 100vh;
-  background-color: #f8f9fa;
-  padding-bottom: 60px; /* 为tabBar留出空间 */
+/* ==========================================================================
+   车源页面样式
+   ========================================================================== */
+
+.vehicles-page {
+    height: calc(100vh - 100rpx);
+    background-color: var(--theme-bg-page);
+    padding-bottom: 100rpx; /* 为tabBar留出空间 */
+    background-color: var(--theme-bg-white);
 }
 
-.header {
-  background-color: #ffffff;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #e5e5e5;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* ==========================================================================
+   搜索模块样式
+   ========================================================================== */
+
+.vehicles-search {
+    background-color: var(--theme-bg-card);
+    padding: var(--theme-spacing-lg);
 }
 
-.header-icon {
-  font-size: 24px;
-  color: #FF8C00;
-  margin-right: 8px;
+/* ==========================================================================
+   筛选工具栏样式
+   ========================================================================== */
+
+.vehicles-filter-bar {
+    background-color: var(--theme-bg-card);
 }
 
-.header-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333333;
+/* 车龄筛选面板样式 */
+.vehicles-age-panel {
+    padding: var(--theme-spacing-xxl);
+    background-color: var(--theme-bg-card);
+    max-height: 500rpx;
+    overflow-y: auto;
 }
 
-.content {
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 60vh;
+.vehicles-age-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--theme-spacing-md);
+    margin-bottom: var(--theme-spacing-xxl);
 }
 
-.placeholder {
-  text-align: center;
-  background-color: #ffffff;
-  padding: 40px 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 300px;
+.vehicles-age-option {
+    flex: 0 0 calc(50% - var(--theme-spacing-md) / 2);
+    padding: var(--theme-spacing-lg);
+    border: 2rpx solid var(--theme-border-light);
+    border-radius: var(--theme-radius-sm);
+    text-align: center;
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+    background-color: var(--theme-bg-card);
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
 }
 
-.placeholder-icon {
-  font-size: 48px;
-  color: #FF8C00;
-  display: block;
-  margin-bottom: 16px;
+.vehicles-age-option--active {
+    border-color: var(--theme-color-primary);
+    background-color: var(--theme-color-primary-light);
+    color: var(--theme-color-primary);
+    font-weight: var(--theme-font-weight-medium);
 }
 
-.placeholder-text {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333333;
-  display: block;
-  margin-bottom: 8px;
+.vehicles-custom-age {
+    margin-bottom: var(--theme-spacing-xxl);
 }
 
-.placeholder-desc {
-  font-size: 14px;
-  color: #666666;
-  display: block;
-  margin-bottom: 16px;
-  line-height: 1.4;
+.vehicles-custom-age__title {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-primary);
+    margin-bottom: var(--theme-spacing-lg);
+    font-weight: var(--theme-font-weight-medium);
 }
 
-.placeholder-note {
-  font-size: 12px;
-  color: #999999;
-  display: block;
-  font-style: italic;
+.vehicles-custom-age__inputs {
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-lg);
+}
+
+.vehicles-custom-age__separator {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-secondary);
+    font-weight: var(--theme-font-weight-bold);
+}
+
+.vehicles-age-panel__actions {
+    display: flex;
+    gap: var(--theme-spacing-lg);
+    justify-content: flex-end;
+}
+
+/* 价格筛选面板样式 */
+.vehicles-price-panel {
+    padding: var(--theme-spacing-xxl);
+    background-color: var(--theme-bg-card);
+    max-height: 500rpx;
+    overflow-y: auto;
+}
+
+.vehicles-price-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--theme-spacing-md);
+    margin-bottom: var(--theme-spacing-xxl);
+}
+
+.vehicles-price-option {
+    flex: 0 0 calc(50% - var(--theme-spacing-md) / 2);
+    padding: var(--theme-spacing-lg);
+    border: 2rpx solid var(--theme-border-light);
+    border-radius: var(--theme-radius-sm);
+    text-align: center;
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+    background-color: var(--theme-bg-card);
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.vehicles-price-option--active {
+    border-color: var(--theme-color-primary);
+    background-color: var(--theme-color-primary-light);
+    color: var(--theme-color-primary);
+    font-weight: var(--theme-font-weight-medium);
+}
+
+.vehicles-custom-price {
+    margin-bottom: var(--theme-spacing-xxl);
+}
+
+.vehicles-custom-price__title {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-primary);
+    margin-bottom: var(--theme-spacing-lg);
+    font-weight: var(--theme-font-weight-medium);
+}
+
+.vehicles-custom-price__inputs {
+    display: flex;
+    align-items: center;
+    gap: var(--theme-spacing-lg);
+}
+
+.vehicles-custom-price__separator {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-secondary);
+    font-weight: var(--theme-font-weight-bold);
+}
+
+.vehicles-price-panel__actions {
+    display: flex;
+    gap: var(--theme-spacing-lg);
+    justify-content: flex-end;
+}
+
+/* ==========================================================================
+   筛选条件回显样式
+   ========================================================================== */
+
+.vehicles-filter-tags {
+    background-color: var(--theme-bg-card);
+    padding: var(--theme-spacing-lg) var(--theme-spacing-lg) var(--theme-spacing-md);
+    display: flex;
+    gap: var(--theme-spacing-md);
+    flex-wrap: wrap;
+    align-items: center;
+    border-top: 1rpx solid var(--theme-border-light);
+}
+
+/* ==========================================================================
+   车辆列表样式
+   ========================================================================== */
+
+.vehicles-list {
+    padding: var(--theme-spacing-lg) 0;
+}
+
+.vehicles-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--theme-spacing-xxxl);
+    background-color: var(--theme-bg-card);
+    margin: var(--theme-spacing-lg);
+    border-radius: var(--theme-radius-lg);
+}
+
+.vehicles-list__content {
+    /* 车辆卡片容器 */
+}
+
+.vehicles-load-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--theme-spacing-xxl);
+    margin: var(--theme-spacing-lg);
+}
+
+.vehicles-load-more__text {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-tertiary);
+}
+
+.vehicles-no-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--theme-spacing-xxl);
+    margin: var(--theme-spacing-lg);
+}
+
+.vehicles-no-more__text {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-tertiary);
+}
+
+.vehicles-empty {
+    padding: var(--theme-spacing-xxxl);
+    margin: var(--theme-spacing-lg);
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+}
+
+.vehicles-empty__button {
+    margin-top: var(--theme-spacing-xxl);
+}
+
+/* ==========================================================================
+   响应式设计
+   ========================================================================== */
+
+/* 小屏设备适配 */
+@media (max-width: 375px) {
+    .vehicles-age-option,
+    .vehicles-price-option {
+        flex: 0 0 100%;
+    }
+
+    .vehicles-filter-tags {
+        padding-left: var(--theme-spacing-md);
+        padding-right: var(--theme-spacing-md);
+    }
+}
+
+/* 中等屏幕设备适配 */
+@media (min-width: 376px) and (max-width: 414px) {
+    .vehicles-age-option,
+    .vehicles-price-option {
+        flex: 0 0 calc(33.333% - var(--theme-spacing-md) * 2 / 3);
+    }
+}
+
+/* 大屏幕设备适配 */
+@media (min-width: 415px) {
+    .vehicles-age-option,
+    .vehicles-price-option {
+        flex: 0 0 calc(25% - var(--theme-spacing-md) * 3 / 4);
+    }
+}
+
+/* ==========================================================================
+   Vant 组件样式覆盖
+   ========================================================================== */
+
+/* 覆盖 van-dropdown-menu 样式 */
+.van-dropdown-menu {
+    box-shadow: var(--theme-shadow-xs);
+}
+.vehicle-filter-menu .van-dropdown-menu {
+    box-shadow: none;
+}
+
+.van-dropdown-menu__bar {
+    background-color: var(--theme-bg-card);
+    border-bottom: 1rpx solid var(--theme-border-light);
+}
+
+.van-dropdown-menu__item {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+}
+
+.van-dropdown-menu__item--active {
+    color: var(--theme-color-primary);
+}
+
+/* 覆盖 van-search 样式 */
+.van-search {
+    padding: 0;
+}
+
+.van-search__content {
+    background-color: var(--theme-bg-secondary);
+    border-radius: var(--theme-radius-xxl);
+}
+
+.van-search__field {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+}
+
+.van-search__action {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-color-primary);
+    font-weight: var(--theme-font-weight-medium);
+}
+
+/* 覆盖 van-tag 样式 */
+.van-tag {
+    font-size: var(--theme-font-size-xs);
+    border-radius: var(--theme-radius-md);
+}
+
+/* 覆盖 van-button 样式 */
+.van-button--primary {
+    background-color: var(--theme-color-primary);
+    border-color: var(--theme-color-primary);
+    border-radius: var(--theme-radius-sm);
+}
+
+.van-button--primary:active {
+    background-color: var(--theme-color-primary-active);
+    border-color: var(--theme-color-primary-active);
+}
+
+.van-button--small {
+    font-size: var(--theme-font-size-xs);
+    padding: var(--theme-spacing-sm) var(--theme-spacing-lg);
+}
+
+/* 覆盖 van-field 样式 */
+.van-field__input {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-primary);
+}
+
+.van-field__placeholder {
+    color: var(--theme-text-placeholder);
+}
+
+/* 覆盖 van-loading 样式 */
+.van-loading__text {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-secondary);
+    margin-top: var(--theme-spacing-sm);
+}
+
+/* 覆盖 van-empty 样式 */
+.van-empty__description {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-secondary);
+}
+
+/* ==========================================================================
+   动画效果
+   ========================================================================== */
+
+.vehicles-age-option,
+.vehicles-price-option {
+    transform: scale(1);
+}
+
+.vehicles-age-option:active,
+.vehicles-price-option:active {
+    transform: scale(0.98);
+    transition: transform var(--theme-duration-fast) var(--theme-ease-out);
+}
+
+/* 筛选条件动画 */
+.vehicles-filter-tags .van-tag {
+    animation: fadeInUp var(--theme-duration-base) var(--theme-ease-out);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10rpx);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 车辆卡片动画 */
+.vehicles-list__content > car-card {
+    animation: fadeInUp var(--theme-duration-base) var(--theme-ease-out);
+    animation-fill-mode: both;
+}
+
+.vehicles-list__content > car-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+.vehicles-list__content > car-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+.vehicles-list__content > car-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+.vehicles-list__content > car-card:nth-child(4) {
+    animation-delay: 0.2s;
+}
+.vehicles-list__content > car-card:nth-child(5) {
+    animation-delay: 0.25s;
 }

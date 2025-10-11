@@ -23,6 +23,11 @@ Component({
     showFavoriteButton: {
       type: Boolean,
       value: true
+    },
+    // 是否显示车辆状态标签
+    showStatusTag: {
+      type: Boolean,
+      value: true
     }
   },
 

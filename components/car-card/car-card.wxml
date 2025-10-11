@@ -46,7 +46,7 @@
       <text class="vehicle-card__price">{{formattedVehicleData.formattedPrice}}</text>
       <!-- 状态徽标 -->
       <van-tag
-        wx:if="{{vehicleData.status && vehicleData.statusName}}"
+        wx:if="{{showStatusTag && vehicleData.status && vehicleData.statusName}}"
         class="vehicle-card__status-tag"
         type="{{vehicleData.status === 'WAIT_APPROVE' ? 'warning' : (vehicleData.status === 'WAIT_RECTIFY' ? 'primary' : (vehicleData.status === 'ON_SALE' ? 'success' : 'default'))}}"
         size="small">
