@@ -11,7 +11,7 @@ Page({
         loading: false,
         vehicleList: [],
         hasMore: true,
-        pageSize: 7,
+        pageSize: 50,
         currentPage: 1,
         totalCount: 0, // 新增：总记录数
 
@@ -539,19 +539,54 @@ Page({
      */
 
     /**
-     * 处理车辆卡片点击事件
+     * 处理车辆卡片点击事件（跳转到编辑页面）
      */
     handleCardTap(e) {
         const { vehicleData } = e.detail;
-        if (!vehicleData || !vehicleData.carId) return;
+        if (!vehicleData || !vehicleData.carId) {
+            console.error('车辆卡片点击缺少必要参数:', { vehicleData });
+            return;
+        }
 
+        console.log('车辆卡片点击，跳转到编辑页面:', vehicleData.carId);
+
+        // 跳转到车辆编辑页面
         wx.navigateTo({
-            url: `/pages/car-detail/car-detail?carId=${vehicleData.carId}`,
+            url: `/pages/car-form/car-form?mode=edit&carId=${vehicleData.carId}`,
             success: () => {
-                console.log('跳转到车辆详情页面成功:', vehicleData.carId);
+                console.log('跳转到车辆编辑页面成功:', vehicleData.carId);
             },
             fail: (error) => {
-                console.error('跳转到车辆详情页面失败:', error);
+                console.error('跳转到车辆编辑页面失败:', error);
+                wx.showToast({
+                    title: '页面跳转失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
+        });
+    },
+
+    /**
+     * 处理车辆编辑事件（如果组件支持单独的编辑按钮）
+     */
+    handleEdit(e) {
+        const { vehicleData } = e.detail;
+        if (!vehicleData || !vehicleData.carId) {
+            console.error('车辆编辑缺少必要参数:', { vehicleData });
+            return;
+        }
+
+        console.log('车辆编辑事件:', vehicleData.carId);
+
+        // 跳转到车辆编辑页面
+        wx.navigateTo({
+            url: `/pages/car-form/car-form?mode=edit&carId=${vehicleData.carId}`,
+            success: () => {
+                console.log('跳转到车辆编辑页面成功:', vehicleData.carId);
+            },
+            fail: (error) => {
+                console.error('跳转到车辆编辑页面失败:', error);
                 wx.showToast({
                     title: '页面跳转失败',
                     icon: 'none',

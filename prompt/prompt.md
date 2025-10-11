@@ -632,3 +632,421 @@ export interface MpUserDTO {
 需要设计一个按钮权限组件，用于判断当前用户是否有权限显示按钮。如果有则根据传入的权限值显示按钮，如果没有则不显示按钮。
 在miniProgramPermList
 获取成功后，是存储在本地的，校验是从本地获取全部权限值，然后根据传入的权限值进行判断，是否显示按钮等内容
+
+#### 编辑车辆功能
+
+1、编辑车辆入口：在卖车列表页面点击车辆列表某车辆卡片，跳转到车辆修改页。
+跳转逻辑：
+1、需要携带当前mode为修改编辑模式的类型，需要携带当前车辆id
+2、跳转页面完成后，判断当前如果是编辑模式，则根据车辆id查询车辆详情，并回显到表单中
+
+车辆详情接口：
+
+- url:/api/mp/car/query-car-detail
+- method:GET
+- 请求参数：carId
+- 返回参数：
+
+```
+/**
+ * 车辆详情信息
+ *
+ * ApiResultMpCarDetailResponse
+ */
+export interface Response {
+    code?: string;
+    data?: MpCarDetailResponse;
+    message?: string;
+    timestamp?: number;
+    traceId?: string;
+    [property: string]: any;
+}
+
+/**
+ * MpCarDetailResponse
+ */
+export interface MpCarDetailResponse {
+    /**
+     * 车辆基本信息
+     */
+    basicInfo?: MpCarResponse;
+    /**
+     * 车型核心参数
+     */
+    modelInfo?: CarModelResponse;
+    /**
+     * 车辆名称
+     */
+    name?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆基本信息
+ *
+ * MpCarResponse
+ */
+export interface MpCarResponse {
+    /**
+     * 车龄（年）
+     */
+    age?: number;
+    /**
+     * 审批意见
+     */
+    approveRemark?: string;
+    /**
+     * 审批时间
+     */
+    approveTime?: string;
+    /**
+     * 审批人ID
+     */
+    approveUserId?: number;
+    /**
+     * 审批人姓名
+     */
+    approveUserName?: string;
+    /**
+     * 品牌
+     */
+    brand?: string;
+    /**
+     * 颜色
+     */
+    color?: string;
+    /**
+     * 联系电话
+     */
+    contactPhone?: string;
+    /**
+     * 成交价格（万元）,保留2位小数
+     */
+    dealPrice?: number;
+    /**
+     * 成交时间
+     */
+    dealTime?: string;
+    /**
+     * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+     */
+    favorStatus?: FavorStatus;
+    /**
+     * 收藏时间
+     */
+    favorTime?: string;
+    /**
+     * 底价（万元）,保留2位小数
+     */
+    floorPrice?: number;
+    /**
+     * 车辆ID
+     */
+    id?: number;
+    /**
+     * 图片文件ID列表，逗号分隔
+     */
+    imageFileIds?: string;
+    /**
+     * 图片url列表，每个元素包含文件名和文件url，用于预览图片
+     */
+    imageUrlList?: FileUrlInfo[];
+    /**
+     * 上牌城市
+     */
+    licenseCity?: string;
+    /**
+     * 上牌日期，yyyy-MM-dd
+     */
+    licenseDate?: string;
+    /**
+     * 里程（万公里）,保留2位小数
+     */
+    mileage?: number;
+    /**
+     * 车型ID
+     */
+    modelId?: number;
+    /**
+     * 加装项目
+     */
+    modifyItems?: string;
+    /**
+     * 车辆名称
+     */
+    name?: string;
+    /**
+     * 发布时间
+     */
+    publishTime?: string;
+    /**
+     * 发布人ID
+     */
+    publishUserId?: number;
+    /**
+     * 发布人姓名
+     */
+    publishUserName?: string;
+    /**
+     * 车况描述
+     */
+    remark?: string;
+    /**
+     * 售价（万元）,保留2位小数
+     */
+    sellPrice?: number;
+    /**
+     * 出售人ID
+     */
+    sellUserId?: number;
+    /**
+     * 出售人姓名
+     */
+    sellUserName?: string;
+    /**
+     * 车系
+     */
+    series?: string;
+    /**
+     * 车辆状态
+     */
+    status?: Status;
+    /**
+     * 车辆状态名称
+     */
+    statusName?: string;
+    /**
+     * 过户次数
+     */
+    transferCount?: number;
+    /**
+     * 使用性质
+     */
+    usage?: string;
+    /**
+     * 款式
+     */
+    variant?: string;
+    [property: string]: any;
+}
+
+/**
+ * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+ */
+export enum FavorStatus {
+    Favorite = "FAVORITE",
+    NotFavorite = "NOT_FAVORITE",
+}
+
+/**
+ * FileUrlInfo
+ */
+export interface FileUrlInfo {
+    /**
+     * 文件名, 上传到cos后的文件名，格式：logo/uuid.ext，或者car/uuid.ext
+     * 例如：logo/1234567890.png, car/1234567890.png
+     */
+    fileName?: string;
+    /**
+     * 文件url，可以直接预览图片。
+     */
+    fileUrl?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆状态
+ */
+export enum Status {
+    OnSale = "ON_SALE",
+    Sold = "SOLD",
+    WaitApprove = "WAIT_APPROVE",
+    WaitRectify = "WAIT_RECTIFY",
+}
+
+/**
+ * 车型核心参数
+ *
+ * CarModelResponse
+ */
+export interface CarModelResponse {
+    /**
+     * 电池容量（kWh）
+     */
+    batteryCapacity?: string;
+    /**
+     * 电池类型
+     */
+    batteryType?: string;
+    /**
+     * 车身结构
+     */
+    bodyStructure?: string;
+    /**
+     * 品牌
+     */
+    brand?: string;
+    /**
+     * 综合续航（公里）
+     */
+    comprehensiveRange?: number;
+    /**
+     * 创建时间
+     */
+    createTime?: string;
+    /**
+     * 创建人ID
+     */
+    createUserId?: number;
+    /**
+     * 创建人姓名
+     */
+    createUserName?: string;
+    /**
+     * 排量（L）,如：2.0L,1.5T等。
+     */
+    displacement?: string;
+    /**
+     * 驱动方式
+     */
+    driveType?: string;
+    /**
+     * 能源类型
+     */
+    energyType?: string;
+    /**
+     * 新车指导价（万元）,保留2位小数
+     */
+    guidePrice?: number;
+    /**
+     * 车型ID
+     */
+    id?: number;
+    /**
+     * 品牌logo文件ID
+     */
+    logoFileId?: string;
+    /**
+     * 品牌logo图片url
+     */
+    logoUrl?: string;
+    /**
+     * 驱动电机数
+     */
+    motorCount?: number;
+    /**
+     * 电动机马力（PS）
+     */
+    motorPower?: string;
+    /**
+     * 纯电续航（公里）
+     */
+    pureElectricRange?: number;
+    /**
+     * 座位数
+     */
+    seatCount?: number;
+    /**
+     * 车系
+     */
+    series?: string;
+    /**
+     * 变速箱类型
+     */
+    transmissionType?: string;
+    /**
+     * 更新时间
+     */
+    updateTime?: string;
+    /**
+     * 更新人ID
+     */
+    updateUserId?: number;
+    /**
+     * 更新人姓名
+     */
+    updateUserName?: string;
+    /**
+     * 款式
+     */
+    variant?: string;
+    [property: string]: any;
+}
+```
+
+图片回显逻辑：需要使用接口返回的imageFileIds字段，每一个fileUrl都是一个可预览的图片地址，回显的图片需要添加标识，表示是已上传的图片，不能在保存时重新添加到上传队列中。
+
+#### 审批车辆
+
+在审批车辆列表页面，点击车辆卡片，需要跳转到车辆审批页面（car-form页面），需要设置mode类型为审批模式，携带车辆id参数，在跳转到car-form后，需要根据id查询详情，这一点在之前编辑车辆时完成了，直接进行复用即可。与编辑车辆不同点：
+1、title显示“审批车辆”
+2、底部按钮需要显示为：通过，驳回
+3、通过与驳回都要调用同一个审批接口，只是参数不同，APPROVED-通过，REJECTED-驳回
+4、在表单项需要新增必填表单项：
+审批意见：textarea，最大200字符，允许清除，placeholder：请输入；绑定的filed为approveRemark
+
+#### 车源页面需求
+1、页面入口：tabBar中点击车源
+2、页面功能：提供用户一个查询在售车辆信息的页面，方便用户根据一些条件进行车辆信息的筛选，包括：
+- 关键词搜索：默认为空，placeholder：“品牌/车龄/价位等”
+- 排序方式
+包含的排序方式：一个下拉框：包含的下拉选项：
+- LATEST_PUBLISHED-最新上架，LOWEST_PRICE-价格最低，HIGHEST_PRICE-价格最高，SHORTEST_AGE-车龄最短，SMART-智能排序。默认：车龄最短，SMART。
+
+- 品牌车型:使用vehicle-picker组件
+- 车龄筛选：一个下拉面板，面板提供一些默认单选选项按钮，包括：
+    - 不限
+    - 1年以内
+    - 3年以内
+    - 5年以内
+    - 10年以内
+    - 1-3年
+    - 3-5年
+    - 5-10年
+    - 10年以上
+ 在默认单选按钮下发给出输入范围的表单项：
+ title：自定义车龄
+ 左右两个输入框，中间“-”符号连接，示意：
+ --------------------------------
+ ---------------        ---------
+ | -最低车龄---|-   -   |--最高车龄-|
+ --------------------------------
+
+- 价格筛选：一个下拉面板，面板提供一些默认单选选项按钮，包括：
+    - 不限
+    - 1万以下
+    - 5万以下
+    - 5-10万
+    - 10-15万
+    - 15-20万
+    - 20万以上
+
+ 在默认单选按钮下发给出输入范围的表单项：
+ title：自定义价格，左侧为最低价格输入表单项，右侧为最高价格输入表单项。
+
+
+UI大致示意：
+
+---------------------------------
+ 模糊搜索框
+---------------------------------
+排序方式|品牌车型|车龄筛选|价格筛选
+---------------------------------
+回显除排序方式外的筛选项
+---------------------------------
+
+车辆列表
+
+
+
+
+
+
+
+
+
+---------------------------------
+
+要点说明：本次实现只完成UI开发，不包含车辆列表查询接口的实现
+
+

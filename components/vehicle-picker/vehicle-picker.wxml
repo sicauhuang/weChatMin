@@ -5,26 +5,23 @@
   custom-style="height: 100%; background: #f7f8fa;"
   custom-class="vehicle-picker-popup"
   bind:close="onClose">
-  
+
   <!-- 顶部操作栏 -->
   <view class="header">
     <view class="header-left">
       <van-icon name="cross" size="18" bind:click="onCancel" />
     </view>
     <view class="header-title">{{title}}</view>
-    <view class="header-right">
-      <view class="confirm-btn" bind:click="onConfirmSelection">确认</view>
-    </view>
   </view>
-  
+
   <!-- 主体内容区 -->
   <view class="content">
     <!-- 左侧品牌菜单 -->
     <view class="brand-menu">
       <van-loading wx:if="{{loading}}" type="spinner" size="20" color="#1989fa" />
       <view wx:else class="vehicle-brand-wrapper">
-        <view 
-          wx:for="{{brandList}}" 
+        <view
+          wx:for="{{brandList}}"
           wx:key="brandId"
           class="brand-item {{selectedBrandId === item.brandId ? 'active' : ''}}"
           bind:tap="onBrandSelect"
@@ -33,14 +30,14 @@
         </view>
       </view>
     </view>
-    
+
     <!-- 右侧车型列表 -->
     <view class="vehicle-list">
       <view wx:if="{{selectedBrand && selectedBrand.seriesList}}" class="series-container">
         <view wx:for="{{selectedBrand.seriesList}}" wx:key="seriesId" class="series-group">
           <!-- 车系标题 -->
           <view class="series-title">{{item.seriesName}}</view>
-          
+
           <!-- 车型列表 -->
           <van-cell-group custom-class="vehicle-picker-cell-group">
             <van-cell

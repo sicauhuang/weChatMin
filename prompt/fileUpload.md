@@ -86,10 +86,11 @@
 需求文档:/Users/xiaofeng/WeChatProjects/miniprogram-1/prompt/prompt.md
 在车辆表单上传页面：/Users/xiaofeng/WeChatProjects/miniprogram-1/pages/car-form
 
-在车辆表单上传页面，图片上传，获取用户需要上传的车辆图片，并且前端都是可控的fileList, 因为需要用户点击保存按钮时，才会触发上传动作。
+在车辆表单上传页面，图片上传后数据是使用页面变量暂时存储的，在点击保存时需要先进行文件上传流程，上传完成再将成功的文件名称列表与表单数据进行后端数据提交。
+
 保存按钮逻辑：
 1、收集表单数据
 2、将图片文件数据通过上传工具进行文件上传，
 3、在prompt.md记录了新增车辆与编辑车辆接口，在请求参数不变的情况下，新增参数：
 
-- imageFileIds：sting, 上传完成的文件UUID名称的字符串，多个名称使用逗号分割。
+- imageFileIds：sting, 上传完成的文件名称（car/uuid.png）的字符串，多个名称使用逗号分割。

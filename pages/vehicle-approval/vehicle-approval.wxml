@@ -23,6 +23,7 @@
         bind:onSelectionChange="onSelectionChange"
         delete-mode="{{deleteMode}}"
         is-selected="{{selectedVehicles.indexOf(item.carId) !== -1}}"
+        show-favorite-button="{{false}}"
       />
     </view>
 

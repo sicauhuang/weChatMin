@@ -13,6 +13,9 @@
         "van-divider": "/@vant/weapp/divider/index",
         "van-tag": "/@vant/weapp/tag/index",
         "van-toast": "/@vant/weapp/toast/index",
+        "van-dialog": "/@vant/weapp/dialog/index",
+        "van-progress": "/@vant/weapp/progress/index",
+        "van-loading": "/@vant/weapp/loading/index",
         "vehicle-picker": "/components/vehicle-picker/vehicle-picker"
     }
 }

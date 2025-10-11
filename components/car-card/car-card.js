@@ -100,8 +100,19 @@ Component({
         return;
       }
 
-      // 正常模式下的卡片点击事件
+      // 正常模式下的卡片点击事件：跳转到编辑页面
       this.triggerEvent('onCardTap', {
+        vehicleData: this.properties.vehicleData
+      });
+    },
+
+    /**
+     * 编辑按钮点击事件（如果需要单独的编辑按钮）
+     */
+    onEditTap() {
+      console.log('编辑按钮点击:', this.properties.vehicleData.carId);
+      
+      this.triggerEvent('onEdit', {
         vehicleData: this.properties.vehicleData
       });
     },

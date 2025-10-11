@@ -78,7 +78,6 @@
         placeholder="请输入"
         label="过户次数"
         type="number"
-        required
         border="{{false}}"
         data-field="transferCount"
         bind:change="onInputChange" />
@@ -88,7 +87,6 @@
         title="上牌日期"
         value="{{formData.plateDate || '请选择'}}"
         is-link
-        required
         class="car-plateDate"
         bind:click="showDatePicker"
         arrow-direction="down" />
@@ -98,7 +96,6 @@
         value="{{formData.plateCity}}"
         placeholder="请输入"
         label="上牌城市"
-        required
         border="{{false}}"
         data-field="plateCity"
         bind:change="onInputChange" />
@@ -108,7 +105,6 @@
         value="{{formData.usageType}}"
         placeholder="请输入"
         label="使用性质"
-        required
         border="{{false}}"
         data-field="usageType"
         bind:change="onInputChange" />
@@ -142,8 +138,9 @@
 
     <!-- 售卖信息 -->
     <van-cell-group title="售卖信息" border="{{false}}">
-      <!-- 底价 -->
+      <!-- 底价（审批模式下隐藏） -->
       <van-field
+        wx:if="{{mode !== 'approval'}}"
         value="{{formData.lowPrice}}"
         placeholder="请输入"
         label="底价"
@@ -187,27 +184,67 @@
     <!-- 车辆照片 -->
     <van-cell-group title="车辆照片（最多5张）" border="{{false}}">
       <van-cell>
-        <van-uploader
-          file-list="{{imageList}}"
-          bind:after-read="onImageUpload"
-          bind:delete="onImageDelete"
-          max-count="5"
-          preview-size="180rpx"
-          upload-text="添加照片" />
+      <van-uploader
+        file-list="{{imageList}}"
+        bind:after-read="onImageUpload"
+        bind:delete="onImageDelete"
+        max-count="5"
+        multiple="{{true}}"
+        preview-size="180rpx"
+        upload-text="添加照片" />
       </van-cell>
     </van-cell-group>
 
+    <!-- 审批意见（仅在审批模式下显示） -->
+    <van-cell-group wx:if="{{mode === 'approval'}}" title="审批意见" border="{{false}}">
+      <van-field
+        value="{{formData.approveRemark}}"
+        placeholder="请输入审批意见"
+        label="审批意见"
+        type="textarea"
+        autosize
+        maxlength="200"
+        show-word-limit
+        clearable
+        required
+        border="{{false}}"
+        data-field="approveRemark"
+        bind:change="onInputChange" />
+    </van-cell-group>
+
     <!-- 占位空间 -->
-    <view style="height: 140rpx;"></view>
+    <view style="height:40rpx;"></view>
   </scroll-view>
 
   <!-- 底部提交按钮 -->
   <view class="form-actions">
+    <!-- 审批模式显示“通过”和“驳回”按钮 -->
+    <view wx:if="{{mode === 'approval'}}" class="approval-actions">
+      <van-button
+        type="danger"
+        size="large"
+        loading="{{submitting && approvalAction === 'REJECTED'}}"
+        class="approval-button approval-reject-button"
+        bind:click="onReject">
+        驳回
+      </van-button>
+      <van-button
+        type="primary"
+        size="large"
+        loading="{{submitting && approvalAction === 'APPROVED'}}"
+        class="approval-button approval-approve-button"
+        bind:click="onApprove">
+        通过
+      </van-button>
+    </view>
+
+    <!-- 新建/编辑模式显示保存按钮 -->
     <van-button
+      wx:else
       type="primary"
       size="large"
       loading="{{submitting}}"
-      custom-class="submit-button"
+      class="submit-button"
       bind:click="onSave">
       {{mode === 'edit' ? '更新' : '保存'}}
     </van-button>
@@ -235,4 +272,40 @@
 
   <!-- Toast 组件 -->
   <van-toast id="van-toast" />
+
+  <!-- 操作选择弹窗 -->
+  <van-dialog
+    show="{{showActionDialog}}"
+    message="车辆信息已成功保存，您希望："
+    show-cancel-button
+    confirm-button-text="继续新建"
+    cancel-button-text="返回列表"
+    confirm-button-color="#1989fa"
+    bind:confirm="onContinueCreate"
+    bind:cancel="onGoBack"
+    bind:close="hideActionDialog" />
+
+  <!-- 上传进度弹窗 -->
+  <van-popup
+    show="{{uploadProgress.show}}"
+    overlay="{{true}}"
+    close-on-click-overlay="{{false}}"
+    position="center"
+    custom-class="upload-progress-popup">
+    <view class="upload-progress-container">
+      <view class="upload-icon">
+        <van-loading type="spinner" size="48rpx" color="#1989fa" />
+      </view>
+      <view class="upload-message">{{uploadProgress.message}}</view>
+      <view class="upload-progress">
+        <van-progress
+          percentage="{{uploadProgress.percentage}}"
+          stroke-width="6"
+          color="#1989fa"
+          pivot-text="{{uploadProgress.percentage}}%"
+          show-pivot="{{true}}" />
+      </view>
+      <view class="upload-tip">请勿关闭页面，正在上传中...</view>
+    </view>
+  </van-popup>
 </view>

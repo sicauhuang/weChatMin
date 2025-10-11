@@ -1,273 +1,287 @@
 /* pages/car-form/car-form.wxss */
-@import '../../assets/styles/theme.wxss';
 
-/* 页面容器 */
 .car-form-page {
-    background-color: var(--theme-bg-white);
-    min-height: 100vh;
+    height: 100vh;
+    background-color: #f7f8fa;
     position: relative;
 }
-.van-cell--required:before {
-    left: var(--padding-xs, 8rpx) !important;
-}
 
-/* 加载状态覆盖层 */
+/* 加载状态 */
 .loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: var(--theme-z-index-modal);
+    z-index: 9999;
 }
 
 .loading-text {
-    font-size: var(--theme-font-size-lg);
-    color: var(--theme-text-secondary);
+    color: #ffffff;
+    font-size: 32rpx;
+    margin-top: 20rpx;
 }
 
 /* 表单容器 */
 .form-container {
     height: calc(100vh - 140rpx);
-    padding: var(--theme-spacing-lg) 0;
-    box-sizing: border-box;
-    background-color: var(--theme-bg-white);
+    padding-bottom: 40rpx;
 }
 
-/* Vant Cell Group 样式优化 - 融合式设计 */
-.van-cell-group {
-    margin: 0 var(--theme-spacing-lg) var(--theme-spacing-xl) var(--theme-spacing-lg);
-    background-color: var(--theme-bg-white) !important;
-    border-radius: var(--theme-radius-lg) !important;
-    overflow: hidden;
-    box-shadow: var(--theme-shadow-xs);
-}
-
-.van-cell-group__title {
-    padding: var(--theme-spacing-xl) var(--theme-spacing-lg) var(--theme-spacing-sm)
-        var(--theme-spacing-lg) !important;
-    margin: 0 !important;
-    background-color: var(--theme-bg-white) !important;
-    color: var(--theme-text-primary) !important;
-    font-size: var(--theme-font-size-lg) !important;
-    font-weight: var(--theme-font-weight-bold) !important;
-    border-bottom: 1rpx solid var(--theme-border-light) !important;
-    position: relative;
-}
-
-/* 标题装饰条 */
-.van-cell-group__title::before {
-    content: '';
-    position: absolute;
-    left: var(--theme-spacing-lg);
-    bottom: 0;
-    width: 60rpx;
-    height: 4rpx;
-    background-color: var(--theme-color-primary-light);
-    border-radius: 2rpx;
-}
-
-/* Vant Field 样式优化 - 与标题融合 */
-.van-field {
-    padding: var(--theme-spacing-lg) var(--theme-spacing-lg) !important;
-    background-color: var(--theme-bg-white) !important;
-    border-bottom: 1rpx solid var(--theme-border-ultra-light) !important;
-    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
-}
-
-.van-field:last-child {
-    border-bottom: none !important;
-}
-
-.van-field:active {
-    background-color: var(--theme-bg-secondary) !important;
-}
-
-.van-field__label {
-    color: var(--theme-text-primary) !important;
-    font-weight: var(--theme-font-weight-medium) !important;
-    width: 200rpx !important;
-    margin-left: 10rpx;
-}
-
-.van-field__control {
-    color: var(--theme-text-primary) !important;
-}
-
-.van-field__control::placeholder {
-    color: var(--theme-text-placeholder) !important;
-}
-
-/* Vant Cell 样式优化 - 与标题融合 */
-.van-cell {
-    padding: var(--theme-spacing-lg) !important;
-    background-color: var(--theme-bg-white) !important;
-    border-bottom: 1rpx solid var(--theme-border-ultra-light) !important;
-    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
-}
-
-.van-cell:last-child {
-    border-bottom: none !important;
-}
-
-.van-cell:active {
-    background-color: var(--theme-bg-secondary) !important;
-}
-
-.van-cell__title {
-    color: var(--theme-text-primary) !important;
-    font-weight: var(--theme-font-weight-medium) !important;
-    margin-left: 10rpx;
-}
-
-.van-cell__value {
-    color: var(--theme-text-secondary) !important;
-}
-
-.van-cell__right-icon {
-    color: var(--theme-text-tertiary) !important;
-}
-
-/* 表单字段单位样式 */
+/* 字段单位样式 */
 .field-unit {
-    color: var(--theme-text-secondary);
-    font-size: var(--theme-font-size-md);
-    padding: 0 var(--theme-spacing-sm);
-    display: flex;
-    align-items: center;
-    min-width: fit-content;
-    white-space: nowrap;
+    color: #969799;
+    font-size: 28rpx;
+    padding: 0 20rpx;
 }
 
-/* van-toast 组件样式优化 */
-.van-toast {
-    min-width: 200rpx !important;
-    max-width: 400rpx !important;
-    white-space: nowrap !important;
+/* 车型选择和日期选择单元格样式 */
+.car-brandModel,
+.car-plateDate {
+    background-color: #ffffff;
 }
 
-.van-toast__text {
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
+.car-brandModel .van-cell__title,
+.car-plateDate .van-cell__title {
+    color: #323233;
+    font-size: 28rpx;
 }
 
-/* 底部提交按钮区域 */
+.car-brandModel .van-cell__value,
+.car-plateDate .van-cell__value {
+    color: #969799;
+    font-size: 28rpx;
+}
+
+/* 当有值时，显示为正常文本颜色 */
+.car-brandModel.has-value .van-cell__value,
+.car-plateDate.has-value .van-cell__value {
+    color: #323233;
+}
+
+/* 底部操作按钮 */
 .form-actions {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: var(--theme-bg-white);
-    padding: var(--theme-spacing-xl) var(--theme-spacing-lg);
-    border-top: 2rpx solid var(--theme-border-light);
-    z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 30rpx;
+  background-color: #ffffff;
+  border-top: 1rpx solid #ebedf0;
+  z-index: 100;
+  overflow: hidden;
 }
 
-/* Vant Button 样式优化 - 只保留提交按钮 */
 .submit-button {
-    width: 100% !important;
-    background: var(--theme-color-primary) !important;
-    color: var(--theme-text-white) !important;
-    border: none !important;
-    border-radius: var(--theme-radius-sm) !important;
-    padding: var(--theme-spacing-lg) !important;
-    font-size: var(--theme-font-size-md) !important;
-    font-weight: var(--theme-font-weight-medium) !important;
-    box-shadow: 0 2rpx 8rpx rgba(218, 165, 32, 0.3) !important;
-    transition: all var(--theme-duration-base) var(--theme-ease-out) !important;
+    width: 100%;
+    height: 88rpx;
+    border-radius: 8rpx;
+    font-size: 32rpx;
+    font-weight: 500;
+    flex:1 !important;
+    overflow: hidden;
 }
 
-.submit-button::after {
-    border: none !important;
+/* 审批按钮样式 */
+.approval-actions {
+    display: flex;
+    gap: 20rpx;
+    width: 100%;
+    overflow: hidden;
 }
 
-.submit-button:active {
-    background: var(--theme-color-primary-hover) !important;
-    transform: translateY(1rpx) !important;
-    box-shadow: 0 1rpx 4rpx rgba(218, 165, 32, 0.4) !important;
+.approval-button {
+    flex: 1;
+    height: 88rpx;
+    border-radius: 8rpx;
+    font-size: 32rpx;
+    font-weight: 500;
+    overflow: hidden;
 }
 
-/* Vant Uploader 样式优化 */
+.approval-reject-button {
+    background-color: #ee0a24 !important;
+    border-color: #ee0a24 !important;
+}
+
+.approval-approve-button {
+    background-color: #07c160 !important;
+    border-color: #07c160 !important;
+}
+
+/* 上传进度弹窗样式 */
+.upload-progress-popup {
+    border-radius: 16rpx;
+}
+
+.upload-progress-container {
+    padding: 60rpx 40rpx;
+    text-align: center;
+    min-width: 500rpx;
+}
+
+.upload-icon {
+    margin-bottom: 30rpx;
+}
+
+.upload-message {
+    font-size: 32rpx;
+    color: #323233;
+    margin-bottom: 30rpx;
+    font-weight: 500;
+}
+
+.upload-progress {
+    margin-bottom: 20rpx;
+}
+
+.upload-tip {
+    font-size: 24rpx;
+    color: #969799;
+    line-height: 1.5;
+}
+
+/* Vant 组件样式覆盖 */
+
+/* Cell Group 标题样式 */
+.van-cell-group__title {
+    padding: 32rpx 30rpx 16rpx;
+    font-size: 28rpx;
+    color: #323233;
+    font-weight: 600;
+    background-color: #f7f8fa;
+}
+
+/* Cell 和 Field 通用样式 */
+.van-cell,
+.van-field {
+    padding: 24rpx 30rpx;
+    font-size: 28rpx;
+    background-color: #ffffff;
+}
+
+.van-cell:not(:last-child)::after,
+.van-field:not(:last-child)::after {
+    border-bottom: 1rpx solid #ebedf0;
+    left: 30rpx;
+    right: 30rpx;
+}
+
+/* Field 标签样式 */
+.van-field__label {
+    color: #323233;
+    font-weight: 500;
+    width: 160rpx;
+    margin-right: 24rpx;
+}
+
+/* Field 输入框样式 */
+.van-field__input {
+    color: #323233;
+    font-size: 28rpx;
+    text-align: right;
+}
+
+.van-field__input::placeholder {
+    color: #c8c9cc;
+}
+
+/* 必填字段标识样式 */
+.van-field[required] .van-field__label::before,
+.van-cell[required] .van-cell__title::before {
+    content: '*';
+    color: #ee0a24;
+    margin-right: 8rpx;
+    font-weight: bold;
+}
+
+/* 车辆照片上传器样式 */
 .van-uploader {
-    padding: var(--theme-spacing-md) 0;
+    padding: 0;
 }
 
-.van-uploader__upload {
-    width: 180rpx !important;
-    height: 180rpx !important;
-    border-radius: var(--theme-radius-md) !important;
-    border: 2rpx dashed var(--theme-border-medium) !important;
-    background-color: var(--theme-bg-white) !important;
+.van-uploader__wrapper {
+    margin: 0;
 }
 
 .van-uploader__preview {
-    width: 180rpx !important;
-    height: 180rpx !important;
-    border-radius: var(--theme-radius-md) !important;
-    margin-right: var(--theme-spacing-lg) !important;
-    margin-bottom: var(--theme-spacing-lg) !important;
+    margin: 0 16rpx 16rpx 0;
 }
 
-.van-uploader__preview-image {
-    border-radius: var(--theme-radius-md) !important;
+.van-uploader__upload {
+    margin: 0 16rpx 16rpx 0;
+    background-color: #fafafa;
+    border: 2rpx dashed #dcdee0;
+    border-radius: 8rpx;
 }
 
-.van-uploader__preview-delete {
-    background-color: var(--theme-text-error) !important;
-    border-radius: var(--theme-radius-round) !important;
+.van-uploader__upload-icon {
+    color: #dcdee0;
+    font-size: 48rpx;
 }
 
-.van-picker {
-    background-color: var(--theme-bg-white) !important;
+.van-uploader__upload-text {
+    color: #969799;
+    font-size: 24rpx;
+    margin-top: 16rpx;
 }
 
-.van-picker__toolbar {
-    border-bottom: 2rpx solid var(--theme-border-light) !important;
+/* 车型选择器弹窗样式 */
+.vehicle-picker-popup {
+    height: 100%;
 }
 
-.van-picker__confirm {
-    color: var(--theme-color-primary) !important;
+/* Toast 样式调整 */
+.van-toast {
+    font-size: 28rpx;
 }
 
-.van-picker__cancel {
-    color: var(--theme-text-tertiary) !important;
-}
-
-/* 响应式适配 */
-@media screen and (max-width: 320px) {
-    .van-cell-group {
-        margin: var(--theme-spacing-md);
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+    .van-field__label {
+        width: 140rpx;
     }
 
-    .van-uploader__upload,
-    .van-uploader__preview {
-        width: 140rpx !important;
-        height: 140rpx !important;
+    .submit-button {
+        height: 80rpx;
+        font-size: 30rpx;
     }
 }
 
-/* 深色模式适配 */
+/* 深色模式支持 */
 @media (prefers-color-scheme: dark) {
-    .van-cell-group,
-    .van-field,
+    .car-form-page {
+        background-color: #1a1a1a;
+    }
+
+    .van-cell-group__title {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+
     .van-cell,
-    .van-uploader__upload {
-        background-color: var(--theme-bg-card) !important;
-        border-color: var(--theme-border-medium) !important;
+    .van-field {
+        background-color: #2d2d2d;
+        color: #ffffff;
     }
 
-    .van-field__label,
-    .van-field__control,
-    .van-cell__title {
-        color: var(--theme-text-primary) !important;
+    .van-field__label {
+        color: #ffffff;
     }
 
-    .van-cell__value {
-        color: var(--theme-text-secondary) !important;
+    .van-field__input {
+        color: #ffffff;
+    }
+
+    .form-actions {
+        background-color: #2d2d2d;
+        border-top-color: #484848;
     }
 }

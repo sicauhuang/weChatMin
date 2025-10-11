@@ -53,6 +53,14 @@ module.exports = {
     production,
     currentEnv,
 
+    // 上传配置
+    uploadConfig: {
+        maxFileSize: 5 * 1024 * 1024,     // 5MB
+        maxFileCount: 5,                   // 最多5个文件
+        supportedTypes: ['png', 'jpg', 'jpeg'],
+        corsOrigin: 'https://cos.ap-beijing.myqcloud.com'
+    },
+
     // 快捷方法
     getLoginUrl() {
         return currentEnv.getApiUrl('/api/login');
@@ -68,6 +76,11 @@ module.exports = {
 
     getHealthUrl() {
         return currentEnv.getApiUrl('/api/health');
+    },
+
+    // 文件上传相关接口
+    getUploadUrlQueryUrl() {
+        return currentEnv.getApiUrl('/api/mp/file/query-upload-url');
     },
 
     // 切换到真机调试模式
