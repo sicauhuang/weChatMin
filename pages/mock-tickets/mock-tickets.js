@@ -76,6 +76,14 @@ Page({
      */
     onPullDownRefresh() {
         console.log('模拟票页面下拉刷新');
+
+        // 检查登录状态
+        if (!this.data.isLoggedIn) {
+            console.log('用户未登录，停止下拉刷新');
+            wx.stopPullDownRefresh();
+            return;
+        }
+
         this.loadTicketList(true);
     },
 
@@ -102,6 +110,16 @@ Page({
      */
     onRefresh() {
         console.log('触发下拉刷新');
+
+        // 检查登录状态
+        if (!this.data.isLoggedIn) {
+            console.log('用户未登录，停止下拉刷新');
+            this.setData({
+                refreshing: false
+            });
+            return;
+        }
+
         this.setData({
             refreshing: true
         });

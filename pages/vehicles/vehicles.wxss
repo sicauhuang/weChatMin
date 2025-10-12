@@ -7,10 +7,118 @@
    ========================================================================== */
 
 .vehicles-page {
-    height: calc(100vh - 100rpx);
-    background-color: var(--theme-bg-page);
-    padding-bottom: 100rpx; /* 为tabBar留出空间 */
     background-color: var(--theme-bg-white);
+    height: calc(100vh - 100rpx);
+}
+
+/* ==========================================================================
+   登录提示样式
+   ========================================================================== */
+
+.vehicles__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--theme-spacing-page);
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.vehicles__loading-text {
+    font-size: var(--theme-font-size-md);
+    color: var(--theme-text-secondary);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.vehicles__login-prompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 302rpx); /* 减去导航栏和tabBar高度 */
+}
+
+.vehicles__login-card {
+    background: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    padding: var(--theme-spacing-xxl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 500rpx;
+    width: 100%;
+    animation: fadeInUp var(--theme-duration-slow) var(--theme-ease-out);
+}
+
+.vehicles__login-icon {
+    font-size: 120rpx;
+    color: var(--theme-color-primary);
+    margin-bottom: var(--theme-spacing-xl);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.vehicles__login-text {
+    font-size: var(--theme-font-size-lg);
+    color: var(--theme-text-secondary);
+    margin-bottom: var(--theme-spacing-xxl);
+    line-height: 1.5;
+}
+
+.vehicles__login-btn {
+    width: 100% !important;
+    background: var(--theme-color-primary);
+    color: var(--theme-text-white);
+    border: none;
+    border-radius: var(--theme-radius-sm);
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xl);
+    font-size: var(--theme-font-size-md);
+    font-weight: var(--theme-font-weight-medium);
+    box-shadow: 0 2rpx 8rpx rgba(218, 165, 32, 0.3);
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.vehicles__login-btn::after {
+    border: none;
+}
+
+.vehicles__login-btn:active {
+    background: var(--theme-color-primary-hover);
+    transform: translateY(1rpx);
+    box-shadow: 0 1rpx 4rpx rgba(218, 165, 32, 0.4);
+}
+
+/* 响应式设计 - 未登录状态 */
+@media (max-width: 750rpx) {
+    .vehicles__login-card {
+        margin: 0 var(--theme-spacing-md);
+        padding: var(--theme-spacing-xl);
+    }
+
+    .vehicles__login-icon {
+        font-size: 100rpx;
+    }
+
+    .vehicles__login-text {
+        font-size: var(--theme-font-size-md);
+    }
+}
+
+@media (max-width: 600rpx) {
+    .vehicles__login-card {
+        margin: 0 var(--theme-spacing-sm);
+        padding: var(--theme-spacing-lg);
+    }
+
+    .vehicles__login-icon {
+        font-size: 80rpx;
+        margin-bottom: var(--theme-spacing-lg);
+    }
+
+    .vehicles__login-text {
+        font-size: var(--theme-font-size-sm);
+        margin-bottom: var(--theme-spacing-xl);
+    }
 }
 
 /* ==========================================================================
@@ -393,6 +501,17 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* 脉冲动画 */
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
     }
 }
 

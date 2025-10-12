@@ -1,5 +1,6 @@
 // pages/vehicles/vehicles.js
 const vehicleApi = require('../../utils/vehicle-api.js');
+const auth = require('../../utils/auth.js');
 
 Page({
     /**
@@ -100,7 +101,10 @@ Page({
             'LOWEST_PRICE': '价格最低',
             'HIGHEST_PRICE': '价格最高',
             'SHORTEST_AGE': '车龄最短'
-        }
+        },
+
+        // 登录状态
+        isLoggedIn: false
     },
 
     /**
@@ -147,8 +151,8 @@ Page({
         // 初始化计算属性
         this.updateComputedData();
 
-        // 加载车辆数据
-        this.loadVehicleList(true);
+        // 检查登录状态并加载数据
+        this.checkLoginAndLoadData();
     },
 
     /**
@@ -166,6 +170,9 @@ Page({
                 selected: 1
             });
         }
+
+        // 重新检查登录状态
+        this.checkLoginAndLoadData();
     },
 
     /**
@@ -182,7 +189,11 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-        this.loadVehicleList(true);
+        // 检查登录状态
+        const isLoggedIn = auth.checkLoginStatus();
+        if (isLoggedIn) {
+            this.loadVehicleList(true);
+        }
         setTimeout(() => {
             wx.stopPullDownRefresh();
         }, 1000);
@@ -223,23 +234,23 @@ Page({
 
         // 构建请求参数
         const params = this.buildApiParams();
-        
+
         console.log('vehicles: 请求车辆列表参数:', params);
 
         // 调用真实API
         vehicleApi.queryOnSaleCarPage(params)
             .then((response) => {
                 console.log('vehicles: 车辆列表响应:', response);
-                
+
                 // 处理响应数据
                 const { list = [], total = 0, pageNum, pageSize } = response;
-                
+
                 // 转换数据格式
                 const processedList = this.processVehicleData(list);
-                
+
                 // 计算是否还有更多数据
                 const hasMore = (pageNum * pageSize) < total;
-                
+
                 if (refresh) {
                     this.setData({
                         vehicleList: processedList,
@@ -261,12 +272,12 @@ Page({
             })
             .catch((error) => {
                 console.error('vehicles: 车辆列表请求失败:', error);
-                
+
                 this.setData({
                     loading: false,
                     loadingMore: false
                 });
-                
+
                 // 根据错误类型显示不同提示
                 if (error.code === 'NETWORK_ERROR') {
                     wx.showToast({
@@ -291,37 +302,37 @@ Page({
         const { filterConditions, pagination } = this.data;
         const { keyword, sortType, brandInfo, ageRange, priceRange } = filterConditions;
         const { pageNum, pageSize } = pagination;
-        
+
         const params = {
             pageNum,
             pageSize
         };
-        
+
         // 关键词搜索
         if (keyword && keyword.trim()) {
             params.keyword = keyword.trim();
         }
-        
+
         // 排序方式
         if (sortType) {
             params.sortType = sortType;
         }
-        
+
         // 品牌筛选
         if (brandInfo.brandName) {
             params.brand = brandInfo.brandName;
         }
-        
+
         // 车系筛选
         if (brandInfo.seriesName) {
             params.series = brandInfo.seriesName;
         }
-        
+
         // 款式筛选
         if (brandInfo.modelName) {
             params.variant = brandInfo.modelName;
         }
-        
+
         // 车龄筛选
         if (ageRange.type && ageRange.type !== 'unlimited') {
             if (ageRange.min !== undefined && ageRange.min > 0) {
@@ -331,7 +342,7 @@ Page({
                 params.endAge = ageRange.max;
             }
         }
-        
+
         // 价格筛选
         if (priceRange.type && priceRange.type !== 'unlimited') {
             if (priceRange.min !== undefined && priceRange.min > 0) {
@@ -341,10 +352,10 @@ Page({
                 params.endPrice = priceRange.max;
             }
         }
-        
+
         return params;
     },
-    
+
     /**
      * 处理车辆数据格式
      */
@@ -355,14 +366,14 @@ Page({
                 // 基础ID字段，car-card组件需要carId字段
                 id: vehicle.id,
                 carId: vehicle.id,
-                
+
                 // 车辆基本信息
                 name: vehicle.name || `${vehicle.brand} ${vehicle.series} ${vehicle.variant}`,
                 brand: vehicle.brand,
                 series: vehicle.series,
                 model: vehicle.variant, // car-card组件使用model字段，接口返回的是variant
                 variant: vehicle.variant,
-                
+
                 // 车辆详细信息
                 age: vehicle.age,
                 registrationDate: vehicle.licenseDate, // car-card组件期望registrationDate字段
@@ -370,26 +381,26 @@ Page({
                 mileage: vehicle.mileage,
                 color: vehicle.color,
                 transferCount: vehicle.transferCount,
-                
+
                 // 价格信息，car-card组件期望retailPrice字段
                 retailPrice: vehicle.sellPrice, // car-card组件使用retailPrice字段
                 sellPrice: vehicle.sellPrice, // 保留原字段名
                 floorPrice: vehicle.floorPrice,
-                
+
                 // 状态和收藏信息
                 status: vehicle.status,
                 statusName: vehicle.statusName,
                 isFavorited: vehicle.favorStatus === 'FAVORITE',
                 favorStatus: vehicle.favorStatus,
-                
+
                 // 时间和联系信息
                 publishTime: vehicle.publishTime,
                 contactPhone: vehicle.contactPhone,
-                
+
                 // 图片信息
                 imageUrlList: vehicle.imageUrlList,
-                previewImage: vehicle.imageUrlList && vehicle.imageUrlList.length > 0 
-                    ? vehicle.imageUrlList[0].fileUrl 
+                previewImage: vehicle.imageUrlList && vehicle.imageUrlList.length > 0
+                    ? vehicle.imageUrlList[0].fileUrl
                     : '/assets/imgs/logo.png'
             };
         });
@@ -561,7 +572,7 @@ Page({
         this.updateComputedData();
         this.loadVehicleList(true);
         this.saveFilterConditionsToStorage();
-        
+
         // 关闭筛选下拉面板
         this.selectComponent('#vehicleDropdownMenu').close();
     },
@@ -651,7 +662,7 @@ Page({
         this.updateComputedData();
         this.loadVehicleList(true);
         this.saveFilterConditionsToStorage();
-        
+
         // 关闭筛选下拉面板
         this.selectComponent('#vehicleDropdownMenu').close();
     },
@@ -717,23 +728,42 @@ Page({
         });
     },
 
+    /**
+     * 处理收藏状态变化事件（新版本）
+     * car-card组件已经处理了API调用，这里只需要更新本地数据
+     */
     onVehicleFavoriteToggle(e) {
-        const { vehicleData, isFavorited } = e.detail;
-        // 处理收藏/取消收藏逻辑
-        const updatedList = this.data.vehicleList.map((item) => {
-            if (item.id === vehicleData.id) {
-                return { ...item, isFavorited };
+        const { vehicleData, isFavorited, success } = e.detail;
+
+        // 只在成功时更新本地数据
+        if (success && vehicleData && vehicleData.carId) {
+            console.log('vehicles: 收藏状态变化，更新本地数据:', {
+                carId: vehicleData.carId,
+                isFavorited
+            });
+
+            // 获取当前车辆列表
+            const vehicleList = [...this.data.vehicleList];
+            const vehicleIndex = vehicleList.findIndex(
+                (vehicle) => vehicle.carId === vehicleData.carId
+            );
+
+            if (vehicleIndex !== -1) {
+                // 更新收藏状态
+                vehicleList[vehicleIndex].isFavorited = isFavorited;
+
+                // 更新数据
+                this.setData({
+                    vehicleList: vehicleList
+                });
+
+                console.log('vehicles: 本地数据更新成功');
+            } else {
+                console.warn('vehicles: 未找到对应车辆信息:', { carId: vehicleData.carId });
             }
-            return item;
-        });
-
-        this.setData({ vehicleList: updatedList });
-
-        // TODO: 调用收藏接口
-        wx.showToast({
-            title: isFavorited ? '已收藏' : '已取消收藏',
-            icon: 'success'
-        });
+        } else if (!success) {
+            console.log('vehicles: 收藏操作失败，不更新本地数据');
+        }
     },
 
     /**
@@ -828,54 +858,45 @@ Page({
     },
 
     /**
-     * 车辆收藏状态切换
-     * 使用独立的收藏API，不依赖car-card组件的实现
-     * @param {Object} event 事件对象
+     * 检查登录状态并加载数据
      */
-    onVehicleFavoriteToggle(event) {
-        const { vehicleData, isFavorited } = event.detail;
-        
-        if (!vehicleData || !vehicleData.id) {
-            console.error('vehicles: 车辆数据无效');
-            return;
+    checkLoginAndLoadData() {
+        console.log('vehicles: 检查登录状态');
+        const isLoggedIn = auth.checkLoginStatus();
+
+        this.setData({ isLoggedIn });
+
+        if (isLoggedIn) {
+            console.log('vehicles: 用户已登录，加载车辆数据');
+            this.loadVehicleList(true);
+        } else {
+            console.log('vehicles: 用户未登录，显示登录提示');
+            this.setData({
+                vehicleList: [],
+                loading: false
+            });
         }
-        
-        console.log('vehicles: 切换收藏状态:', { carId: vehicleData.id, isFavorited });
-        
-        // 调用收藏API
-        const apiCall = isFavorited ? vehicleApi.favorCar(vehicleData.id) : vehicleApi.cancelFavorCar(vehicleData.id);
-        
-        apiCall
-            .then(() => {
-                console.log('vehicles: 收藏操作成功');
-                
-                // 更新本地数据
-                const vehicleList = [...this.data.vehicleList];
-                const vehicleIndex = vehicleList.findIndex((vehicle) => vehicle.id === vehicleData.id);
-                
-                if (vehicleIndex !== -1) {
-                    vehicleList[vehicleIndex].isFavorited = isFavorited;
-                    this.setData({ vehicleList });
-                }
-                
-                // 显示成功提示
+    },
+
+    /**
+     * 跳转到登录页面
+     */
+    onGoLogin() {
+        console.log('vehicles: 跳转到登录页面');
+        wx.navigateTo({
+            url: '/pages/login/login',
+            success: () => {
+                console.log('vehicles: 跳转登录页面成功');
+            },
+            fail: (error) => {
+                console.error('vehicles: 跳转登录页面失败:', error);
                 wx.showToast({
-                    title: isFavorited ? '已收藏' : '已取消收藏',
-                    icon: 'success',
-                    duration: 1500
-                });
-            })
-            .catch((error) => {
-                console.error('vehicles: 收藏操作失败:', error);
-                
-                // 收藏失败，恢复原状态（需要通知car-card组件）
-                // 这里可以通过事件或其他方式通知组件恢复状态
-                
-                wx.showToast({
-                    title: error.userMessage || '操作失败',
+                    title: '页面跳转失败',
                     icon: 'none',
                     duration: 2000
                 });
-            });
-    }
+            }
+        });
+    },
+
 });

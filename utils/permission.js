@@ -32,7 +32,7 @@ class PermissionCache {
             cacheTime: Date.now(),
             expireTime: Date.now() + this.cacheExpireTime
         };
-        
+
         // 同时存储到本地
         storage.setStorage('permission_cache', this.memoryCache);
         console.log('权限数据已缓存:', {
@@ -82,12 +82,71 @@ class PermissionCache {
 }
 
 /**
+ * 权限变化事件管理器
+ */
+class PermissionEventManager {
+    constructor() {
+        this.listeners = [];
+    }
+
+    /**
+     * 添加权限变化监听器
+     * @param {Function} listener 监听器函数
+     * @returns {Function} 取消监听的函数
+     */
+    addListener(listener) {
+        if (typeof listener !== 'function') {
+            console.warn('权限监听器必须是函数');
+            return () => {};
+        }
+
+        this.listeners.push(listener);
+        console.log('权限变化监听器已添加，当前监听器数量:', this.listeners.length);
+
+        // 返回取消监听的函数
+        return () => {
+            const index = this.listeners.indexOf(listener);
+            if (index > -1) {
+                this.listeners.splice(index, 1);
+                console.log('权限变化监听器已移除，当前监听器数量:', this.listeners.length);
+            }
+        };
+    }
+
+    /**
+     * 触发权限变化事件
+     * @param {Object} eventData 事件数据
+     */
+    emit(eventData = {}) {
+        console.log('触发权限变化事件，监听器数量:', this.listeners.length, '事件数据:', eventData);
+
+        this.listeners.forEach((listener, index) => {
+            try {
+                listener(eventData);
+            } catch (error) {
+                console.error(`权限监听器[${index}]执行失败:`, error);
+            }
+        });
+    }
+
+    /**
+     * 清除所有监听器
+     */
+    clearListeners() {
+        const count = this.listeners.length;
+        this.listeners = [];
+        console.log(`已清除${count}个权限变化监听器`);
+    }
+}
+
+/**
  * 权限管理器
  */
 class PermissionManager {
     constructor() {
         this.cache = new PermissionCache();
         this.isRefreshing = false;
+        this.eventManager = new PermissionEventManager();
     }
 
     /**
@@ -100,7 +159,7 @@ class PermissionManager {
             permissions: permissionList?.length || 0,
             metadata: userMetadata
         });
-        
+
         this.cache.setCache(permissionList, userMetadata);
     }
 
@@ -141,17 +200,25 @@ class PermissionManager {
         }
 
         try {
-            const results = permissions.map(permission => this.checkPermission(permission));
-            
+            const results = permissions.map((permission) => this.checkPermission(permission));
+
             if (requireAll) {
                 // 与关系：需要全部权限
-                const hasAllPermissions = results.every(result => result);
-                console.log(`多权限验证(与): [${permissions.join(', ')}] => ${hasAllPermissions ? '通过' : '拒绝'}`);
+                const hasAllPermissions = results.every((result) => result);
+                console.log(
+                    `多权限验证(与): [${permissions.join(', ')}] => ${
+                        hasAllPermissions ? '通过' : '拒绝'
+                    }`
+                );
                 return hasAllPermissions;
             } else {
                 // 或关系：只需要任一权限
-                const hasAnyPermission = results.some(result => result);
-                console.log(`多权限验证(或): [${permissions.join(', ')}] => ${hasAnyPermission ? '通过' : '拒绝'}`);
+                const hasAnyPermission = results.some((result) => result);
+                console.log(
+                    `多权限验证(或): [${permissions.join(', ')}] => ${
+                        hasAnyPermission ? '通过' : '拒绝'
+                    }`
+                );
                 return hasAnyPermission;
             }
         } catch (error) {
@@ -167,6 +234,7 @@ class PermissionManager {
      */
     checkPermissionFromUserInfo(permission) {
         try {
+
             const userInfo = storage.getUserInfo();
             if (userInfo && Array.isArray(userInfo.permissions)) {
                 return userInfo.permissions.includes(permission);
@@ -192,13 +260,13 @@ class PermissionManager {
         }
 
         this.isRefreshing = true;
-        
+
         try {
             console.log('开始刷新权限数据...');
-            
+
             // 调用认证模块的用户信息刷新
             const userProfile = await auth.fetchUserProfile(2); // 最多重试2次
-            
+
             if (userProfile && userProfile.permissions) {
                 // 更新权限缓存
                 this.init(userProfile.permissions, {
@@ -206,7 +274,7 @@ class PermissionManager {
                     roleId: userProfile.roleId,
                     roleName: userProfile.roleName
                 });
-                
+
                 console.log('权限数据刷新成功');
                 return true;
             } else {
@@ -257,7 +325,7 @@ class PermissionManager {
      */
     checkPermissionWithFallback(permission, options = {}) {
         const { allowGuest = false, fallbackPermission = null } = options;
-        
+
         // 主权限检查
         const hasMainPermission = this.checkPermission(permission);
         if (hasMainPermission) {
@@ -301,8 +369,6 @@ class PermissionManager {
         };
     }
 
-
-
     /**
      * 获取当前权限摘要
      * @returns {Object} 权限摘要信息
@@ -335,7 +401,39 @@ class PermissionManager {
     clear() {
         this.cache.clearCache();
         this.isRefreshing = false;
+
+        // 触发权限变化事件
+        this.eventManager.emit({
+            type: 'permission_cleared',
+            timestamp: Date.now(),
+            reason: 'manual_clear'
+        });
+
         console.log('权限管理器已清除');
+    }
+
+    /**
+     * 添加权限变化监听器
+     * @param {Function} listener 监听器函数
+     * @returns {Function} 取消监听的函数
+     */
+    addPermissionChangeListener(listener) {
+        return this.eventManager.addListener(listener);
+    }
+
+    /**
+     * 触发权限变化事件
+     * @param {Object} eventData 事件数据
+     */
+    emitPermissionChange(eventData) {
+        this.eventManager.emit(eventData);
+    }
+
+    /**
+     * 清除所有权限变化监听器
+     */
+    clearPermissionChangeListeners() {
+        this.eventManager.clearListeners();
     }
 }
 
@@ -434,59 +532,89 @@ function clearPermissions() {
 }
 
 /**
+ * 添加权限变化监听器
+ * @param {Function} listener 监听器函数
+ * @returns {Function} 取消监听的函数
+ */
+function addPermissionChangeListener(listener) {
+    return permissionManager.addPermissionChangeListener(listener);
+}
+
+/**
+ * 触发权限变化事件
+ * @param {Object} eventData 事件数据
+ */
+function emitPermissionChange(eventData) {
+    permissionManager.emitPermissionChange(eventData);
+}
+
+/**
+ * 清除所有权限变化监听器
+ */
+function clearPermissionChangeListeners() {
+    permissionManager.clearPermissionChangeListeners();
+}
+
+/**
  * 权限常量定义
  */
 const PERMISSIONS = {
     // 页面访问权限
     PAGE: {
-        TEACH: 'miniprogram:page.teach',          // 模拟票助考页面
-        CHECK: 'miniprogram:page.check',          // 模拟票核销页面
-        SELL: 'miniprogram:page.sell',            // 我要卖车页面
-        APPROVE: 'miniprogram:page.approve'       // 审批车辆页面
+        TEACH: 'miniprogram:page.teach', // 模拟票助考页面
+        CHECK: 'miniprogram:page.check', // 模拟票核销页面
+        SELL: 'miniprogram:page.sell', // 我要卖车页面
+        APPROVE: 'miniprogram:page.approve' // 审批车辆页面
     },
-    
+
     // 卖车模块操作权限
     SELL_ACTION: {
-        ADD: 'miniprogram:page.sell:action.add',        // 新建车辆
-        DELETE: 'miniprogram:page.sell:action.delete',  // 删除车辆
-        EDIT: 'miniprogram:page.sell:action.edit'       // 编辑车辆
+        ADD: 'miniprogram:page.sell:action.add', // 新建车辆
+        DELETE: 'miniprogram:page.sell:action.delete', // 删除车辆
+        EDIT: 'miniprogram:page.sell:action.edit' // 编辑车辆
     },
-    
+
     // 审批模块操作权限
     APPROVE_ACTION: {
-        APPROVE: 'miniprogram:page.approve:action.approve',    // 审批操作
-        EDIT: 'miniprogram:page.approve:action.edit',          // 审批编辑
-        DELETE: 'miniprogram:page.approve:action.delete'       // 审批删除
+        APPROVE: 'miniprogram:page.approve:action.approve', // 审批操作
+        EDIT: 'miniprogram:page.approve:action.edit', // 审批编辑
+        DELETE: 'miniprogram:page.approve:action.delete' // 审批删除
     },
-    
+
     // 特殊功能权限
     SPECIAL: {
-        VIEW_FLOOR_PRICE: 'miniprogram:action.view-floor-price'  // 查看底价
+        VIEW_FLOOR_PRICE: 'miniprogram:action.view-floor-price' // 查看底价
     }
 };
 
 module.exports = {
     // 权限管理器实例
     permissionManager,
-    
+
     // 便捷函数
     hasPermission,
     hasPermissions,
     hasAnyPermission,
     hasAllPermissions,
     checkPermissionWithFallback,
-    
+
     // 管理函数
     initPermissions,
     refreshPermissions,
     getPermissionSummary,
     getPermissionLevel,
     clearPermissions,
-    
+
+    // 权限变化监听
+    addPermissionChangeListener,
+    emitPermissionChange,
+    clearPermissionChangeListeners,
+
     // 权限常量
     PERMISSIONS,
-    
+
     // 类导出（供高级用户使用）
     PermissionManager,
-    PermissionCache
+    PermissionCache,
+    PermissionEventManager
 };

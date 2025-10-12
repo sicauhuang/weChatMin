@@ -1,17 +1,88 @@
+<!-- 足迹页面 -->
 <view class="my-footprints-page">
-  <!-- 页面头部 -->
-  <view class="page-header">
-    <text class="iconfont icon-zuji page-header__icon"></text>
-    <text class="page-header__title">我的足迹</text>
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <van-loading type="spinner" size="24px" color="var(--theme-color-primary)">
+      加载中...
+    </van-loading>
   </view>
 
-  <!-- 页面内容 -->
-  <view class="page-content">
-    <view class="placeholder-content">
-      <text class="iconfont icon-zuji placeholder-content__icon"></text>
-      <text class="placeholder-content__title">我的足迹</text>
-      <text class="placeholder-content__desc">记录您的浏览历史和访问轨迹</text>
-      <text class="placeholder-content__note">功能开发中，敬请期待...</text>
+  <!-- 未登录状态 -->
+  <view class="my-footprints__login-prompt" wx:elif="{{!isLoggedIn}}">
+    <view class="my-footprints__login-card">
+      <text class="iconfont icon-zuji my-footprints__login-icon"></text>
+      <text class="my-footprints__login-text">登录后获取我的足迹</text>
+      <button class="my-footprints__login-btn" bindtap="onLoginTap">
+        现在登录
+      </button>
     </view>
+  </view>
+
+  <!-- 已登录但无足迹数据 -->
+  <view class="empty-container" wx:elif="{{isLoggedIn && footprintList.length === 0 && !isLoading}}">
+    <van-empty
+      image="search"
+      description="暂无浏览记录"
+      class="empty-state">
+      <van-button
+        type="primary"
+        size="small"
+        bind:click="onGoToVehicles">
+        去看看车源
+      </van-button>
+    </van-empty>
+  </view>
+
+  <!-- 足迹列表 - 使用scroll-view优化滚动性能 -->
+  <scroll-view
+    class="footprints-scroll-container"
+    wx:elif="{{isLoggedIn && footprintList.length > 0}}"
+    scroll-y="{{true}}"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
+    enable-back-to-top="{{true}}"
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{refresherTriggered}}"
+    bind:refresherrefresh="onScrollRefresh"
+    bind:refresherrestore="onScrollRestore"
+    bind:scroll="onScroll">
+
+    <view class="footprints-list">
+      <view class="footprint-item" wx:for="{{footprintList}}" wx:key="id">
+        <!-- 浏览时间header -->
+        <view class="footprint-item__header">
+          <text class="iconfont icon-shijian footprint-item__time-icon"></text>
+          <text class="footprint-item__time">浏览时间：{{item.formattedBrowseTime}}</text>
+          <text class="footprint-item__count" wx:if="{{item.browseCount > 1}}">（浏览{{item.browseCount}}次）</text>
+        </view>
+
+        <!-- 车辆卡片 -->
+        <view class="footprint-item__card">
+          <car-card
+            vehicle-data="{{item.vehicleData}}"
+            show-favorite-button="{{true}}"
+            show-status-tag="{{true}}"
+            delete-mode="{{false}}"
+            bind:onCardTap="onCardTap"
+            bind:onFavoriteStatusChange="onFavoriteStatusChange">
+          </car-card>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 错误状态 -->
+  <view class="error-container" wx:elif="{{hasError}}">
+    <van-empty
+      image="error"
+      description="{{errorMessage || '加载失败，请重试'}}"
+      class="error-state">
+      <van-button
+        type="primary"
+        size="small"
+        bind:click="onRetry">
+        重新加载
+      </van-button>
+    </van-empty>
   </view>
 </view>

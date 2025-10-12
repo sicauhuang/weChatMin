@@ -20,7 +20,7 @@ page {
     max-height: calc(100vh - 50rpx);
     overflow: hidden;
     /* 使用主题变量设置全局背景色 */
-    background-color: var(--theme-bg-page);
+    background-color: var(--theme-bg-white);
     /* 为有 tabBar 的页面添加底部内边距 */
     padding-bottom: 50px;
     /* 设置全局字体 */

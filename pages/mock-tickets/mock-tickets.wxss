@@ -529,7 +529,6 @@
 .mock-tickets__login-card {
     background: var(--theme-bg-card);
     border-radius: var(--theme-radius-lg);
-    box-shadow: var(--theme-shadow-card);
     padding: var(--theme-spacing-xxl);
     display: flex;
     flex-direction: column;

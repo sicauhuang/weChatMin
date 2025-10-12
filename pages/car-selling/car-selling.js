@@ -600,44 +600,6 @@ Page({
     },
 
     /**
-     * 处理收藏状态切换事件
-     * car-card组件已经处理了API调用，这里只需要更新本地数据
-     */
-    handleFavoriteToggle(e) {
-        const { vehicleData, isFavorited, success } = e.detail;
-
-        // 只在成功时更新本地数据
-        if (success && vehicleData && vehicleData.carId) {
-            console.log('car-selling: 更新本地收藏状态:', {
-                carId: vehicleData.carId,
-                isFavorited
-            });
-
-            // 获取当前车辆列表
-            const vehicleList = [...this.data.vehicleList];
-            const vehicleIndex = vehicleList.findIndex(
-                (vehicle) => vehicle.carId === vehicleData.carId
-            );
-
-            if (vehicleIndex !== -1) {
-                // 更新收藏状态
-                vehicleList[vehicleIndex].isFavorited = isFavorited;
-
-                // 更新数据
-                this.setData({
-                    vehicleList: vehicleList
-                });
-
-                console.log('car-selling: 本地数据更新成功');
-            } else {
-                console.warn('car-selling: 未找到对应车辆信息:', { carId: vehicleData.carId });
-            }
-        } else if (!success) {
-            console.log('car-selling: 收藏操作失败，不更新本地数据');
-        }
-    },
-
-    /**
      * 处理车辆删除事件
      */
     handleDelete(e) {

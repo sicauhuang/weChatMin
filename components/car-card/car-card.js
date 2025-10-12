@@ -168,7 +168,7 @@ Component({
                         carId: carId
                     },
                     {
-                        showLoading: true,
+                        showLoading: false,
                         loadingTitle: loadingTitle,
                         showErrorToast: true
                     }
@@ -179,9 +179,9 @@ Component({
                     ...vehicleData,
                     isFavorited: newFavoritedStatus
                 };
-
-                // 触发事件通知父组件更新数据
-                this.triggerEvent('onFavoriteToggle', {
+              
+                // 触发新的状态变化事件（推荐使用）
+                this.triggerEvent('onFavoriteStatusChange', {
                     vehicleData: updatedVehicleData,
                     isFavorited: newFavoritedStatus,
                     success: true
@@ -190,7 +190,7 @@ Component({
                 // 显示成功反馈
                 const action = newFavoritedStatus ? '收藏' : '取消收藏';
                 console.log(`car-card: ${action}成功:`, vehicleData.brand, vehicleData.series);
-
+             
                 wx.showToast({
                     title: `${action}成功`,
                     icon: 'success',
@@ -199,7 +199,15 @@ Component({
             } catch (error) {
                 console.error('car-card: 收藏操作失败:', error);
 
-                // 触发失败事件
+                // 触发新的状态变化事件（推荐使用）
+                this.triggerEvent('onFavoriteStatusChange', {
+                    vehicleData: vehicleData,
+                    isFavorited: vehicleData.isFavorited, // 保持原状态
+                    success: false,
+                    error: error
+                });
+
+                // 保持向后兼容的原有事件
                 this.triggerEvent('onFavoriteToggle', {
                     vehicleData: vehicleData,
                     isFavorited: vehicleData.isFavorited, // 保持原状态

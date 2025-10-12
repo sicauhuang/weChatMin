@@ -1,7 +1,25 @@
 <!--pages/vehicles/vehicles.wxml-->
 <view class="vehicles-page">
-  <!-- 搜索模块 -->
-  <view class="vehicles-search">
+  <!-- 加载状态 -->
+  <view class="vehicles__loading" wx:if="{{loading && !isLoggedIn}}">
+    <text class="vehicles__loading-text">加载中...</text>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="vehicles__login-prompt" wx:elif="{{!isLoggedIn && !loading}}">
+    <view class="vehicles__login-card">
+      <text class="iconfont icon-cheyuan vehicles__login-icon"></text>
+      <text class="vehicles__login-text">登录后查看车源信息</text>
+      <button class="vehicles__login-btn" bindtap="onGoLogin">
+        现在登录
+      </button>
+    </view>
+  </view>
+
+  <!-- 已登录状态 - 车辆功能区 -->
+  <view class="vehicles-content" wx:elif="{{isLoggedIn}}">
+    <!-- 搜索模块 -->
+    <view class="vehicles-search">
     <van-search
       value="{{filterConditions.keyword}}"
       placeholder="品牌/车龄/价位等"
@@ -210,7 +228,7 @@
         show-favorite-button="{{true}}"
         show-status-tag="{{false}}"
         bind:onCardTap="onVehicleCardTap"
-        bind:onFavoriteToggle="onVehicleFavoriteToggle"
+        bind:onFavoriteStatusChange="onVehicleFavoriteToggle"
       />
 
       <!-- 加载更多 -->
@@ -259,4 +277,5 @@
     bind:onCancel="onVehiclePickerCancel"
     bind:onClose="onVehiclePickerClose"
   />
+  </view>
 </view>

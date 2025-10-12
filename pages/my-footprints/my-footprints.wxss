@@ -1,94 +1,334 @@
 /* 引入主题样式 */
 @import '../../assets/styles/theme.wxss';
+@import '../../assets/fonts/iconfont.wxss';
 
 /* 页面容器 */
 .my-footprints-page {
-    min-height: 100vh;
-    background-color: var(--theme-bg-page);
-    padding: var(--theme-spacing-lg);
+    height: 100vh;
 }
 
-/* 页面头部 */
-.page-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--theme-spacing-xxxl) 0;
-    margin-bottom: var(--theme-spacing-xl);
-}
-
-.page-header__icon {
-    font-size: var(--theme-icon-size-xl);
-    color: var(--theme-icon-color-primary);
-    margin-right: var(--theme-spacing-md);
-}
-
-.page-header__title {
-    font-size: var(--theme-font-size-xxl);
-    font-weight: var(--theme-font-weight-bold);
-    color: var(--theme-text-primary);
-}
-
-/* 页面内容 */
-.page-content {
-    flex: 1;
+/* 加载状态 */
+.loading-container {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 60vh;
+    padding: var(--theme-spacing-xl);
 }
 
-/* 占位内容 */
-.placeholder-content {
+/* 登录提示容器 */
+.login-prompt-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: var(--theme-spacing-xl);
+}
+
+.login-prompt-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: var(--theme-spacing-xxxl);
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    margin: var(--theme-spacing-lg);
 }
 
-.placeholder-content__icon {
+.login-prompt-card__icon {
     font-size: 120rpx;
     color: var(--theme-icon-color-tertiary);
     margin-bottom: var(--theme-spacing-xl);
 }
 
-.placeholder-content__title {
+.login-prompt-card__title {
     font-size: var(--theme-font-size-xl);
     font-weight: var(--theme-font-weight-bold);
     color: var(--theme-text-primary);
     margin-bottom: var(--theme-spacing-md);
 }
 
-.placeholder-content__desc {
+.login-prompt-card__desc {
     font-size: var(--theme-font-size-md);
     color: var(--theme-text-secondary);
     line-height: var(--theme-line-height-base);
-    margin-bottom: var(--theme-spacing-lg);
+    margin-bottom: var(--theme-spacing-xl);
 }
 
-.placeholder-content__note {
+.login-prompt-card__button {
+    width: 200rpx;
+}
+
+/* 空状态容器 */
+.empty-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: var(--theme-spacing-xl);
+}
+
+.empty-state {
+    width: 100%;
+}
+
+/* 错误状态容器 */
+.error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: var(--theme-spacing-xl);
+}
+
+.error-state {
+    width: 100%;
+}
+
+/* scroll-view容器 */
+.footprints-scroll-container {
+    height: calc(100vh - 88rpx); /* 减去导航栏高度 */
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+/* 足迹列表 */
+.footprints-list {
+    padding: var(--theme-spacing-md);
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.footprint-item {
+    margin-bottom: var(--theme-spacing-lg);
+    background-color: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    overflow: hidden;
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.footprint-item:last-child {
+    margin-bottom: var(--theme-spacing-md); /* 底部保留一些间距 */
+}
+
+.footprint-item:active {
+    transform: translateY(1rpx);
+    box-shadow: var(--theme-shadow-card-active);
+}
+
+/* 浏览时间header - 一体化设计 */
+.footprint-item__header {
+    display: flex;
+    align-items: center;
+    padding: var(--theme-spacing-md) var(--theme-spacing-lg);
+    background-color: var(--theme-bg-card);
+    border-bottom: 1rpx solid var(--theme-border-lighter);
+    position: relative;
+}
+
+.footprint-item__header::before {
+    content: '';
+    position: absolute;
+    left: var(--theme-spacing-lg);
+    right: var(--theme-spacing-lg);
+    bottom: 0;
+    height: 1rpx;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--theme-border-lighter) 20%,
+        var(--theme-border-lighter) 80%,
+        transparent 100%);
+}
+
+.footprint-item__time-icon {
+    font-size: var(--theme-icon-size-sm);
+    color: var(--theme-color-primary);
+    margin-right: var(--theme-spacing-sm);
+    opacity: 0.8;
+}
+
+.footprint-item__time {
     font-size: var(--theme-font-size-sm);
     color: var(--theme-text-tertiary);
     line-height: var(--theme-line-height-base);
-    padding: var(--theme-spacing-md) var(--theme-spacing-xl);
-    background-color: var(--theme-bg-card);
-    border-radius: var(--theme-radius-md);
-    border: 1rpx solid var(--theme-border-light);
+    font-weight: var(--theme-font-weight-normal);
+    flex: 1;
+}
+
+.footprint-item__count {
+    font-size: var(--theme-font-size-xs);
+    color: var(--theme-text-quaternary);
+    margin-left: var(--theme-spacing-sm);
+    opacity: 0.7;
+}
+
+/* 车辆卡片容器 - 移除独立样式 */
+.footprint-item__card {
+    background-color: transparent;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
 }
 
 /* 响应式适配 */
 @media screen and (max-width: 375px) {
-    .placeholder-content__icon {
+    .login-prompt-card {
+        margin: var(--theme-spacing-md);
+        padding: var(--theme-spacing-xl);
+    }
+
+    .login-prompt-card__icon {
         font-size: 100rpx;
     }
 
-    .placeholder-content__title {
+    .login-prompt-card__title {
         font-size: var(--theme-font-size-lg);
     }
 
-    .placeholder-content__desc {
+    .login-prompt-card__desc {
         font-size: var(--theme-font-size-sm);
+    }
+
+    .footprints-list {
+        padding: var(--theme-spacing-sm);
+    }
+
+    .footprint-item {
+        margin-bottom: var(--theme-spacing-md);
+    }
+}
+
+/* Vant组件样式覆盖 */
+.van-button--primary {
+    background-color: var(--theme-color-primary);
+    border-color: var(--theme-color-primary);
+}
+
+.van-button--primary:active {
+    background-color: var(--theme-color-primary-active);
+    border-color: var(--theme-color-primary-active);
+}
+
+.van-loading__spinner {
+    color: var(--theme-color-primary);
+}
+
+.van-empty__description {
+    color: var(--theme-text-secondary);
+}
+
+/* 未登录状态样式 - 与mock-tickets保持一致 */
+.my-footprints__login-prompt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 302rpx); /* 减去导航栏和tabBar高度 */
+}
+
+.my-footprints__login-card {
+    background: var(--theme-bg-card);
+    border-radius: var(--theme-radius-lg);
+    padding: var(--theme-spacing-xxl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 500rpx;
+    width: 100%;
+    animation: fadeInUp var(--theme-duration-slow) var(--theme-ease-out);
+}
+
+.my-footprints__login-icon {
+    font-size: 120rpx;
+    color: var(--theme-color-primary);
+    margin-bottom: var(--theme-spacing-xl);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.my-footprints__login-text {
+    font-size: var(--theme-font-size-lg);
+    color: var(--theme-text-secondary);
+    margin-bottom: var(--theme-spacing-xxl);
+    line-height: 1.5;
+}
+
+.my-footprints__login-btn {
+    width: 100% !important;
+    background: var(--theme-color-primary);
+    color: var(--theme-text-white);
+    border: none;
+    border-radius: var(--theme-radius-sm);
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xl);
+    font-size: var(--theme-font-size-md);
+    font-weight: var(--theme-font-weight-medium);
+    box-shadow: 0 2rpx 8rpx rgba(218, 165, 32, 0.3);
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.my-footprints__login-btn::after {
+    border: none;
+}
+
+.my-footprints__login-btn:active {
+    background: var(--theme-color-primary-hover);
+    transform: translateY(1rpx);
+    box-shadow: 0 1rpx 4rpx rgba(218, 165, 32, 0.4);
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20rpx);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 响应式设计 - 未登录状态 */
+@media (max-width: 750rpx) {
+    .my-footprints__login-card {
+        margin: 0 var(--theme-spacing-md);
+        padding: var(--theme-spacing-xl);
+    }
+
+    .my-footprints__login-icon {
+        font-size: 100rpx;
+    }
+
+    .my-footprints__login-text {
+        font-size: var(--theme-font-size-md);
+    }
+}
+
+@media (max-width: 600rpx) {
+    .my-footprints__login-card {
+        margin: 0 var(--theme-spacing-sm);
+        padding: var(--theme-spacing-lg);
+    }
+
+    .my-footprints__login-icon {
+        font-size: 80rpx;
+        margin-bottom: var(--theme-spacing-lg);
+    }
+
+    .my-footprints__login-text {
+        font-size: var(--theme-font-size-sm);
+        margin-bottom: var(--theme-spacing-xl);
     }
 }

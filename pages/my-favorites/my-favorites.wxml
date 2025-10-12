@@ -1,17 +1,88 @@
+<!-- 收藏页面 -->
 <view class="my-favorites-page">
-  <!-- 页面头部 -->
-  <view class="page-header">
-    <text class="iconfont icon-shoucang page-header__icon"></text>
-    <text class="page-header__title">我的收藏</text>
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <van-loading type="spinner" size="24px" color="var(--theme-color-primary)">
+      加载中...
+    </van-loading>
   </view>
 
-  <!-- 页面内容 -->
-  <view class="page-content">
-    <view class="placeholder-content">
-      <text class="iconfont icon-shoucang placeholder-content__icon"></text>
-      <text class="placeholder-content__title">我的收藏</text>
-      <text class="placeholder-content__desc">收藏您感兴趣的车源和模拟票信息</text>
-      <text class="placeholder-content__note">功能开发中，敬请期待...</text>
+  <!-- 未登录状态 -->
+  <view class="my-favorites__login-prompt" wx:elif="{{!isLoggedIn}}">
+    <view class="my-favorites__login-card">
+      <text class="iconfont icon-shoucang my-favorites__login-icon"></text>
+      <text class="my-favorites__login-text">登录后获取我的收藏</text>
+      <button class="my-favorites__login-btn" bindtap="onLoginTap">
+        现在登录
+      </button>
     </view>
+  </view>
+
+  <!-- 已登录但无收藏数据 -->
+  <view class="empty-container" wx:elif="{{isLoggedIn && favoriteList.length === 0 && !isLoading}}">
+    <van-empty
+      image="search"
+      description="暂无收藏的车辆"
+      class="empty-state">
+      <van-button
+        type="primary"
+        size="small"
+        bind:click="onGoToVehicles">
+        去看看车源
+      </van-button>
+    </van-empty>
+  </view>
+
+  <!-- 收藏列表 - 使用scroll-view优化滚动性能 -->
+  <scroll-view
+    class="favorites-scroll-container"
+    wx:elif="{{isLoggedIn && favoriteList.length > 0}}"
+    scroll-y="{{true}}"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
+    enable-back-to-top="{{true}}"
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{refresherTriggered}}"
+    bind:refresherrefresh="onScrollRefresh"
+    bind:refresherrestore="onScrollRestore"
+    bind:scroll="onScroll">
+
+    <view class="favorites-list">
+      <view class="favorite-item" wx:for="{{favoriteList}}" wx:key="id">
+        <!-- 收藏时间header -->
+        <view class="favorite-item__header">
+          <text class="iconfont icon-shijian favorite-item__time-icon"></text>
+          <text class="favorite-item__time">收藏时间：{{item.formattedFavorTime}}</text>
+        </view>
+
+        <!-- 车辆卡片 -->
+        <view class="favorite-item__card">
+          <car-card
+            vehicle-data="{{item.vehicleData}}"
+            show-favorite-button="{{true}}"
+            show-status-tag="{{true}}"
+            delete-mode="{{false}}"
+            show-status-tag="{{false}}"
+            bind:onCardTap="onCardTap"
+            bind:onFavoriteStatusChange="onFavoriteStatusChange">
+          </car-card>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 错误状态 -->
+  <view class="error-container" wx:elif="{{hasError}}">
+    <van-empty
+      image="error"
+      description="{{errorMessage || '加载失败，请重试'}}"
+      class="error-state">
+      <van-button
+        type="primary"
+        size="small"
+        bind:click="onRetry">
+        重新加载
+      </van-button>
+    </van-empty>
   </view>
 </view>

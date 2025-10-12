@@ -2,11 +2,14 @@
     "navigationBarTitleText": "我的收藏",
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#f8f9fa",
-    "enablePullDownRefresh": true,
+    "backgroundColor": "#ffffff",
+    "enablePullDownRefresh": false,
     "onReachBottomDistance": 50,
     "usingComponents": {
+        "car-card": "../../components/car-card/car-card",
         "van-card": "/@vant/weapp/card/index",
-        "van-empty": "/@vant/weapp/empty/index"
+        "van-empty": "/@vant/weapp/empty/index",
+        "van-loading": "/@vant/weapp/loading/index",
+        "van-button": "/@vant/weapp/button/index"
     }
 }

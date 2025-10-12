@@ -1054,3 +1054,780 @@ UI大致示意：
 - priceTitle固定显示：“价格”
 
 品牌需要调整，品牌下拉的UI样式和其他筛选字段一样，但更类似与按钮，点击后不显示下拉面板，而是直接显示vehicle-picker组件的弹窗，使用方式可参考car-form页面的品牌选择。
+
+#### 收藏页面需求
+
+- 页面入口：profile页面中点击我的收藏
+- 页面功能：提供用户一个查看自己收藏车辆信息的页面，方便用户查看自己收藏的车辆信息，但是未登录需要提示登录。
+- UI设计：需要使用滚动列表结合car-card组件，展示收藏车辆信息。在车辆卡片中需要使用view包裹一次，设置header用于展示单条车辆卡片的收藏时间。
+- 逻辑设计：
+1、需要根据接口返回的收藏车辆信息，渲染出滚动列表。
+2、需要判断当前用户是否登录，如果未登录，则提示登录。
+3、查询车辆列表信息的数据字段和car-card组件不一定一致，需要根据接口返回的字段进行映射。
+
+- 接口设计：
+- url:/api/mp/car/query-my-favor-car-list
+- method:GET
+- request:无
+- response:
+
+```
+/**
+ * ApiResultListMpCarResponse
+ */
+export interface Response {
+    code?: string;
+    data?: MpCarResponse[];
+    message?: string;
+    timestamp?: number;
+    traceId?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆响应DTO
+ *
+ * MpCarResponse
+ */
+export interface MpCarResponse {
+    /**
+     * 车龄（年）
+     */
+    age?: number;
+    /**
+     * 审批意见
+     */
+    approveRemark?: string;
+    /**
+     * 审批时间
+     */
+    approveTime?: string;
+    /**
+     * 审批人ID
+     */
+    approveUserId?: number;
+    /**
+     * 审批人姓名
+     */
+    approveUserName?: string;
+    /**
+     * 品牌
+     */
+    brand?: string;
+    /**
+     * 颜色
+     */
+    color?: string;
+    /**
+     * 联系电话
+     */
+    contactPhone?: string;
+    /**
+     * 成交价格（万元）,保留2位小数
+     */
+    dealPrice?: number;
+    /**
+     * 成交时间
+     */
+    dealTime?: string;
+    /**
+     * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+     */
+    favorStatus?: FavorStatus;
+    /**
+     * 收藏时间
+     */
+    favorTime?: string;
+    /**
+     * 底价（万元）,保留2位小数
+     */
+    floorPrice?: number;
+    /**
+     * 车辆ID
+     */
+    id?: number;
+    /**
+     * 图片文件ID列表，逗号分隔
+     */
+    imageFileIds?: string;
+    /**
+     * 图片url列表，每个元素包含文件名和文件url，用于预览图片
+     */
+    imageUrlList?: FileUrlInfo[];
+    /**
+     * 上牌城市
+     */
+    licenseCity?: string;
+    /**
+     * 上牌日期，yyyy-MM-dd
+     */
+    licenseDate?: string;
+    /**
+     * 里程（万公里）,保留2位小数
+     */
+    mileage?: number;
+    /**
+     * 车型ID
+     */
+    modelId?: number;
+    /**
+     * 加装项目
+     */
+    modifyItems?: string;
+    /**
+     * 车辆名称
+     */
+    name?: string;
+    /**
+     * 发布时间
+     */
+    publishTime?: string;
+    /**
+     * 发布人ID
+     */
+    publishUserId?: number;
+    /**
+     * 发布人姓名
+     */
+    publishUserName?: string;
+    /**
+     * 车况描述
+     */
+    remark?: string;
+    /**
+     * 售价（万元）,保留2位小数
+     */
+    sellPrice?: number;
+    /**
+     * 出售人ID
+     */
+    sellUserId?: number;
+    /**
+     * 出售人姓名
+     */
+    sellUserName?: string;
+    /**
+     * 车系
+     */
+    series?: string;
+    /**
+     * 车辆状态
+     */
+    status?: Status;
+    /**
+     * 车辆状态名称
+     */
+    statusName?: string;
+    /**
+     * 过户次数
+     */
+    transferCount?: number;
+    /**
+     * 使用性质
+     */
+    usage?: string;
+    /**
+     * 款式
+     */
+    variant?: string;
+    [property: string]: any;
+}
+
+/**
+ * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+ */
+export enum FavorStatus {
+    Favorite = "FAVORITE",
+    NotFavorite = "NOT_FAVORITE",
+}
+
+/**
+ * FileUrlInfo
+ */
+export interface FileUrlInfo {
+    /**
+     * 文件名, 上传到cos后的文件名，格式：logo/uuid.ext，或者car/uuid.ext
+     * 例如：logo/1234567890.png, car/1234567890.png
+     */
+    fileName?: string;
+    /**
+     * 文件url，可以直接预览图片。
+     */
+    fileUrl?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆状态
+ */
+export enum Status {
+    OnSale = "ON_SALE",
+    Sold = "SOLD",
+    WaitApprove = "WAIT_APPROVE",
+    WaitRectify = "WAIT_RECTIFY",
+}
+```
+
+#### 我的足迹页面需求
+
+UI设计与逻辑实现和我的收藏页面类似，需要根据接口返回的足迹信息，渲染出滚动列表。只是接口上对接不同：
+
+- url:/api/mp/car/query-my-browse-car-list
+- method:GET
+- request:无
+- response:
+
+```
+/**
+ * ApiResultListMpCarBrowseRecordResponse
+ */
+export interface Response {
+    code?: string;
+    data?: MpCarBrowseRecordResponse[];
+    message?: string;
+    timestamp?: number;
+    traceId?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆浏览记录实体类。
+ * 与表 `car_browse_record` 映射；主键采用自增（AUTO_INCREMENT）。
+ *
+ * MpCarBrowseRecordResponse
+ */
+export interface MpCarBrowseRecordResponse {
+    /**
+     * 车龄（年）
+     */
+    age?: number;
+    /**
+     * 审批意见
+     */
+    approveRemark?: string;
+    /**
+     * 审批时间
+     */
+    approveTime?: string;
+    /**
+     * 审批人ID
+     */
+    approveUserId?: number;
+    /**
+     * 审批人姓名
+     */
+    approveUserName?: string;
+    /**
+     * 品牌
+     */
+    brand?: string;
+    /**
+     * 累计浏览次数
+     */
+    browseCount?: number;
+    /**
+     * 颜色
+     */
+    color?: string;
+    /**
+     * 联系电话
+     */
+    contactPhone?: string;
+    /**
+     * 成交价格（万元）,保留2位小数
+     */
+    dealPrice?: number;
+    /**
+     * 成交时间
+     */
+    dealTime?: string;
+    /**
+     * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+     */
+    favorStatus?: FavorStatus;
+    /**
+     * 收藏时间
+     */
+    favorTime?: string;
+    /**
+     * 底价（万元）,保留2位小数
+     */
+    floorPrice?: number;
+    /**
+     * 车辆ID
+     */
+    id?: number;
+    /**
+     * 图片文件ID列表，逗号分隔
+     */
+    imageFileIds?: string;
+    /**
+     * 图片url列表，每个元素包含文件名和文件url，用于预览图片
+     */
+    imageUrlList?: FileUrlInfo[];
+    /**
+     * 最后浏览时间
+     */
+    lastBrowseTime?: string;
+    /**
+     * 上牌城市
+     */
+    licenseCity?: string;
+    /**
+     * 上牌日期，yyyy-MM-dd
+     */
+    licenseDate?: string;
+    /**
+     * 里程（万公里）,保留2位小数
+     */
+    mileage?: number;
+    /**
+     * 车型ID
+     */
+    modelId?: number;
+    /**
+     * 加装项目
+     */
+    modifyItems?: string;
+    /**
+     * 车辆名称
+     */
+    name?: string;
+    /**
+     * 发布时间
+     */
+    publishTime?: string;
+    /**
+     * 发布人ID
+     */
+    publishUserId?: number;
+    /**
+     * 发布人姓名
+     */
+    publishUserName?: string;
+    /**
+     * 车况描述
+     */
+    remark?: string;
+    /**
+     * 售价（万元）,保留2位小数
+     */
+    sellPrice?: number;
+    /**
+     * 出售人ID
+     */
+    sellUserId?: number;
+    /**
+     * 出售人姓名
+     */
+    sellUserName?: string;
+    /**
+     * 车系
+     */
+    series?: string;
+    /**
+     * 车辆状态
+     */
+    status?: Status;
+    /**
+     * 车辆状态名称
+     */
+    statusName?: string;
+    /**
+     * 过户次数
+     */
+    transferCount?: number;
+    /**
+     * 使用性质
+     */
+    usage?: string;
+    /**
+     * 款式
+     */
+    variant?: string;
+    [property: string]: any;
+}
+
+/**
+ * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+ */
+export enum FavorStatus {
+    Favorite = "FAVORITE",
+    NotFavorite = "NOT_FAVORITE",
+}
+
+/**
+ * FileUrlInfo
+ */
+export interface FileUrlInfo {
+    /**
+     * 文件名, 上传到cos后的文件名，格式：logo/uuid.ext，或者car/uuid.ext
+     * 例如：logo/1234567890.png, car/1234567890.png
+     */
+    fileName?: string;
+    /**
+     * 文件url，可以直接预览图片。
+     */
+    fileUrl?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆状态
+ */
+export enum Status {
+    OnSale = "ON_SALE",
+    Sold = "SOLD",
+    WaitApprove = "WAIT_APPROVE",
+    WaitRectify = "WAIT_RECTIFY",
+}
+```
+
+#### 车辆详情页面需求
+
+- 页面入口：在车源页面点击车辆卡片，跳转到车辆详情页面
+- 页面功能：提供用户一个查看车辆详情的页面，方便用户查看车辆的详细信息。
+- UI设计：目前已实现部分UI，具体UI设计上从上而下包含：
+1、车辆图片：需要用户能左右滑动查看图片，点击图片能放大显示
+2、tab栏：包含基本信息、车辆配置两部分
+基本信息与车辆配置按表格方式展示，左侧为标题，右侧为内容。展示的数据根据接口返回的字段进行提取。
+基础数据使用basicInfo字段，车辆配置使用modelInfo字段。
+
+3、车辆实拍：将第一部分图片一张接一张的瀑布流式显示
+4、底部固定按钮显示区域：
+- 左侧收藏按钮，点击后将车辆加入收藏列表，收藏与取消收藏接口定义可参考/Users/xiaofeng/WeChatProjects/miniprogram-1/prompt/接口对接文档.md
+- 联系卖家按钮，点击后调用拨打电话的按钮，电话信息在调用车辆详情的接口中有定义。
+- 查看低价按钮，点击后给出弹窗显示，当前车辆详情接口中的底价数据。需要使用permission-wrapper组件进行权限控制，权限值是：miniprogram:action.view-floor-price
+5、数据字段定义：
+接口的定义：
+- url:/api/mp/car/query-car-detail
+- method:GET
+- request:无
+- response:
+
+```
+/**
+ * 车辆详情信息
+ *
+ * ApiResultMpCarDetailResponse
+ */
+export interface Response {
+    code?: string;
+    data?: MpCarDetailResponse;
+    message?: string;
+    timestamp?: number;
+    traceId?: string;
+    [property: string]: any;
+}
+
+/**
+ * MpCarDetailResponse
+ */
+export interface MpCarDetailResponse {
+    /**
+     * 车辆基本信息
+     */
+    basicInfo?: MpCarResponse;
+    /**
+     * 车型核心参数
+     */
+    modelInfo?: CarModelResponse;
+    /**
+     * 车辆名称
+     */
+    name?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆基本信息
+ *
+ * MpCarResponse
+ */
+export interface MpCarResponse {
+    /**
+     * 车龄（年）
+     */
+    age?: number;
+    /**
+     * 审批意见
+     */
+    approveRemark?: string;
+    /**
+     * 审批时间
+     */
+    approveTime?: string;
+    /**
+     * 审批人ID
+     */
+    approveUserId?: number;
+    /**
+     * 审批人姓名
+     */
+    approveUserName?: string;
+    /**
+     * 品牌
+     */
+    brand?: string;
+    /**
+     * 颜色
+     */
+    color?: string;
+    /**
+     * 联系电话
+     */
+    contactPhone?: string;
+    /**
+     * 成交价格（万元）,保留2位小数
+     */
+    dealPrice?: number;
+    /**
+     * 成交时间
+     */
+    dealTime?: string;
+    /**
+     * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+     */
+    favorStatus?: FavorStatus;
+    /**
+     * 收藏时间
+     */
+    favorTime?: string;
+    /**
+     * 底价（万元）,保留2位小数
+     */
+    floorPrice?: number;
+    /**
+     * 车辆ID
+     */
+    id?: number;
+    /**
+     * 图片文件ID列表，逗号分隔
+     */
+    imageFileIds?: string;
+    /**
+     * 图片url列表，每个元素包含文件名和文件url，用于预览图片
+     */
+    imageUrlList?: FileUrlInfo[];
+    /**
+     * 上牌城市
+     */
+    licenseCity?: string;
+    /**
+     * 上牌日期，yyyy-MM-dd
+     */
+    licenseDate?: string;
+    /**
+     * 里程（万公里）,保留2位小数
+     */
+    mileage?: number;
+    /**
+     * 车型ID
+     */
+    modelId?: number;
+    /**
+     * 加装项目
+     */
+    modifyItems?: string;
+    /**
+     * 车辆名称
+     */
+    name?: string;
+    /**
+     * 发布时间
+     */
+    publishTime?: string;
+    /**
+     * 发布人ID
+     */
+    publishUserId?: number;
+    /**
+     * 发布人姓名
+     */
+    publishUserName?: string;
+    /**
+     * 车况描述
+     */
+    remark?: string;
+    /**
+     * 售价（万元）,保留2位小数
+     */
+    sellPrice?: number;
+    /**
+     * 出售人ID
+     */
+    sellUserId?: number;
+    /**
+     * 出售人姓名
+     */
+    sellUserName?: string;
+    /**
+     * 车系
+     */
+    series?: string;
+    /**
+     * 车辆状态
+     */
+    status?: Status;
+    /**
+     * 车辆状态名称
+     */
+    statusName?: string;
+    /**
+     * 过户次数
+     */
+    transferCount?: number;
+    /**
+     * 使用性质
+     */
+    usage?: string;
+    /**
+     * 款式
+     */
+    variant?: string;
+    [property: string]: any;
+}
+
+/**
+ * 收藏状态：FAVORITE-已收藏，NOT_FAVORITE-未收藏
+ */
+export enum FavorStatus {
+    Favorite = "FAVORITE",
+    NotFavorite = "NOT_FAVORITE",
+}
+
+/**
+ * FileUrlInfo
+ */
+export interface FileUrlInfo {
+    /**
+     * 文件名, 上传到cos后的文件名，格式：logo/uuid.ext，或者car/uuid.ext
+     * 例如：logo/1234567890.png, car/1234567890.png
+     */
+    fileName?: string;
+    /**
+     * 文件url，可以直接预览图片。
+     */
+    fileUrl?: string;
+    [property: string]: any;
+}
+
+/**
+ * 车辆状态
+ */
+export enum Status {
+    OnSale = "ON_SALE",
+    Sold = "SOLD",
+    WaitApprove = "WAIT_APPROVE",
+    WaitRectify = "WAIT_RECTIFY",
+}
+
+/**
+ * 车型核心参数
+ *
+ * CarModelResponse
+ */
+export interface CarModelResponse {
+    /**
+     * 电池容量（kWh）
+     */
+    batteryCapacity?: string;
+    /**
+     * 电池类型
+     */
+    batteryType?: string;
+    /**
+     * 车身结构
+     */
+    bodyStructure?: string;
+    /**
+     * 品牌
+     */
+    brand?: string;
+    /**
+     * 综合续航（公里）
+     */
+    comprehensiveRange?: number;
+    /**
+     * 创建时间
+     */
+    createTime?: string;
+    /**
+     * 创建人ID
+     */
+    createUserId?: number;
+    /**
+     * 创建人姓名
+     */
+    createUserName?: string;
+    /**
+     * 排量（L）,如：2.0L,1.5T等。
+     */
+    displacement?: string;
+    /**
+     * 驱动方式
+     */
+    driveType?: string;
+    /**
+     * 能源类型
+     */
+    energyType?: string;
+    /**
+     * 新车指导价（万元）,保留2位小数
+     */
+    guidePrice?: number;
+    /**
+     * 车型ID
+     */
+    id?: number;
+    /**
+     * 品牌logo文件ID
+     */
+    logoFileId?: string;
+    /**
+     * 品牌logo图片url
+     */
+    logoUrl?: string;
+    /**
+     * 驱动电机数
+     */
+    motorCount?: number;
+    /**
+     * 电动机马力（PS）
+     */
+    motorPower?: string;
+    /**
+     * 纯电续航（公里）
+     */
+    pureElectricRange?: number;
+    /**
+     * 座位数
+     */
+    seatCount?: number;
+    /**
+     * 车系
+     */
+    series?: string;
+    /**
+     * 变速箱类型
+     */
+    transmissionType?: string;
+    /**
+     * 更新时间
+     */
+    updateTime?: string;
+    /**
+     * 更新人ID
+     */
+    updateUserId?: number;
+    /**
+     * 更新人姓名
+     */
+    updateUserName?: string;
+    /**
+     * 款式
+     */
+    variant?: string;
+    [property: string]: any;
+}
+```
