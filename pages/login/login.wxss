@@ -126,33 +126,6 @@
     box-shadow: var(--theme-shadow-sm);
 }
 
-/* 响应式适配 */
-@media screen and (max-height: 667px) {
-    .login-page__logo-section {
-        min-height: 30vh;
-    }
-
-    .login-page__logo {
-        width: 160rpx;
-        height: 160rpx;
-    }
-
-    .login-page__company-name {
-        font-size: var(--theme-font-size-xl);
-    }
-}
-
-@media screen and (max-height: 568px) {
-    .login-page__logo-section {
-        min-height: 25vh;
-    }
-
-    .login-page__logo {
-        width: 140rpx;
-        height: 140rpx;
-    }
-}
-
 /* 动画效果 */
 .login-page__logo {
     animation: logoFadeIn 0.8s var(--theme-ease-out);

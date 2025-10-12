@@ -129,36 +129,6 @@
   text-align: center;
 }
 
-/* 响应式适配 */
-@media screen and (max-width: 375px) {
-  .qr-code__canvas-wrapper {
-    padding: var(--theme-spacing-md);
-    min-width: 360rpx;
-    min-height: 360rpx;
-  }
-
-  .qr-code__canvas {
-    width: 300rpx;
-    height: 300rpx;
-  }
-
-  .qr-code__refresh-text {
-    font-size: var(--theme-font-size-xxs);
-  }
-}
-
-/* 大屏幕优化 */
-@media screen and (min-width: 768px) {
-  .qr-code__canvas-wrapper {
-    min-width: 480rpx;
-    min-height: 480rpx;
-  }
-
-  .qr-code__canvas {
-    width: 460rpx;
-    height: 460rpx;
-  }
-}
 
 /* 深色模式适配 */
 @media (prefers-color-scheme: dark) {

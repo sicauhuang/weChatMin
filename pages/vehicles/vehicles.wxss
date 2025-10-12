@@ -94,39 +94,6 @@
     box-shadow: 0 1rpx 4rpx rgba(218, 165, 32, 0.4);
 }
 
-/* 响应式设计 - 未登录状态 */
-@media (max-width: 750rpx) {
-    .vehicles__login-card {
-        margin: 0 var(--theme-spacing-md);
-        padding: var(--theme-spacing-xl);
-    }
-
-    .vehicles__login-icon {
-        font-size: 100rpx;
-    }
-
-    .vehicles__login-text {
-        font-size: var(--theme-font-size-md);
-    }
-}
-
-@media (max-width: 600rpx) {
-    .vehicles__login-card {
-        margin: 0 var(--theme-spacing-sm);
-        padding: var(--theme-spacing-lg);
-    }
-
-    .vehicles__login-icon {
-        font-size: 80rpx;
-        margin-bottom: var(--theme-spacing-lg);
-    }
-
-    .vehicles__login-text {
-        font-size: var(--theme-font-size-sm);
-        margin-bottom: var(--theme-spacing-xl);
-    }
-}
-
 /* ==========================================================================
    搜索模块样式
    ========================================================================== */
@@ -351,45 +318,6 @@
 
 .vehicles-empty__button {
     margin-top: var(--theme-spacing-xxl);
-}
-
-/* ==========================================================================
-   响应式设计
-   ========================================================================== */
-
-/* 小屏设备适配 */
-@media (max-width: 375px) {
-    .vehicles-age-option,
-    .vehicles-price-option {
-        /* 小屏幕保持自适应宽度，但减少padding */
-        padding-left: var(--theme-spacing-lg);
-        padding-right: var(--theme-spacing-lg);
-    }
-
-    .vehicles-filter-tags {
-        padding-left: var(--theme-spacing-md);
-        padding-right: var(--theme-spacing-md);
-    }
-}
-
-/* 中等屏幕设备适配 */
-@media (min-width: 376px) and (max-width: 414px) {
-    .vehicles-age-option,
-    .vehicles-price-option {
-        /* 中等屏幕保持自适应宽度 */
-        padding-left: var(--theme-spacing-xl);
-        padding-right: var(--theme-spacing-xl);
-    }
-}
-
-/* 大屏幕设备适配 */
-@media (min-width: 415px) {
-    .vehicles-age-option,
-    .vehicles-price-option {
-        /* 大屏幕保持自适应宽度，可以适当增加padding */
-        padding-left: var(--theme-spacing-xxl);
-        padding-right: var(--theme-spacing-xxl);
-    }
 }
 
 /* ==========================================================================

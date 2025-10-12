@@ -344,14 +344,3 @@
   color: #999;
   line-height: 1.5;
 }
-
-/* 响应式适配 */
-@media (max-width: 375px) {
-  .detail-header__price-text {
-    font-size: 42rpx;
-  }
-
-  .detail-photos__item {
-    height: 300rpx;
-  }
-}

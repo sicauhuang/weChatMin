@@ -166,40 +166,6 @@
 }
 
 
-/* 响应式适配 */
-@media screen and (max-width: 375px) {
-    .login-prompt-card {
-        margin: var(--theme-spacing-md);
-        padding: var(--theme-spacing-xl);
-    }
-
-    .login-prompt-card__icon {
-        font-size: 100rpx;
-    }
-
-    .login-prompt-card__title {
-        font-size: var(--theme-font-size-lg);
-    }
-
-    .login-prompt-card__desc {
-        font-size: var(--theme-font-size-sm);
-    }
-
-    .favorites-list {
-        padding: var(--theme-spacing-sm);
-    }
-
-    .favorite-item {
-        margin-bottom: var(--theme-spacing-md);
-    }
-}
-
-/* Vant组件样式覆盖 */
-.van-button--primary {
-    background-color: var(--theme-color-primary);
-    border-color: var(--theme-color-primary);
-}
-
 .van-button--primary:active {
     background-color: var(--theme-color-primary-active);
     border-color: var(--theme-color-primary-active);
@@ -293,35 +259,3 @@
     }
 }
 
-/* 响应式设计 - 未登录状态 */
-@media (max-width: 750rpx) {
-    .my-favorites__login-card {
-        margin: 0 var(--theme-spacing-md);
-        padding: var(--theme-spacing-xl);
-    }
-
-    .my-favorites__login-icon {
-        font-size: 100rpx;
-    }
-
-    .my-favorites__login-text {
-        font-size: var(--theme-font-size-md);
-    }
-}
-
-@media (max-width: 600rpx) {
-    .my-favorites__login-card {
-        margin: 0 var(--theme-spacing-sm);
-        padding: var(--theme-spacing-lg);
-    }
-
-    .my-favorites__login-icon {
-        font-size: 80rpx;
-        margin-bottom: var(--theme-spacing-lg);
-    }
-
-    .my-favorites__login-text {
-        font-size: var(--theme-font-size-sm);
-        margin-bottom: var(--theme-spacing-xl);
-    }
-}

@@ -219,46 +219,6 @@
     color: var(--theme-text-tertiary);
 }
 
-/* 响应式设计 */
-@media (max-width: 750rpx) {
-    .mock-tickets__appointment {
-        flex-direction: column;
-    }
-
-    .mock-tickets__appointment .mock-tickets__info-item {
-        margin-bottom: var(--theme-spacing-md);
-    }
-
-    .mock-tickets__card {
-        margin: 0 var(--theme-spacing-md) var(--theme-spacing-md);
-        padding: var(--theme-spacing-lg);
-    }
-
-    .mock-tickets__card-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .mock-tickets__status {
-        margin-top: var(--theme-spacing-sm);
-        align-self: flex-end;
-    }
-}
-
-/* 小屏幕适配 */
-@media (max-width: 600rpx) {
-    .mock-tickets__order-info {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-/* 深色模式适配 */
-@media (prefers-color-scheme: dark) {
-    .mock-tickets__status--used {
-        background: linear-gradient(135deg, #059142, #048a3d);
-    }
-}
 
 /* 动画效果 */
 .mock-tickets__card {
@@ -520,43 +480,6 @@
     }
 }
 
-/* 响应式设计 */
-@media (max-width: 750rpx) {
-    .mock-tickets__qr-content {
-        margin: var(--theme-spacing-md);
-        padding: var(--theme-spacing-xl);
-    }
-
-    .mock-tickets__qr-canvas {
-        width: 300rpx;
-        height: 300rpx;
-    }
-
-    .mock-tickets__qr-actions {
-        flex-direction: column;
-        gap: var(--theme-spacing-md);
-    }
-}
-
-@media (max-width: 600rpx) {
-    .mock-tickets__qr-content {
-        width: 95%;
-        margin: var(--theme-spacing-sm);
-        padding: var(--theme-spacing-lg);
-    }
-
-    .mock-tickets__qr-canvas {
-        width: 250rpx;
-        height: 250rpx;
-    }
-
-    .mock-tickets__qr-info-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--theme-spacing-xs);
-    }
-}
-
 /* 未登录状态样式 */
 .mock-tickets__login-prompt {
     display: flex;
@@ -613,37 +536,4 @@
     background: var(--theme-color-primary-hover);
     transform: translateY(1rpx);
     box-shadow: 0 1rpx 4rpx rgba(218, 165, 32, 0.4);
-}
-
-/* 响应式设计 - 未登录状态 */
-@media (max-width: 750rpx) {
-    .mock-tickets__login-card {
-        margin: 0 var(--theme-spacing-md);
-        padding: var(--theme-spacing-xl);
-    }
-
-    .mock-tickets__login-icon {
-        font-size: 100rpx;
-    }
-
-    .mock-tickets__login-text {
-        font-size: var(--theme-font-size-md);
-    }
-}
-
-@media (max-width: 600rpx) {
-    .mock-tickets__login-card {
-        margin: 0 var(--theme-spacing-sm);
-        padding: var(--theme-spacing-lg);
-    }
-
-    .mock-tickets__login-icon {
-        font-size: 80rpx;
-        margin-bottom: var(--theme-spacing-lg);
-    }
-
-    .mock-tickets__login-text {
-        font-size: var(--theme-font-size-sm);
-        margin-bottom: var(--theme-spacing-xl);
-    }
 }

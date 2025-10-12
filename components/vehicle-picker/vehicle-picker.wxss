@@ -261,32 +261,3 @@
   color: var(--theme-text-tertiary);
   font-size: var(--theme-font-size-sm);
 }
-
-/* 响应式适配 */
-@media screen and (max-width: 375px) {
-  .header-title {
-    font-size: var(--theme-font-size-md);
-  }
-  
-  .brand-name {
-    font-size: var(--theme-font-size-xs);
-  }
-  
-  .series-title {
-    font-size: var(--theme-font-size-md);
-  }
-}
-
-@media screen and (min-width: 414px) {
-  .header {
-    height: 96rpx;
-  }
-  
-  .content {
-    height: calc(100% - 96rpx);
-  }
-  
-  .brand-item {
-    height: 96rpx;
-  }
-}

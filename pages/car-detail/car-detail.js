@@ -53,6 +53,40 @@ Page({
     },
 
     /**
+     * 格式化价格，保留两位小数
+     */
+    formatPrice(price) {
+        if (!price || price === 0) return '面议';
+        return parseFloat(price).toFixed(2);
+    },
+
+    /**
+     * 格式化车辆详情数据
+     */
+    formatCarDetailData(carDetail) {
+        if (!carDetail) return null;
+
+        const formattedDetail = { ...carDetail };
+
+        // 格式化基本信息中的价格字段
+        if (formattedDetail.basicInfo) {
+            if (formattedDetail.basicInfo.sellPrice) {
+                formattedDetail.basicInfo.formattedSellPrice = this.formatPrice(formattedDetail.basicInfo.sellPrice);
+            }
+            if (formattedDetail.basicInfo.floorPrice) {
+                formattedDetail.basicInfo.formattedFloorPrice = this.formatPrice(formattedDetail.basicInfo.floorPrice);
+            }
+        }
+
+        // 格式化车型信息中的价格字段
+        if (formattedDetail.modelInfo && formattedDetail.modelInfo.guidePrice) {
+            formattedDetail.modelInfo.formattedGuidePrice = this.formatPrice(formattedDetail.modelInfo.guidePrice);
+        }
+
+        return formattedDetail;
+    },
+
+    /**
      * 加载车辆详情
      */
     async loadCarDetail(carId) {
@@ -63,11 +97,14 @@ Page({
             const result = await carApi.getCarDetail(carId);
 
             if (result) {
+                // 格式化价格数据
+                const formattedCarDetail = this.formatCarDetailData(result.data);
+
                 this.setData({
-                    carDetail: result.data,
+                    carDetail: formattedCarDetail,
                     currentImageIndex: 0
                 });
-                console.log('车辆详情加载成功:', result.data);
+                console.log('车辆详情加载成功:', formattedCarDetail);
             } else {
                 throw new Error('获取车辆详情失败');
             }
