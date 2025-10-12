@@ -45,7 +45,8 @@ Page({
         pagination: {
             pageNum: 1,
             pageSize: 20,
-            total: 0
+            total: 0,
+            baseId: null
         },
 
         // 排序选项
@@ -226,7 +227,8 @@ Page({
             this.setData({
                 loading: true,
                 vehicleList: [],
-                'pagination.pageNum': 1
+                'pagination.pageNum': 1,
+                'pagination.baseId': null
             });
         } else {
             this.setData({ loadingMore: true });
@@ -243,7 +245,7 @@ Page({
                 console.log('vehicles: 车辆列表响应:', response);
 
                 // 处理响应数据
-                const { list = [], total = 0, pageNum, pageSize } = response;
+                const { list = [], total = 0, pageNum, pageSize, baseId } = response;
 
                 // 转换数据格式
                 const processedList = this.processVehicleData(list);
@@ -257,7 +259,8 @@ Page({
                         loading: false,
                         hasMore,
                         'pagination.total': total,
-                        'pagination.pageNum': pageNum + 1
+                        'pagination.pageNum': pageNum + 1,
+                        'pagination.baseId': baseId
                     });
                 } else {
                     this.setData({
@@ -265,6 +268,7 @@ Page({
                         loadingMore: false,
                         hasMore,
                         'pagination.pageNum': pageNum + 1
+                        // baseId保持不变，不需要更新
                     });
                 }
 
@@ -301,11 +305,12 @@ Page({
     buildApiParams() {
         const { filterConditions, pagination } = this.data;
         const { keyword, sortType, brandInfo, ageRange, priceRange } = filterConditions;
-        const { pageNum, pageSize } = pagination;
+        const { pageNum, pageSize, baseId } = pagination;
 
         const params = {
             pageNum,
-            pageSize
+            pageSize,
+            baseId: pageNum === 1 ? null : baseId
         };
 
         // 关键词搜索

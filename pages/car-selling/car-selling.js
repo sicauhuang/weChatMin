@@ -14,6 +14,7 @@ Page({
         pageSize: 50,
         currentPage: 1,
         totalCount: 0, // 新增：总记录数
+        baseId: null, // 新增：分页基准ID，防止数据重复
 
         // 过滤相关状态
         filterStatus: '', // 当前选中的过滤状态（空字符串表示全部）
@@ -38,12 +39,14 @@ Page({
      * @param {number} params.pageSize 每页数量，默认50
      * @param {string} params.keyword 关键词搜索（可选）
      * @param {string[]} params.statusIn 状态筛选数组（可选）
+     * @param {string} params.baseId 分页基准ID，防止数据重复（可选）
      * @returns {Promise} 车辆列表数据
      */
     async queryMyPublishCarPage(params = {}) {
         const requestData = {
             pageNum: params.pageNum || 1,
             pageSize: params.pageSize || 50,
+            baseId: params.pageNum === 1 ? null : params.baseId,
             ...params
         };
 
@@ -195,7 +198,8 @@ Page({
                 list: transformedList,
                 pageNum: pageNum,
                 pageSize: pageSize,
-                total: total
+                total: total,
+                baseId: response.baseId || null
             };
         } catch (error) {
             console.error('转换分页响应失败:', error, response);
@@ -294,7 +298,8 @@ Page({
             // 准备请求参数
             const requestParams = {
                 pageNum: refresh ? 1 : this.data.currentPage,
-                pageSize: this.data.pageSize
+                pageSize: this.data.pageSize,
+                baseId: refresh ? null : this.data.baseId
             };
 
             // 添加状态过滤
@@ -335,31 +340,34 @@ Page({
             }));
 
             // 计算分页信息
-            const { pageNum, pageSize, total } = transformedData;
+            const { pageNum, pageSize, total, baseId } = transformedData;
             const maxPage = Math.ceil(total / pageSize);
             const hasMore = pageNum < maxPage;
 
             if (refresh) {
-                // 刷新数据
+                // 刷新数据，保存baseId
                 this.setData({
                     vehicleList: formattedVehicles,
                     currentPage: pageNum,
                     totalCount: total,
-                    hasMore: hasMore
+                    hasMore: hasMore,
+                    baseId: baseId
                 });
                 console.log('刷新车辆列表成功:', {
                     count: formattedVehicles.length,
                     total: total,
-                    hasMore: hasMore
+                    hasMore: hasMore,
+                    baseId: baseId
                 });
             } else {
-                // 加载更多数据 - 数据去重后追加
+                // 加载更多数据 - 数据去重后追加，baseId保持不变
                 const newVehicleList = [...this.data.vehicleList, ...formattedVehicles];
                 this.setData({
                     vehicleList: newVehicleList,
                     currentPage: pageNum,
                     totalCount: total,
                     hasMore: hasMore
+                    // baseId保持不变，不需要更新
                 });
                 console.log('加载更多车辆成功:', {
                     newCount: formattedVehicles.length,

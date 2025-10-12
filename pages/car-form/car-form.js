@@ -11,7 +11,7 @@ Page({
      * 页面的初始数据
      */
     data: {
-        mode: 'create', // create | edit
+        mode: 'create', // create | edit | approval
         carId: null,
 
         // 根据设计文档的数据模型
@@ -34,7 +34,10 @@ Page({
             // 售卖信息
             lowPrice: '',
             sellPrice: '',
-            contactInfo: ''
+            contactInfo: '',
+
+            // 审批信息
+            approveRemark: '' // 审批意见
         },
 
         // 表单验证错误
@@ -53,6 +56,7 @@ Page({
         loading: false,
         submitting: false,
         scrollTop: 0, // 用于scroll-view的滚动定位
+        approvalAction: '', // 审批操作类型：APPROVED | REJECTED
 
         // 上传状态
         uploadProgress: {
@@ -75,14 +79,19 @@ Page({
         });
 
         // 设置导航栏标题
+        const titles = {
+            'create': '新建车辆',
+            'edit': '编辑车辆',
+            'approval': '审批车辆'
+        };
         wx.setNavigationBarTitle({
-            title: mode === 'edit' ? '编辑车辆' : '新建车辆'
+            title: titles[mode] || '车辆表单'
         });
 
-        // 如果是编辑模式，加载车辆信息
-        if (mode === 'edit' && carId) {
+        // 编辑和审批模式都需要加载车辆信息
+        if ((mode === 'edit' || mode === 'approval') && carId) {
             this.loadVehicleData(carId);
-        } else {
+        } else if (mode === 'create') {
             // 新建模式：初始化用户信息
             this.initUserInfo();
         }
@@ -744,13 +753,15 @@ Page({
             errors.mileage = '里程数不能为负数';
         }
 
-        // 底价（必填）- floorPrice
-        if (!formData.lowPrice) {
-            errors.lowPrice = '请输入底价';
-        } else if (!/^\d+(\.\d{1,2})?$/.test(formData.lowPrice)) {
-            errors.lowPrice = '请输入正确的价格格式（最多2位小数）';
-        } else if (parseFloat(formData.lowPrice) <= 0) {
-            errors.lowPrice = '底价必须大于0';
+        // 底价（必填）- floorPrice（审批模式下不验证）
+        if (this.data.mode !== 'approval') {
+            if (!formData.lowPrice) {
+                errors.lowPrice = '请输入底价';
+            } else if (!/^\d+(\.\d{1,2})?$/.test(formData.lowPrice)) {
+                errors.lowPrice = '请输入正确的价格格式（最多2位小数）';
+            } else if (parseFloat(formData.lowPrice) <= 0) {
+                errors.lowPrice = '底价必须大于0';
+            }
         }
 
         // 售价（必填）- sellPrice
@@ -1051,7 +1062,6 @@ Page({
     showConfirmDialog(title, content) {
         return new Promise((resolve) => {
             wx.showModal({
-                title: title,
                 content: content,
                 confirmText: '继续',
                 cancelText: '取消',
@@ -1082,7 +1092,8 @@ Page({
             usageType: '.van-field[data-field="usageType"]',
             lowPrice: '.van-field[data-field="lowPrice"]',
             sellPrice: '.van-field[data-field="sellPrice"]',
-            contactInfo: '.van-field[data-field="contactInfo"]'
+            contactInfo: '.van-field[data-field="contactInfo"]',
+            approveRemark: '.van-field[data-field="approveRemark"]'
         };
 
         const selector = fieldSelectors[fieldName];
@@ -1203,7 +1214,6 @@ Page({
         const apiData = {
             // 必填字段
             modelId: formData.modelId, // 车型ID，通过车型选择器获取
-            floorPrice: parseFloat(formData.lowPrice), // 底价（万元）
             sellPrice: parseFloat(formData.sellPrice), // 售价（万元）
             contactPhone: formData.contactInfo, // 联系电话
 
@@ -1220,6 +1230,10 @@ Page({
             modifyItems: formData.modifications || null, // 加装项目
             imageFileIds: this.formatImageFileIds(formData.images) // 图片文件ID列表
         };
+        // 底价字段处理（审批模式下可能为空）
+        if (formData.lowPrice && formData.lowPrice>=0) {
+            apiData.floorPrice = parseFloat(formData.lowPrice);
+        }
 
         // 移除null值字段（可选）
         Object.keys(apiData).forEach((key) => {
@@ -1273,5 +1287,187 @@ Page({
 
         // 图片文件名数组转换为逗号分隔的字符串
         return images.join(',');
+    },
+
+    // ===== 审批模式相关方法 =====
+
+    /**
+     * 审批通过
+     */
+    async onApprove() {
+        await this.handleApproval('APPROVED');
+    },
+
+    /**
+     * 审批驳回
+     */
+    async onReject() {
+        await this.handleApproval('REJECTED');
+    },
+
+    /**
+     * 处理审批操作
+     * @param {string} approveStatus 审批状态：APPROVED | REJECTED
+     */
+    async handleApproval(approveStatus) {
+        if (this.data.submitting) return;
+
+        const { formData, imageList } = this.data;
+
+        // 审批意见验证
+        if (!formData.approveRemark || !formData.approveRemark.trim()) {
+            Toast.fail('请输入审批意见');
+            this.scrollToField('approveRemark');
+            return;
+        }
+
+        // 表单验证（审批模式下也需要验证基本信息）
+        const validationResult = this.validateForm();
+        if (!validationResult.isValid) {
+            Toast.fail(validationResult.firstErrorMessage);
+            this.scrollToField(validationResult.firstErrorField);
+            return;
+        }
+
+        // 确认审批操作
+        const actionText = approveStatus === 'APPROVED' ? '通过' : '驳回';
+        const confirmed = await this.showConfirmDialog(
+            `确认${actionText}`,
+            `确定要${actionText}此车辆吗？`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        this.setData({
+            submitting: true,
+            approvalAction: approveStatus
+        });
+
+        try {
+            const { carId } = this.data;
+
+            // 处理图片数据：审批模式下通常不会有新增图片，但需要传递现有图片
+            let finalImageFileNames = [];
+            if (imageList.length > 0) {
+                // 审批模式下，图片通常都是已有的，直接使用现有文件名
+                const existingImages = imageList.filter((item) => item.isUploaded);
+                finalImageFileNames = existingImages.map((item) => item.name);
+                console.log('审批模式使用现有图片:', finalImageFileNames);
+            }
+
+            // 构建包含完整车辆数据的提交数据
+            const submitData = {
+                ...formData,
+                images: finalImageFileNames
+            };
+
+            // 调用审批API，传递完整的车辆数据
+            await this.approveVehicle(carId, submitData, approveStatus);
+
+            Toast.success(`${actionText}成功`);
+
+            // 审批成功后返回上一页
+            setTimeout(() => {
+                wx.navigateBack({
+                    delta: 1,
+                    success: () => {
+                        console.log(`车辆审批${actionText}成功，已返回上一页`);
+                    },
+                    fail: (error) => {
+                        console.error('返回上一页失败:', error);
+                        // 如果返回失败，尝试重新跳转到审批列表页
+                        wx.redirectTo({
+                            url: '/pages/vehicle-approval/vehicle-approval'
+                        });
+                    }
+                });
+            }, 800);
+
+        } catch (error) {
+            console.error(`车辆审批${actionText}失败:`, error);
+            this.handleSaveError(error);
+        } finally {
+            this.setData({
+                submitting: false,
+                approvalAction: ''
+            });
+        }
+    },
+
+    /**
+     * 审批车辆API调用
+     * @param {string|number} carId 车辆ID
+     * @param {Object} formData 完整的表单数据
+     * @param {string} approveStatus 审批状态：APPROVED | REJECTED
+     */
+    async approveVehicle(carId, formData, approveStatus) {
+        if (!carId) {
+            throw new Error('车辆ID不能为空');
+        }
+
+        const apiUrl = '/api/mp/car/approve-car';
+
+        // 构建审批API数据，包含完整的车辆信息
+        const apiData = this.mapFormDataToApiForApproval(carId, formData, approveStatus);
+
+        console.log('审批车辆 API 调用:', {
+            url: apiUrl,
+            method: 'POST',
+            carId: carId,
+            approveStatus: approveStatus,
+            data: apiData
+        });
+
+        try {
+            const response = await request.post(apiUrl, apiData, {
+                showLoading: true,
+                loadingTitle: `正在${approveStatus === 'APPROVED' ? '通过' : '驳回'}审批...`,
+                showErrorToast: false // 使用页面自己的错误处理
+            });
+
+            console.log('车辆审批成功:', response);
+
+            return {
+                success: true,
+                carId: carId,
+                approveStatus: approveStatus,
+                data: response,
+                message: `车辆审批${approveStatus === 'APPROVED' ? '通过' : '驳回'}成功`
+            };
+        } catch (error) {
+            console.error('审批车辆API调用失败:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * 将前端表单数据映射为审批车辆API格式
+     * @param {string|number} carId 车辆ID
+     * @param {Object} formData 前端表单数据
+     * @param {string} approveStatus 审批状态：APPROVED | REJECTED
+     * @returns {Object} 后端审批API需要的数据格式
+     */
+    mapFormDataToApiForApproval(carId, formData, approveStatus) {
+        // 获取基本车辆数据映射
+        const baseApiData = this.mapFormDataToApi(formData);
+
+        // 添加审批相关字段
+        const approvalApiData = {
+            carId: carId.toString(),
+            approvalResult: approveStatus, // 根据接口文档，字段名为approvalResult
+            approveRemark: formData.approveRemark.trim(),
+            ...baseApiData
+        };
+
+        console.log('审批车辆数据映射结果:', {
+            carId: carId,
+            approveStatus: approveStatus,
+            原始表单数据: formData,
+            最终API数据: approvalApiData
+        });
+
+        return approvalApiData;
     }
 });

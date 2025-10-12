@@ -6,6 +6,44 @@
 .mock-tickets {
     background-color: var(--theme-bg-white);
     height: calc(100vh - 100rpx);
+    position: relative;
+}
+
+/* 右上角电话按钮 */
+.mock-tickets__phone-btn {
+    position: fixed;
+    bottom: 120rpx;
+    right: 30rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    z-index: 100;
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+    white-space: nowrap;
+    color: var(--theme-color-primary);
+}
+
+.mock-tickets__phone-btn .dianhua-iconfont {
+  font-size: 16px;
+  margin-right: 10rpx;
+}
+
+.mock-tickets__phone-btn:active {
+    transform: scale(0.9);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.mock-tickets__phone-btn .iconfont {
+    color: var(--theme-color-primary);
+    transition: color var(--theme-duration-base) var(--theme-ease-out);
+}
+
+.mock-tickets__phone-btn:active .iconfont {
+    color: var(--theme-color-primary-hover);
 }
 
 /* 加载状态 */

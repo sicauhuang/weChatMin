@@ -13,6 +13,7 @@ Page({
         pageSize: 50, // 每页数据条数
         currentPage: 1, // 当前页码
         isEmpty: false, // 是否为空状态
+        baseId: null, // 新增：分页基准ID，防止数据重复
         // 删除模式相关
         deleteMode: false, // 是否处于删除模式
         selectedVehicles: [] // 已选中的车辆ID列表
@@ -146,6 +147,7 @@ Page({
             const result = await this.queryWaitApproveCarPage({
                 pageNum: this.data.currentPage,
                 pageSize: this.data.pageSize,
+                baseId: isRefresh ? null : this.data.baseId,
                 keyword: '' // 暂不支持搜索
             });
 
@@ -157,21 +159,29 @@ Page({
             let newVehicleList;
             if (isRefresh || this.data.currentPage === 1) {
                 newVehicleList = mappedVehicles;
+                // 刷新数据时保存baseId
+                this.setData({
+                    vehicleList: newVehicleList,
+                    hasMore: result.pageNum < Math.ceil(result.total / result.pageSize),
+                    isEmpty: newVehicleList.length === 0,
+                    loading: false,
+                    baseId: result.baseId || null
+                });
             } else {
                 newVehicleList = [...this.data.vehicleList, ...mappedVehicles];
+                // 加载更多数据时baseId保持不变
+                this.setData({
+                    vehicleList: newVehicleList,
+                    hasMore: result.pageNum < Math.ceil(result.total / result.pageSize),
+                    isEmpty: newVehicleList.length === 0,
+                    loading: false
+                    // baseId保持不变，不需要更新
+                });
             }
 
-            // 计算是否还有更多数据
-            const hasMore = result.pageNum < Math.ceil(result.total / result.pageSize);
-
-            this.setData({
-                vehicleList: newVehicleList,
-                hasMore: hasMore,
-                isEmpty: newVehicleList.length === 0,
-                loading: false
-            });
-
-            console.log(`加载成功，当前共${newVehicleList.length}条数据，是否有更多：${hasMore}`);
+            console.log(
+                `加载成功，当前共${newVehicleList.length}条数据，是否有更多：${this.data.hasMore}`
+            );
         } catch (error) {
             console.error('加载车辆列表失败:', error);
             this.setData({ loading: false });
@@ -190,16 +200,42 @@ Page({
     /**
      * 查询待审批车辆列表API
      * @param {Object} params 请求参数
+     * @param {number} params.pageNum 页码，从1开始
+     * @param {number} params.pageSize 每页数量，默认50
+     * @param {string} params.keyword 关键词搜索（可选）
+     * @param {string} params.baseId 分页基准ID，防止数据重复（可选）
      * @returns {Promise<Object>} API响应结果
      */
     async queryWaitApproveCarPage(params) {
         try {
-            console.log('调用审批车辆列表API:', params);
+            const requestData = {
+                pageNum: params.pageNum || 1,
+                pageSize: params.pageSize || 50,
+                baseId: params.pageNum === 1 ? null : params.baseId,
+                ...params
+            };
 
-            const response = await request.post('/api/mp/car/query-wait-approve-car-page', params, {
-                showLoading: false, // 使用页面自己的loading状态
-                showErrorToast: false // 使用页面自己的错误处理
+            // 过滤掉空值和undefined
+            Object.keys(requestData).forEach((key) => {
+                if (
+                    requestData[key] === null ||
+                    requestData[key] === undefined ||
+                    requestData[key] === ''
+                ) {
+                    delete requestData[key];
+                }
             });
+
+            console.log('调用审批车辆列表API:', requestData);
+
+            const response = await request.post(
+                '/api/mp/car/query-wait-approve-car-page',
+                requestData,
+                {
+                    showLoading: false, // 使用页面自己的loading状态
+                    showErrorToast: false // 使用页面自己的错误处理
+                }
+            );
 
             console.log('审批车辆列表API响应:', response);
 

@@ -209,23 +209,29 @@
 .home-error__text {
     color: var(--theme-text-error);
     font-size: var(--theme-font-size-sm);
-    margin-bottom: var(--theme-spacing-xxl);
+    margin-bottom: var(--theme-spacing-lg);
     text-align: center;
 }
 
-.home-error__button {
-    background-color: var(--theme-color-primary);
-    color: var(--theme-text-white);
+.home-error__tip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--theme-spacing-md);
+    background-color: var(--theme-bg-light);
     border-radius: var(--theme-radius-sm);
-    padding: var(--theme-spacing-lg) var(--theme-spacing-xxxl);
-    font-size: var(--theme-font-size-sm);
-    border: none;
-    min-width: 200rpx;
-    transition: background-color var(--theme-duration-base) var(--theme-ease-out);
+    border: 1rpx solid var(--theme-border-light);
 }
 
-.home-error__button:active {
-    background-color: var(--theme-color-primary-hover);
+.home-error__refresh-icon {
+    font-size: var(--theme-icon-size-sm);
+    color: var(--theme-icon-color-secondary);
+    margin-right: var(--theme-spacing-xs);
+}
+
+.home-error__refresh-text {
+    font-size: var(--theme-font-size-xs);
+    color: var(--theme-text-tertiary);
 }
 
 /* ==========================================================================
@@ -368,8 +374,8 @@
         color: #f8ca4f;
     }
 
-    .home-error__button {
-        background-color: #f8ca4f;
+    .home-error__refresh-icon {
+        color: #999999;
     }
 
     .home-page {
@@ -382,6 +388,11 @@
         background-color: #ffffff;
     }
 
+    .home-error__tip {
+        background-color: #f5f5f5;
+        border-color: #e0e0e0;
+    }
+
     .home-company__title,
     .home-contact__title,
     .home-contact__item-label {
@@ -391,5 +402,13 @@
     .home-company__description,
     .home-contact__item-value {
         color: #666666;
+    }
+
+    .home-error__text {
+        color: #ff4444;
+    }
+
+    .home-error__refresh-text {
+        color: #999999;
     }
 }

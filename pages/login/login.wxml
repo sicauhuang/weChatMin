@@ -15,7 +15,7 @@
     <view class="login-page__agreement">
       <view class="login-page__checkbox" bindtap="onToggleAgreement">
         <view class="login-page__checkbox-icon {{agreeProtocol ? 'login-page__checkbox-icon--checked' : ''}}">
-          <text class="iconfont icon-check" wx:if="{{agreeProtocol}}"></text>
+          <text class="iconfont icon-seleted" wx:if="{{agreeProtocol}}"></text>
         </view>
         <text class="login-page__agreement-text">
           <text>我已阅读并同意 </text>

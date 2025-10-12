@@ -1,5 +1,6 @@
 // index.js
 const apiConfig = require('../../config/api.js');
+const request = require('../../utils/request.js');
 
 Page({
     data: {
@@ -8,7 +9,10 @@ Page({
             companyName: '',
             companyDesc: '',
             companyAddress: '',
-            companyContact: ''
+            companyContact: '',
+            mockExamPhone: '',
+            companyLat: null,
+            companyLng: null
         },
         loading: true,
         error: ''
@@ -42,33 +46,40 @@ Page({
             error: ''
         });
 
-        console.warn('-----apiconfi', apiConfig.currentEnv.getApiUrl('/api/home-info'));
+        console.log('开始加载主页数据...');
 
-        wx.request({
-            url: 'http://192.168.31.57:3000/api/home-info',
-            method: 'GET',
-            success: (res) => {
-                console.log('首页数据请求成功:', res.data);
-                if (res.data && res.data.success) {
-                    this.setData({
-                        homeData: res.data.data,
-                        loading: false,
-                        error: ''
-                    });
-                } else {
-                    this.setData({
-                        loading: false,
-                        error: res.data?.message || '获取数据失败'
-                    });
-                }
-            },
-            fail: (err) => {
-                console.error('首页数据请求失败:', err);
-                this.setData({
-                    loading: false,
-                    error: '网络请求失败，请检查网络连接'
-                });
-            }
+        // 使用统一的请求工具调用真实接口
+        request.get('/api/mp/setting/query-main-page-info', {}, {
+            showLoading: false,
+            showErrorToast: false
+        })
+        .then((data) => {
+            console.log('主页数据请求成功:', data);
+
+            // 转换数据结构以适配现有UI
+            const homeData = {
+                imgList: data.miniProgramImageUrlList?.map(item => item.fileUrl) || [],
+                companyName: data.companyName || '',
+                companyDesc: data.companyDesc || '',
+                companyAddress: data.companyAddress || '',
+                companyContact: data.contactPhone || '',
+                mockExamPhone: data.mockExamPhone || '',
+                companyLat: data.companyLat,
+                companyLng: data.companyLng
+            };
+
+            this.setData({
+                homeData: homeData,
+                loading: false,
+                error: ''
+            });
+        })
+        .catch((err) => {
+            console.error('主页数据请求失败:', err);
+            this.setData({
+                loading: false,
+                error: err.userMessage || err.message || '获取数据失败'
+            });
         });
     },
 
@@ -109,11 +120,48 @@ Page({
     },
 
     /**
+     * 拨打模拟考试电话
+     */
+    callMockExamPhone() {
+        const phoneNumber = this.data.homeData.mockExamPhone;
+        if (!phoneNumber) {
+            wx.showToast({
+                title: '模拟考试电话不可用',
+                icon: 'none'
+            });
+            return;
+        }
+
+        wx.showModal({
+            title: '拨打模拟考试电话',
+            content: `确定要拨打 ${phoneNumber} 吗？`,
+            success: (res) => {
+                if (res.confirm) {
+                    wx.makePhoneCall({
+                        phoneNumber: phoneNumber,
+                        success: () => {
+                            console.log('拨打模拟考试电话成功');
+                        },
+                        fail: (err) => {
+                            console.error('拨打模拟考试电话失败:', err);
+                            wx.showToast({
+                                title: '拨打电话失败',
+                                icon: 'none'
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    },
+
+    /**
      * 打开地图位置
      */
     openLocation() {
-        const address = this.data.homeData.companyAddress;
-        if (!address) {
+        const { companyAddress, companyName, companyLat, companyLng } = this.data.homeData;
+
+        if (!companyAddress) {
             wx.showToast({
                 title: '地址信息不可用',
                 icon: 'none'
@@ -121,16 +169,15 @@ Page({
             return;
         }
 
-        // 使用地理编码获取经纬度（这里使用模拟数据）
-        // 实际项目中应该调用地图API获取真实经纬度
-        const latitude = 39.9042; // 北京市朝阳区建国路附近纬度
-        const longitude = 116.4074; // 北京市朝阳区建国路附近经度
+        // 使用接口返回的真实经纬度，如果没有则使用默认坐标
+        const latitude = companyLat || 39.9042; // 默认北京市朝阳区建国路附近纬度
+        const longitude = companyLng || 116.4074; // 默认北京市朝阳区建国路附近经度
 
         wx.openLocation({
             latitude: latitude,
             longitude: longitude,
-            name: this.data.homeData.companyName,
-            address: address,
+            name: companyName || '公司位置',
+            address: companyAddress,
             scale: 18,
             success: () => {
                 console.log('打开地图成功');

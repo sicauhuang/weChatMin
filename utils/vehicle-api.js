@@ -18,6 +18,7 @@ const { post } = require('./request.js');
  * @param {number} params.endAge 车龄范围筛选-结束年龄，单位：年
  * @param {number} params.startPrice 价格范围筛选-开始价格，单位：万元
  * @param {number} params.endPrice 价格范围筛选-结束价格，单位：万元
+ * @param {number|null} params.baseId 基准ID，防止分页重复数据。第一页传null，后续页传第一页返回的baseId
  * @returns {Promise} 车辆列表数据
  */
 function queryOnSaleCarPage(params = {}) {

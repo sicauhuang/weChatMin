@@ -81,6 +81,43 @@ function cancelFavorCar(carId) {
 }
 
 /**
+ * 获取车辆详情
+ * @param {number} carId 车辆ID
+ * @returns {Promise} 返回车辆详情数据
+ */
+function getCarDetail(carId) {
+    console.log('获取车辆详情请求:', { carId });
+
+    return request
+        .get(
+            '/api/mp/car/query-car-detail',
+            {
+                carId: carId
+            },
+            {
+                showLoading: true,
+                loadingTitle: '加载中...',
+                showErrorToast: true
+            }
+        )
+        .then((response) => {
+            console.log('获取车辆详情成功:', response);
+            return {
+                success: true,
+                data: response
+            };
+        })
+        .catch((error) => {
+            console.error('获取车辆详情失败:', error);
+            throw {
+                success: false,
+                error: error,
+                message: error.userMessage || error.message || '获取详情失败'
+            };
+        });
+}
+
+/**
  * 更新车辆收藏状态
  * @param {number} carId 车辆ID
  * @param {boolean} isFavorited 是否收藏（true-收藏，false-取消收藏）
@@ -97,6 +134,7 @@ function updateFavoriteStatus(carId, isFavorited) {
 }
 
 module.exports = {
+    getCarDetail,
     favorCar,
     cancelFavorCar,
     updateFavoriteStatus

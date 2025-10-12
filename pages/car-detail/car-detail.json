@@ -3,6 +3,7 @@
   "enablePullDownRefresh": false,
   "usingComponents": {
     "van-cell": "/@vant/weapp/cell/index",
-    "van-cell-group": "/@vant/weapp/cell-group/index"
+    "van-cell-group": "/@vant/weapp/cell-group/index",
+    "permission-wrapper": "../../components/permission-wrapper/permission-wrapper"
   }
 }

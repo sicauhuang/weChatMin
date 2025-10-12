@@ -1,11 +1,7 @@
 <view class="car-detail-page">
-  <!-- 加载状态 -->
-  <view class="loading-overlay" wx:if="{{loading}}">
-    <text class="loading-text">加载中...</text>
-  </view>
 
   <!-- 页面内容 -->
-  <scroll-view class="detail-container" scroll-y="true" enhanced="true" wx:if="{{vehicleData}}">
+  <scroll-view class="detail-container" scroll-y="true" enhanced="true" wx:if="{{carDetail}}">
     <!-- 车辆图片轮播 -->
     <view class="detail-images">
       <swiper
@@ -17,124 +13,163 @@
         circular="true"
         bindchange="onImageSwiperChange"
         bindtap="onImagePreview">
-        <swiper-item wx:for="{{vehicleData.images}}" wx:key="index">
+        <swiper-item wx:for="{{carDetail.basicInfo.imageUrlList}}" wx:key="index">
           <image
             class="swiper-image"
-            src="{{item}}"
+            src="{{item.fileUrl}}"
             mode="aspectFill" />
         </swiper-item>
       </swiper>
 
-      <!-- 状态标签 -->
-      <view class="detail-status detail-status--{{vehicleData.status}}">
-        <text class="detail-status__text">
-          {{vehicleData.status === 'ON_SALE' ? '在售中' : (vehicleData.status === 'RESERVED' ? '已预订' : (vehicleData.status === 'SOLD' ? '已售出' : '已下架'))}}
-        </text>
-      </view>
-
       <!-- 图片计数 -->
-      <view class="image-counter" wx:if="{{vehicleData.images.length > 1}}">
-        <text class="image-counter__text">{{currentImageIndex + 1}}/{{vehicleData.images.length}}</text>
+      <view class="image-counter" wx:if="{{carDetail.basicInfo.imageUrlList.length > 1}}">
+        <text class="image-counter__text">{{currentImageIndex + 1}}/{{carDetail.basicInfo.imageUrlList.length}}</text>
       </view>
     </view>
 
-    <!-- 基本信息卡片 -->
+    <!-- 车辆标题和价格 -->
+    <view class="detail-header">
+      <view class="detail-header__main">
+        <text class="detail-header__title">{{carDetail.name}}</text>
+      </view>
+      <view class="detail-header__price">
+        <text class="detail-header__price-text">{{carDetail.basicInfo.sellPrice}}</text>
+        <text class="detail-header__price-unit">万元</text>
+      </view>
+    </view>
+
+    <!-- Tab栏 -->
+    <view class="detail-tabs">
+      <view
+        class="detail-tabs__item {{activeTab === 'basic' ? 'active' : ''}}"
+        data-tab="basic"
+        bindtap="onTabChange">
+        <text class="detail-tabs__text">基本信息</text>
+      </view>
+      <view
+        class="detail-tabs__item {{activeTab === 'config' ? 'active' : ''}}"
+        data-tab="config"
+        bindtap="onTabChange">
+        <text class="detail-tabs__text">车辆配置</text>
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="detail-card" wx:if="{{activeTab === 'basic'}}">
+      <view class="detail-table">
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.age}}">
+          <text class="detail-table__label">车龄</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.age}}年</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.color}}">
+          <text class="detail-table__label">颜色</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.color}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.mileage}}">
+          <text class="detail-table__label">里程</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.mileage}}万公里</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.transferCount !== null}}">
+          <text class="detail-table__label">过户次数</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.transferCount}}次</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.licenseDate}}">
+          <text class="detail-table__label">上牌日期</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.licenseDate}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.licenseCity}}">
+          <text class="detail-table__label">上牌城市</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.licenseCity}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.usage}}">
+          <text class="detail-table__label">使用性质</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.usage}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.remark}}">
+          <text class="detail-table__label">车况描述</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.remark}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.basicInfo.modifyItems}}">
+          <text class="detail-table__label">加装项目</text>
+          <text class="detail-table__value">{{carDetail.basicInfo.modifyItems}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 车辆配置 -->
+    <view class="detail-card" wx:if="{{activeTab === 'config' && carDetail.modelInfo}}">
+      <view class="detail-table">
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.energyType}}">
+          <text class="detail-table__label">能源类型</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.energyType}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.displacement}}">
+          <text class="detail-table__label">排量</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.displacement}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.transmissionType}}">
+          <text class="detail-table__label">变速箱类型</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.transmissionType}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.driveType}}">
+          <text class="detail-table__label">驱动方式</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.driveType}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.bodyStructure}}">
+          <text class="detail-table__label">车身结构</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.bodyStructure}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.seatCount}}">
+          <text class="detail-table__label">座位数</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.seatCount}}座</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.guidePrice}}">
+          <text class="detail-table__label">新车指导价</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.guidePrice}}万元</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.batteryCapacity}}">
+          <text class="detail-table__label">电池容量</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.batteryCapacity}}kWh</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.batteryType}}">
+          <text class="detail-table__label">电池类型</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.batteryType}}</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.comprehensiveRange}}">
+          <text class="detail-table__label">综合续航</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.comprehensiveRange}}公里</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.pureElectricRange}}">
+          <text class="detail-table__label">纯电续航</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.pureElectricRange}}公里</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.motorPower}}">
+          <text class="detail-table__label">电动机马力</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.motorPower}}PS</text>
+        </view>
+        <view class="detail-table__row" wx:if="{{carDetail.modelInfo.motorCount}}">
+          <text class="detail-table__label">驱动电机数</text>
+          <text class="detail-table__value">{{carDetail.modelInfo.motorCount}}个</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 车辆实拍 -->
     <view class="detail-card">
       <view class="detail-card__header">
-        <text class="detail-card__title">基本信息</text>
+        <text class="detail-card__title">车辆实拍</text>
       </view>
-
-      <view class="detail-card__content">
-        <!-- 车型和价格 -->
-        <view class="basic-info">
-          <view class="basic-info__main">
-            <text class="basic-info__model">{{vehicleData.carModel}}</text>
-            <text class="basic-info__condition">{{vehicleData.condition}}</text>
-          </view>
-          <view class="basic-info__price">
-            <text class="basic-info__price-text">{{vehicleData.price}}</text>
-            <text class="basic-info__price-unit">万元</text>
-          </view>
-        </view>
-
-        <!-- 详细信息 -->
-        <view class="detail-info">
-          <view class="detail-info__item">
-            <view class="detail-info__label">
-              <text class="iconfont icon-chepai detail-info__icon"></text>
-              <text class="detail-info__label-text">车牌号</text>
-            </view>
-            <text class="detail-info__value">{{vehicleData.licensePlate}}</text>
-          </view>
-
-          <view class="detail-info__item">
-            <view class="detail-info__label">
-              <text class="iconfont icon-weizhi detail-info__icon"></text>
-              <text class="detail-info__label-text">所在地区</text>
-            </view>
-            <text class="detail-info__value">{{vehicleData.location}}</text>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 联系信息卡片 -->
-    <view class="detail-card">
-      <view class="detail-card__header">
-        <text class="detail-card__title">联系信息</text>
-      </view>
-
-      <view class="detail-card__content">
-        <view class="contact-info">
-          <view class="contact-info__item">
-            <view class="contact-info__label">
-              <text class="iconfont icon-yonghu contact-info__icon"></text>
-              <text class="contact-info__label-text">车主姓名</text>
-            </view>
-            <text class="contact-info__value">{{vehicleData.ownerName}}</text>
-          </view>
-
-          <view class="contact-info__item" bindtap="onCallPhone">
-            <view class="contact-info__label">
-              <text class="iconfont icon-dianhua contact-info__icon"></text>
-              <text class="contact-info__label-text">联系电话</text>
-            </view>
-            <view class="contact-info__phone">
-              <text class="contact-info__value">{{vehicleData.contactPhone}}</text>
-              <text class="iconfont icon-dianhua contact-info__call-icon"></text>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 车辆描述卡片 -->
-    <view class="detail-card" wx:if="{{vehicleData.description}}">
-      <view class="detail-card__header">
-        <text class="detail-card__title">车辆描述</text>
-      </view>
-
-      <view class="detail-card__content">
-        <text class="description-text">{{vehicleData.description}}</text>
-      </view>
-    </view>
-
-    <!-- 发布信息卡片 -->
-    <view class="detail-card">
-      <view class="detail-card__header">
-        <text class="detail-card__title">发布信息</text>
-      </view>
-
-      <view class="detail-card__content">
-        <view class="publish-info">
-          <view class="publish-info__item">
-            <text class="publish-info__label">发布时间</text>
-            <text class="publish-info__value">{{vehicleData.createdAt}}</text>
-          </view>
-          <view class="publish-info__item">
-            <text class="publish-info__label">更新时间</text>
-            <text class="publish-info__value">{{vehicleData.updatedAt}}</text>
-          </view>
+      <view class="detail-photos">
+        <view
+          class="detail-photos__item"
+          wx:for="{{carDetail.basicInfo.imageUrlList}}"
+          wx:key="index"
+          data-index="{{index}}"
+          bindtap="onPhotoTap">
+          <image
+            class="detail-photos__image"
+            src="{{item.fileUrl}}"
+            mode="aspectFill" />
         </view>
       </view>
     </view>
@@ -144,41 +179,42 @@
   </scroll-view>
 
   <!-- 底部操作按钮 -->
-  <view class="detail-actions" wx:if="{{vehicleData}}">
+  <view class="detail-actions" wx:if="{{carDetail}}">
     <button
-      class="detail-actions__button detail-actions__button--secondary"
+      class="detail-actions__button detail-actions__button--favorite {{carDetail.basicInfo.favorStatus === 'FAVORITE' ? 'favorited' : ''}}"
+      bindtap="onToggleFavorite">
+      <text class="iconfont {{carDetail.basicInfo.favorStatus === 'FAVORITE' ? 'icon-yishoucang' : 'icon-shoucang'}} detail-actions__button-icon"></text>
+      {{carDetail.basicInfo.favorStatus === 'FAVORITE' ? '已收藏' : '收藏'}}
+    </button>
+    <permission-wrapper permission="miniprogram:action.view-floor-price">
+      <button
+        class="detail-actions__button detail-actions__button--price"
+        bindtap="onShowFloorPrice">
+        <text class="iconfont icon-jiage detail-actions__button-icon"></text>
+        查看底价
+      </button>
+    </permission-wrapper>
+    <button
+      class="detail-actions__button detail-actions__button--contact"
       bindtap="onCallPhone">
       <text class="iconfont icon-dianhua detail-actions__button-icon"></text>
-      联系车主
-    </button>
-    <button
-      class="detail-actions__button detail-actions__button--primary"
-      bindtap="onShowActionSheet">
-      <text class="iconfont icon-gengduo detail-actions__button-icon"></text>
-      更多操作
+      联系卖家
     </button>
   </view>
 
-  <!-- 操作菜单 -->
-  <view class="action-sheet" wx:if="{{showActionSheet}}" bindtap="onHideActionSheet">
-    <view class="action-sheet__mask"></view>
-    <view class="action-sheet__content" catchtap="">
-      <view class="action-sheet__header">
-        <text class="action-sheet__title">车辆操作</text>
-        <text class="iconfont icon-guanbi action-sheet__close" bindtap="onHideActionSheet"></text>
+  <!-- 底价弹窗 -->
+  <view class="floor-price-modal" wx:if="{{showFloorPriceModal}}" bindtap="onHideFloorPriceModal">
+    <view class="floor-price-modal__content" catchtap="">
+      <view class="floor-price-modal__header">
+        <text class="floor-price-modal__title">车辆底价</text>
+        <text class="iconfont icon-guanbi floor-price-modal__close" bindtap="onHideFloorPriceModal"></text>
       </view>
-
-      <view class="action-sheet__body">
-        <view
-          class="action-sheet__item {{item.danger ? 'danger' : ''}}"
-          wx:for="{{actionSheetItems}}"
-          wx:key="key"
-          data-key="{{item.key}}"
-          bindtap="onActionSheetItemTap">
-          <text class="iconfont {{item.icon}} action-sheet__item-icon"></text>
-          <text class="action-sheet__item-text">{{item.text}}</text>
-          <text class="iconfont icon-arrow-right action-sheet__item-arrow"></text>
+      <view class="floor-price-modal__body">
+        <view class="floor-price-info">
+          <text class="floor-price-info__label">底价</text>
+          <text class="floor-price-info__value">{{carDetail.basicInfo.floorPrice}}万元</text>
         </view>
+        <text class="floor-price-info__note">此价格为车主设定的最低价格，仅供参考</text>
       </view>
     </view>
   </view>

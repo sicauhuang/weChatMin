@@ -78,6 +78,11 @@ module.exports = {
         return currentEnv.getApiUrl('/api/health');
     },
 
+    // 主页信息接口
+    getMainPageInfoUrl() {
+        return currentEnv.getApiUrl('/api/mp/setting/query-main-page-info');
+    },
+
     // 文件上传相关接口
     getUploadUrlQueryUrl() {
         return currentEnv.getApiUrl('/api/mp/file/query-upload-url');

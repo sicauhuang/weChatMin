@@ -1495,6 +1495,7 @@ export enum Status {
 
 3、车辆实拍：将第一部分图片一张接一张的瀑布流式显示
 4、底部固定按钮显示区域：
+
 - 左侧收藏按钮，点击后将车辆加入收藏列表，收藏与取消收藏接口定义可参考/Users/xiaofeng/WeChatProjects/miniprogram-1/prompt/接口对接文档.md
 - 联系卖家按钮，点击后调用拨打电话的按钮，电话信息在调用车辆详情的接口中有定义。
 - 查看低价按钮，点击后给出弹窗显示，当前车辆详情接口中的底价数据。需要使用permission-wrapper组件进行权限控制，权限值是：miniprogram:action.view-floor-price
@@ -1831,3 +1832,7 @@ export interface CarModelResponse {
     [property: string]: any;
 }
 ```
+
+#### 模拟票页面优化
+
+在模拟票右上角显示一个无边框的按钮，功能是获取主页查询的系统信息中的模拟考试电话，点击按钮后直接拨打电话。

@@ -4,12 +4,12 @@
     <!-- 轮播图区域 -->
     <view class="home-banner">
       <swiper class="home-banner__swiper"
-              indicator-dots="{{true}}"
-              autoplay="{{true}}"
+              indicator-dots="{{homeData.imgList.length > 1}}"
+              autoplay="{{homeData.imgList.length > 1}}"
               interval="{{3000}}"
               duration="{{500}}"
-              circular="{{true}}">
-        <swiper-item wx:for="{{homeData.imgList}}" wx:key="index">
+              circular="{{homeData.imgList.length > 1}}">
+        <swiper-item wx:for="{{homeData.imgList.length > 0 ? homeData.imgList : []}}" wx:key="index">
           <image class="home-banner__image" src="{{item}}" mode="aspectFill"></image>
         </swiper-item>
       </swiper>
@@ -61,10 +61,5 @@
       <text>加载中...</text>
     </view>
 
-    <!-- 错误提示 -->
-    <view class="home-error" wx:if="{{error}}">
-      <text class="home-error__text">{{error}}</text>
-      <button class="home-error__button" bindtap="loadHomeData">重新加载</button>
-    </view>
   </view>
 </scroll-view>

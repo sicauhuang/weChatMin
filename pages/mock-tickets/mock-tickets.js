@@ -12,7 +12,8 @@ Page({
         refreshing: false, // 下拉刷新状态
         showQRModal: false, // 是否显示二维码弹窗
         currentTicketQRData: null, // 当前票据的二维码数据
-        isLoggedIn: false // 登录状态
+        isLoggedIn: false, // 登录状态
+        mockExamPhone: '' // 模拟考试电话
     },
 
     /**
@@ -20,6 +21,7 @@ Page({
      */
     onLoad(options) {
         console.log('模拟票页面加载');
+        this.loadSystemInfo();
         this.checkLoginAndLoadData();
     },
 
@@ -423,5 +425,62 @@ Page({
                 });
             }
         });
+    },
+
+    /**
+     * 加载系统信息（获取模拟考试电话）
+     */
+    loadSystemInfo() {
+        console.log('开始加载系统信息...');
+
+        // 使用统一的请求工具调用真实接口
+        request.get('/api/mp/setting/query-main-page-info', {}, {
+            showLoading: false,
+            showErrorToast: false
+        })
+        .then((data) => {
+            console.log('系统信息请求成功:', data);
+
+            // 提取模拟考试电话
+            const mockExamPhone = data.mockExamPhone || '';
+
+            this.setData({
+                mockExamPhone: mockExamPhone
+            });
+
+            console.log('模拟考试电话已设置:', mockExamPhone);
+        })
+        .catch((err) => {
+            console.error('系统信息请求失败:', err);
+            // 静默失败，不影响页面其他功能
+        });
+    },
+
+    /**
+     * 拨打模拟考试电话
+     */
+    callMockExamPhone() {
+        const phoneNumber = this.data.mockExamPhone;
+        if (!phoneNumber) {
+            wx.showToast({
+                title: '模拟考试电话不可用',
+                icon: 'none'
+            });
+            return;
+        }
+
+        wx.makePhoneCall({
+          phoneNumber: phoneNumber,
+          success: () => {
+              console.log('拨打模拟考试电话成功');
+          },
+          fail: (err) => {
+              console.error('拨打模拟考试电话失败:', err);
+              wx.showToast({
+                  title: '拨打电话失败',
+                  icon: 'none'
+              });
+          }
+      });
     }
 });
