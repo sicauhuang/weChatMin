@@ -22,12 +22,9 @@
   background: var(--theme-bg-card);
   border-radius: var(--theme-radius-lg);
   margin-bottom: var(--theme-spacing-xl);
-  display: flex;
-  align-items: flex-start;
   gap: var(--theme-spacing-xl);
   transition: all var(--theme-duration-base) var(--theme-ease-out);
   position: relative;
-  overflow: hidden;
   min-height: 170rpx;
   height: 170rpx;
   padding-left: var(--theme-spacing-xxl);
@@ -105,6 +102,8 @@
   border-radius: var(--theme-radius-sm);
   overflow: hidden;
   flex-shrink: 0;
+  float: left;
+  margin-right: 20rpx;
 }
 
 .vehicle-card__preview-image {
@@ -115,12 +114,7 @@
 
 /* 右侧信息区域 */
 .vehicle-card__info-container {
-  height: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
-  justify-content: space-around;
 }
 
 /* 第一行：品牌+车系+款式 */
@@ -168,6 +162,8 @@
   justify-content: space-between;
   gap: var(--theme-spacing-lg);
   overflow: hidden;
+  flex-shrink: 0;
+  height: 48rpx;
 }
 
 .vehicle-card__price {

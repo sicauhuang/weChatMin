@@ -11,11 +11,11 @@
     height: calc(100vh - 100rpx);
 }
 
-.vehicles-content{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+.vehicles-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 /* ==========================================================================
    登录提示样式
@@ -99,7 +99,7 @@
    ========================================================================== */
 
 .vehicles-search {
-    flex-shrink:0;
+    flex-shrink: 0;
     background-color: var(--theme-bg-card);
     padding: var(--theme-spacing-lg);
 }
@@ -109,7 +109,7 @@
    ========================================================================== */
 
 .vehicles-filter-bar {
-    flex-shrink:0;
+    flex-shrink: 0;
     background-color: var(--theme-bg-card);
 }
 
@@ -330,6 +330,15 @@
 }
 .vehicle-filter-menu .van-dropdown-menu {
     box-shadow: none;
+}
+.vehicle-filter-menu .van-dropdown-menu__title--active {
+    color: var(--theme-color-primary);
+}
+.vehicle-filter-menu .van-dropdown-menu__item:first-child {
+    flex: 1 0 100rpx;
+}
+.vehicle-filter-menu .van-dropdown-item__option--active .van-dropdown-item__title{
+    color: var(--theme-color-primary-light);
 }
 
 .van-dropdown-menu__bar {

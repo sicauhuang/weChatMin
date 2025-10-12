@@ -108,47 +108,11 @@ Page({
         isLoggedIn: false
     },
 
-    /**
-     * 计算属性
-     */
-    computed: {
-        // 是否有激活的筛选条件
-        hasActiveFilters() {
-            if (!this.data || !this.data.filterConditions) {
-                return false;
-            }
-            const { brandInfo, ageRange, priceRange } = this.data.filterConditions;
-            return !!(
-                brandInfo.brandName ||
-                (ageRange.type && ageRange.type !== 'unlimited') ||
-                (priceRange.type && priceRange.type !== 'unlimited')
-            );
-        },
-
-        // 车龄显示文本
-        ageDisplayText() {
-            if (!this.data || !this.data.filterConditions) {
-                return '';
-            }
-            return this.getAgeDisplayText(this.data.filterConditions.ageRange);
-        },
-
-        // 价格显示文本
-        priceDisplayText() {
-            if (!this.data || !this.data.filterConditions) {
-                return '';
-            }
-            return this.getPriceDisplayText(this.data.filterConditions.priceRange);
-        }
-    },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-        // 从本地存储读取筛选条件（先初始化数据）
-        this.loadFilterConditionsFromStorage();
-
         // 初始化计算属性
         this.updateComputedData();
 
@@ -422,10 +386,23 @@ Page({
             return;
         }
 
+        const { brandInfo, ageRange, priceRange } = this.data.filterConditions;
+
+        // 直接计算是否有激活的筛选条件
+        const hasActiveFilters = !!(
+            brandInfo.brandName ||
+            (ageRange.type && ageRange.type !== 'unlimited') ||
+            (priceRange.type && priceRange.type !== 'unlimited')
+        );
+
+        // 直接计算显示文本
+        const ageDisplayText = this.getAgeDisplayText(ageRange);
+        const priceDisplayText = this.getPriceDisplayText(priceRange);
+
         this.setData({
-            hasActiveFilters: this.computed.hasActiveFilters(),
-            ageDisplayText: this.computed.ageDisplayText(),
-            priceDisplayText: this.computed.priceDisplayText()
+            hasActiveFilters,
+            ageDisplayText,
+            priceDisplayText
         });
     },
 
@@ -459,34 +436,10 @@ Page({
     },
 
     /**
-     * 本地存储相关
-     */
-    saveFilterConditionsToStorage() {
-        try {
-            wx.setStorageSync('vehicles_filter_conditions', this.data.filterConditions);
-        } catch (e) {
-            console.error('保存筛选条件失败:', e);
-        }
-    },
-
-    loadFilterConditionsFromStorage() {
-        try {
-            const filterConditions = wx.getStorageSync('vehicles_filter_conditions');
-            if (filterConditions) {
-                this.setData({ filterConditions });
-                this.updateComputedData();
-            }
-        } catch (e) {
-            console.error('读取筛选条件失败:', e);
-        }
-    },
-
-    /**
      * 搜索相关事件
      */
     onSearch() {
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     onSearchChange(e) {
@@ -500,7 +453,6 @@ Page({
             'filterConditions.keyword': ''
         });
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     /**
@@ -511,7 +463,6 @@ Page({
             'filterConditions.sortType': e.detail
         });
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     /**
@@ -578,7 +529,6 @@ Page({
         });
         this.updateComputedData();
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
 
         // 关闭筛选下拉面板
         this.selectComponent('#vehicleDropdownMenu').close();
@@ -601,7 +551,6 @@ Page({
         });
         this.updateComputedData();
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     /**
@@ -668,7 +617,6 @@ Page({
         });
         this.updateComputedData();
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
 
         // 关闭筛选下拉面板
         this.selectComponent('#vehicleDropdownMenu').close();
@@ -691,7 +639,6 @@ Page({
         });
         this.updateComputedData();
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     /**
@@ -721,7 +668,6 @@ Page({
         });
         this.updateComputedData();
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     /**
@@ -807,7 +753,6 @@ Page({
         });
         this.updateComputedData();
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     onVehiclePickerCancel() {
@@ -831,7 +776,6 @@ Page({
         });
         this.updateComputedData();
         this.loadVehicleList(true);
-        this.saveFilterConditionsToStorage();
     },
 
     /**

@@ -88,6 +88,11 @@ module.exports = {
         return currentEnv.getApiUrl('/api/mp/file/query-upload-url');
     },
 
+    // 品牌车型数据接口
+    getBrandDropdownListUrl() {
+        return currentEnv.getApiUrl('/api/mp/car/query-brand-dropdown-list');
+    },
+
     // 切换到真机调试模式
     switchToLocalNetwork(ip) {
         if (ip) {

@@ -1,4 +1,6 @@
 // components/vehicle-picker/vehicle-picker.js
+const { queryBrandDropdownList } = require('../../utils/vehicle-api.js');
+
 Component({
     /**
      * 组件的属性列表
@@ -201,26 +203,95 @@ Component({
         loadVehicleData() {
             this.setData({ loading: true });
 
-            // 模拟API请求，一次性加载所有品牌和车系数据
-            setTimeout(() => {
-                this.setData({
-                    brandList: this.data.mockVehicleData,
-                    loading: false
-                });
+            // 调用真实接口获取品牌数据
+            queryBrandDropdownList()
+                .then((brandData) => {
+                    console.log('品牌数据接口返回:', brandData);
 
-                // 如果有默认值，设置默认选中状态
-                if (this.data.defaultValue && this.data.defaultValue.brandId) {
-                    this.setDefaultSelection();
-                } else {
-                    // 没有默认值时，默认选中第一个品牌
-                    this.setDefaultFirstBrand();
+                    // 适配数据结构，确保与组件期望的格式一致
+                    const adaptedBrandList = this.adaptBrandData(brandData || []);
+
+                    this.setData({
+                        brandList: adaptedBrandList,
+                        loading: false
+                    });
+
+                    // 如果有默认值，设置默认选中状态
+                    if (this.data.defaultValue && this.data.defaultValue.brandId) {
+                        this.setDefaultSelection();
+                    } else {
+                        // 没有默认值时，默认选中第一个品牌
+                        this.setDefaultFirstBrand();
+                    }
+
+                    console.log('车型数据加载完成:', {
+                        brandCount: this.data.brandList.length,
+                        firstBrand: this.data.brandList[0]?.brandName
+                    });
+                })
+                .catch((error) => {
+                    console.error('加载品牌数据失败:', error);
+
+                    // 设置默认选中状态
+                    if (this.data.defaultValue && this.data.defaultValue.brandId) {
+                        this.setDefaultSelection();
+                    } else {
+                        this.setDefaultFirstBrand();
+                    }
+
+                    // 显示错误提示（可选，因为request.js已经处理了错误提示）
+                    wx.showToast({
+                        title: '加载品牌数据失败，使用默认数据',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                });
+        },
+        /**
+         * 适配品牌数据结构
+         * 将接口返回的数据格式适配为组件期望的格式
+         */
+        adaptBrandData(brandData) {
+            if (!Array.isArray(brandData)) {
+                console.warn('品牌数据格式异常，返回空数组');
+                return [];
+            }
+
+            return brandData.map((brand) => {
+                // 适配品牌数据结构
+                const adaptedBrand = {
+                    brandId: brand.brandId || brand.brandName, // 使用brandId，如果没有则使用brandName
+                    brandName: brand.brandName || '',
+                    brandLogo: brand.brandLogo || '', // 品牌logo
+                    seriesList: []
+                };
+
+                // 适配车系数据
+                if (Array.isArray(brand.seriesList)) {
+                    adaptedBrand.seriesList = brand.seriesList.map((series) => {
+                        const adaptedSeries = {
+                            seriesId: series.seriesId || series.seriesName, // 使用seriesId，如果没有则使用seriesName
+                            seriesName: series.seriesName || '',
+                            modelList: []
+                        };
+
+                        // 适配车型数据
+                        if (Array.isArray(series.modelList)) {
+                            adaptedSeries.modelList = series.modelList.map((model) => ({
+                                modelId: model.modelId, // 接口返回的是number类型
+                                modelName: model.modelName || model.variant || '', // 款式名称
+                                brand: model.brand || brand.brandName, // 品牌
+                                series: model.series || series.seriesName, // 车系
+                                variant: model.variant || model.modelName // 款式
+                            }));
+                        }
+
+                        return adaptedSeries;
+                    });
                 }
 
-                console.log('车型数据加载完成:', {
-                    brandCount: this.data.brandList.length,
-                    firstBrand: this.data.brandList[0]?.brandName
-                });
-            }, 300); // 缩短加载时间
+                return adaptedBrand;
+            });
         },
 
         /**
@@ -292,8 +363,10 @@ Component({
                 brandName: brand.brandName,
                 seriesName: series.seriesName,
                 modelName: model.modelName,
-                modelYear: model.modelYear
+                variant: model.variant
             });
+
+            // 构造回调数据，适配接口数据结构
             const result = {
                 brandInfo: {
                     brandId: brand.brandId,
@@ -306,12 +379,14 @@ Component({
                 modelInfo: {
                     modelId: model.modelId,
                     modelName: model.modelName,
-                    modelYear: model.modelYear,
-                    price: model.price
+                    brand: model.brand || brand.brandName,
+                    series: model.series || series.seriesName,
+                    variant: model.variant || model.modelName
                 },
-                displayText: `${series.seriesName} ${model.modelName} ${model.modelYear}`,
+                displayText: `${brand.brandName} ${series.seriesName} ${model.modelName}`,
                 modelId: model.modelId
             };
+
             // 触发确认事件
             this.triggerEvent('onConfirm', result);
             setTimeout(() => {
@@ -341,7 +416,7 @@ Component({
                 (m) => m.modelId === selectedModelId
             );
 
-            // 构造回调数据
+            // 构造回调数据，适配接口数据结构
             const result = {
                 brandInfo: {
                     brandId: selectedBrand.brandId,
@@ -354,10 +429,11 @@ Component({
                 modelInfo: {
                     modelId: selectedModel.modelId,
                     modelName: selectedModel.modelName,
-                    modelYear: selectedModel.modelYear,
-                    price: selectedModel.price
+                    brand: selectedModel.brand || selectedBrand.brandName,
+                    series: selectedModel.series || selectedSeries.seriesName,
+                    variant: selectedModel.variant || selectedModel.modelName
                 },
-                displayText: `${selectedSeries.seriesName} ${selectedModel.modelName} ${selectedModel.modelYear}`,
+                displayText: `${selectedBrand.brandName} ${selectedSeries.seriesName} ${selectedModel.modelName}`,
                 modelId: selectedModel.modelId
             };
 

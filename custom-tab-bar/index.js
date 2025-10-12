@@ -12,7 +12,7 @@ Component({
             {
                 pagePath: '/pages/vehicles/vehicles',
                 iconClass: 'icon-cheyuan',
-                text: '车源'
+                text: '买车'
             },
             {
                 pagePath: '/pages/mock-tickets/mock-tickets',

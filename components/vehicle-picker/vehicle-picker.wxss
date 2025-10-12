@@ -93,6 +93,7 @@
   font-size: var(--theme-font-size-lg);
   font-weight: var(--theme-font-weight-medium);
   color: var(--theme-text-primary);
+  margin-right: 80rpx;
 }
 
 .header-right {

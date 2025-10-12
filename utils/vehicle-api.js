@@ -2,7 +2,7 @@
  * 车源相关API接口
  */
 
-const { post } = require('./request.js');
+const { get, post } = require('./request.js');
 
 /**
  * 查询在售车辆列表
@@ -60,8 +60,21 @@ function cancelFavorCar(carId) {
     );
 }
 
+/**
+ * 查询品牌下拉列表
+ * 获取品牌、车系、车型的树形结构数据
+ * @returns {Promise} 品牌树形数据列表
+ */
+function queryBrandDropdownList() {
+    return get('/api/mp/car/query-brand-dropdown-list', {}, {
+        showLoading: false,
+        showErrorToast: true
+    });
+}
+
 module.exports = {
     queryOnSaleCarPage,
     favorCar,
-    cancelFavorCar
+    cancelFavorCar,
+    queryBrandDropdownList
 };
