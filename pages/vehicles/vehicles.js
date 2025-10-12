@@ -44,7 +44,7 @@ Page({
         // 分页信息
         pagination: {
             pageNum: 1,
-            pageSize: 20,
+            pageSize: 50,
             total: 0,
             baseId: null
         },
@@ -97,11 +97,11 @@ Page({
 
         // 排序选项映射
         sortTypeMap: {
-            'SMART': '智能排序',
-            'LATEST_PUBLISHED': '最新上架',
-            'LOWEST_PRICE': '价格最低',
-            'HIGHEST_PRICE': '价格最高',
-            'SHORTEST_AGE': '车龄最短'
+            SMART: '智能排序',
+            LATEST_PUBLISHED: '最新上架',
+            LOWEST_PRICE: '价格最低',
+            HIGHEST_PRICE: '价格最高',
+            SHORTEST_AGE: '车龄最短'
         },
 
         // 登录状态
@@ -240,7 +240,8 @@ Page({
         console.log('vehicles: 请求车辆列表参数:', params);
 
         // 调用真实API
-        vehicleApi.queryOnSaleCarPage(params)
+        vehicleApi
+            .queryOnSaleCarPage(params)
             .then((response) => {
                 console.log('vehicles: 车辆列表响应:', response);
 
@@ -251,7 +252,7 @@ Page({
                 const processedList = this.processVehicleData(list);
 
                 // 计算是否还有更多数据
-                const hasMore = (pageNum * pageSize) < total;
+                const hasMore = pageNum * pageSize < total;
 
                 if (refresh) {
                     this.setData({
@@ -365,7 +366,7 @@ Page({
      * 处理车辆数据格式
      */
     processVehicleData(vehicleList) {
-        return vehicleList.map(vehicle => {
+        return vehicleList.map((vehicle) => {
             // 转换数据格式以适配car-card组件
             return {
                 // 基础ID字段，car-card组件需要carId字段
@@ -404,9 +405,10 @@ Page({
 
                 // 图片信息
                 imageUrlList: vehicle.imageUrlList,
-                previewImage: vehicle.imageUrlList && vehicle.imageUrlList.length > 0
-                    ? vehicle.imageUrlList[0].fileUrl
-                    : '/assets/imgs/logo.png'
+                previewImage:
+                    vehicle.imageUrlList && vehicle.imageUrlList.length > 0
+                        ? vehicle.imageUrlList[0].fileUrl
+                        : '/assets/imgs/logo.png'
             };
         });
     },
@@ -902,6 +904,5 @@ Page({
                 });
             }
         });
-    },
-
+    }
 });

@@ -11,7 +11,7 @@
         "van-loading": "/@vant/weapp/loading/index",
         "van-empty": "/@vant/weapp/empty/index"
     },
-    "navigationBarTitleText": "车源",
+    "navigationBarTitleText": "买车",
     "enablePullDownRefresh": true,
     "onReachBottomDistance": 50
 }

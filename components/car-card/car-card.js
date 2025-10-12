@@ -50,7 +50,7 @@ Component({
          */
         formatPrice(price) {
             if (!price) return '面议';
-            return `${price.toFixed(1)}万`;
+            return `${price.toFixed(2)}万`;
         },
 
         /**
