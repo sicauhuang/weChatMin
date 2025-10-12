@@ -80,7 +80,10 @@ Page({
         try {
             // 处理图片URL - 取第一个图片或使用默认图片
             let previewImage = '/assets/imgs/logo.png';
-            if (Array.isArray(backendCarData.imageUrlList) && backendCarData.imageUrlList.length > 0) {
+            if (
+                Array.isArray(backendCarData.imageUrlList) &&
+                backendCarData.imageUrlList.length > 0
+            ) {
                 const firstImage = backendCarData.imageUrlList[0];
                 if (firstImage && typeof firstImage === 'object' && firstImage.fileUrl) {
                     previewImage = firstImage.fileUrl;
@@ -181,7 +184,7 @@ Page({
                         return null;
                     }
                 })
-                .filter(item => item !== null); // 过滤转换失败的数据
+                .filter((item) => item !== null); // 过滤转换失败的数据
 
             console.log('转换后数据统计:', {
                 转换成功数量: transformedList.length,
@@ -310,9 +313,9 @@ Page({
             console.log('转换后数据:', transformedData);
 
             // 数据去重处理
-            const existingIds = refresh ? [] : this.data.vehicleList.map(v => v.carId);
+            const existingIds = refresh ? [] : this.data.vehicleList.map((v) => v.carId);
             const filteredNewVehicles = transformedData.list.filter(
-                vehicle => !existingIds.includes(vehicle.carId)
+                (vehicle) => !existingIds.includes(vehicle.carId)
             );
 
             console.log('数据去重:', {
@@ -598,55 +601,41 @@ Page({
 
     /**
      * 处理收藏状态切换事件
+     * car-card组件已经处理了API调用，这里只需要更新本地数据
      */
     handleFavoriteToggle(e) {
-        const { vehicleData, isFavorited } = e.detail;
+        const { vehicleData, isFavorited, success } = e.detail;
 
-        if (!vehicleData || !vehicleData.carId) {
-            console.error('收藏操作缺少必要参数:', { vehicleData });
-            return;
-        }
-
-        console.log('收藏状态切换:', { carId: vehicleData.carId, isFavorited });
-
-        // 获取当前车辆列表
-        const vehicleList = [...this.data.vehicleList];
-        const vehicleIndex = vehicleList.findIndex(
-            (vehicle) => vehicle.carId === vehicleData.carId
-        );
-
-        if (vehicleIndex === -1) {
-            console.error('未找到对应车辆信息:', { carId: vehicleData.carId });
-            wx.showToast({
-                title: '操作失败',
-                icon: 'none',
-                duration: 1500
+        // 只在成功时更新本地数据
+        if (success && vehicleData && vehicleData.carId) {
+            console.log('car-selling: 更新本地收藏状态:', {
+                carId: vehicleData.carId,
+                isFavorited
             });
-            return;
+
+            // 获取当前车辆列表
+            const vehicleList = [...this.data.vehicleList];
+            const vehicleIndex = vehicleList.findIndex(
+                (vehicle) => vehicle.carId === vehicleData.carId
+            );
+
+            if (vehicleIndex !== -1) {
+                // 更新收藏状态
+                vehicleList[vehicleIndex].isFavorited = isFavorited;
+
+                // 更新数据
+                this.setData({
+                    vehicleList: vehicleList
+                });
+
+                console.log('car-selling: 本地数据更新成功');
+            } else {
+                console.warn('car-selling: 未找到对应车辆信息:', { carId: vehicleData.carId });
+            }
+        } else if (!success) {
+            console.log('car-selling: 收藏操作失败，不更新本地数据');
         }
-
-        // 更新收藏状态
-        vehicleList[vehicleIndex].isFavorited = isFavorited;
-
-        // 更新数据
-        this.setData({
-            vehicleList: vehicleList
-        });
-
-        // 显示反馈消息
-        const action = isFavorited ? '收藏' : '取消收藏';
-        console.log(`${action}成功:`, vehicleData.brand, vehicleData.series);
-
-        wx.showToast({
-            title: `${action}成功`,
-            icon: 'success',
-            duration: 1000
-        });
-
-        // TODO: 调用后端 API 更新收藏状态
-        // this.updateFavoriteStatus(vehicleData.carId, isFavorited);
     },
-
 
     /**
      * 处理车辆删除事件
@@ -989,6 +978,5 @@ Page({
         this.loadVehicleList(true).catch((error) => {
             console.error('重置过滤后加载失败:', error);
         });
-    },
-
+    }
 });

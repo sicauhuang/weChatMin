@@ -1,4 +1,6 @@
 // pages/vehicles/vehicles.js
+const vehicleApi = require('../../utils/vehicle-api.js');
+
 Page({
     /**
      * 页面的初始数据
@@ -91,69 +93,14 @@ Page({
         ageTitle: '车龄',
         priceTitle: '价格',
 
-        // Mock车辆数据
-        mockVehicleData: [
-            {
-                id: 'vehicle_001',
-                brand: '奔驰',
-                series: 'C级',
-                model: 'C200L',
-                year: '2023款',
-                licensePlate: '京A12345',
-                registrationDate: '2023-01',
-                mileage: 1.5,
-                color: '黑色',
-                transferCount: 0,
-                retailPrice: 32.98,
-                dealPrice: 30.5,
-                status: 'ON_SALE',
-                statusName: '在售',
-                isFavorited: false,
-                publishTime: '2024-01-15',
-                location: '北京',
-                previewImage: '/assets/imgs/logo.png'
-            },
-            {
-                id: 'vehicle_002',
-                brand: '宝马',
-                series: '3系',
-                model: '320Li',
-                year: '2022款',
-                licensePlate: '沪B67890',
-                registrationDate: '2022-06',
-                mileage: 2.8,
-                color: '白色',
-                transferCount: 1,
-                retailPrice: 28.9,
-                dealPrice: 26.5,
-                status: 'ON_SALE',
-                statusName: '在售',
-                isFavorited: true,
-                publishTime: '2024-01-14',
-                location: '上海',
-                previewImage: '/assets/imgs/logo.png'
-            },
-            {
-                id: 'vehicle_003',
-                brand: '奥迪',
-                series: 'A4L',
-                model: '40 TFSI',
-                year: '2021款',
-                licensePlate: '粤C11111',
-                registrationDate: '2021-12',
-                mileage: 3.2,
-                color: '银色',
-                transferCount: 0,
-                retailPrice: 25.8,
-                dealPrice: 23.8,
-                status: 'ON_SALE',
-                statusName: '在售',
-                isFavorited: false,
-                publishTime: '2024-01-13',
-                location: '深圳',
-                previewImage: '/assets/imgs/logo.png'
-            }
-        ]
+        // 排序选项映射
+        sortTypeMap: {
+            'SMART': '智能排序',
+            'LATEST_PUBLISHED': '最新上架',
+            'LOWEST_PRICE': '价格最低',
+            'HIGHEST_PRICE': '价格最高',
+            'SHORTEST_AGE': '车龄最短'
+        }
     },
 
     /**
@@ -274,115 +221,178 @@ Page({
             this.setData({ loadingMore: true });
         }
 
-        // 模拟API请求
-        setTimeout(() => {
-            const { mockVehicleData } = this.data;
-            const { pageNum, pageSize } = this.data.pagination;
+        // 构建请求参数
+        const params = this.buildApiParams();
+        
+        console.log('vehicles: 请求车辆列表参数:', params);
 
-            // 模拟筛选逻辑
-            let filteredData = this.applyFilters(mockVehicleData);
+        // 调用真实API
+        vehicleApi.queryOnSaleCarPage(params)
+            .then((response) => {
+                console.log('vehicles: 车辆列表响应:', response);
+                
+                // 处理响应数据
+                const { list = [], total = 0, pageNum, pageSize } = response;
+                
+                // 转换数据格式
+                const processedList = this.processVehicleData(list);
+                
+                // 计算是否还有更多数据
+                const hasMore = (pageNum * pageSize) < total;
+                
+                if (refresh) {
+                    this.setData({
+                        vehicleList: processedList,
+                        loading: false,
+                        hasMore,
+                        'pagination.total': total,
+                        'pagination.pageNum': pageNum + 1
+                    });
+                } else {
+                    this.setData({
+                        vehicleList: [...this.data.vehicleList, ...processedList],
+                        loadingMore: false,
+                        hasMore,
+                        'pagination.pageNum': pageNum + 1
+                    });
+                }
 
-            // 模拟排序
-            filteredData = this.applySorting(filteredData);
-
-            // 模拟分页
-            const startIndex = (pageNum - 1) * pageSize;
-            const endIndex = startIndex + pageSize;
-            const pageData = filteredData.slice(startIndex, endIndex);
-
-            const hasMore = endIndex < filteredData.length;
-
-            if (refresh) {
+                this.updateComputedData();
+            })
+            .catch((error) => {
+                console.error('vehicles: 车辆列表请求失败:', error);
+                
                 this.setData({
-                    vehicleList: pageData,
                     loading: false,
-                    hasMore,
-                    'pagination.total': filteredData.length
+                    loadingMore: false
                 });
-            } else {
-                this.setData({
-                    vehicleList: [...this.data.vehicleList, ...pageData],
-                    loadingMore: false,
-                    hasMore,
-                    'pagination.pageNum': pageNum + 1
-                });
-            }
-
-            this.updateComputedData();
-        }, 800);
+                
+                // 根据错误类型显示不同提示
+                if (error.code === 'NETWORK_ERROR') {
+                    wx.showToast({
+                        title: '网络连接失败',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                } else {
+                    wx.showToast({
+                        title: error.userMessage || '加载失败',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                }
+            });
     },
 
     /**
-     * 应用筛选条件
+     * 构建API请求参数
      */
-    applyFilters(data) {
-        if (!this.data || !this.data.filterConditions) {
-            return data;
+    buildApiParams() {
+        const { filterConditions, pagination } = this.data;
+        const { keyword, sortType, brandInfo, ageRange, priceRange } = filterConditions;
+        const { pageNum, pageSize } = pagination;
+        
+        const params = {
+            pageNum,
+            pageSize
+        };
+        
+        // 关键词搜索
+        if (keyword && keyword.trim()) {
+            params.keyword = keyword.trim();
         }
-
-        const { keyword, brandInfo, ageRange, priceRange } = this.data.filterConditions;
-
-        return data.filter((item) => {
-            // 关键词筛选
-            if (keyword) {
-                const searchText = `${item.brand} ${item.series} ${item.model}`.toLowerCase();
-                if (!searchText.includes(keyword.toLowerCase())) {
-                    return false;
-                }
+        
+        // 排序方式
+        if (sortType) {
+            params.sortType = sortType;
+        }
+        
+        // 品牌筛选
+        if (brandInfo.brandName) {
+            params.brand = brandInfo.brandName;
+        }
+        
+        // 车系筛选
+        if (brandInfo.seriesName) {
+            params.series = brandInfo.seriesName;
+        }
+        
+        // 款式筛选
+        if (brandInfo.modelName) {
+            params.variant = brandInfo.modelName;
+        }
+        
+        // 车龄筛选
+        if (ageRange.type && ageRange.type !== 'unlimited') {
+            if (ageRange.min !== undefined && ageRange.min > 0) {
+                params.startAge = ageRange.min;
             }
-
-            // 品牌筛选
-            if (brandInfo.brandName && item.brand !== brandInfo.brandName) {
-                return false;
+            if (ageRange.max !== undefined && ageRange.max < 999) {
+                params.endAge = ageRange.max;
             }
-
-            // 车系筛选
-            if (brandInfo.seriesName && item.series !== brandInfo.seriesName) {
-                return false;
+        }
+        
+        // 价格筛选
+        if (priceRange.type && priceRange.type !== 'unlimited') {
+            if (priceRange.min !== undefined && priceRange.min > 0) {
+                params.startPrice = priceRange.min;
             }
-
-            // 车龄筛选（这里简化处理，实际应该根据注册日期计算）
-            if (ageRange.type && ageRange.type !== 'unlimited') {
-                // 简化：根据里程数模拟车龄
-                const simulatedAge = Math.floor(item.mileage);
-                if (simulatedAge < ageRange.min || simulatedAge > ageRange.max) {
-                    return false;
-                }
+            if (priceRange.max !== undefined && priceRange.max < 999) {
+                params.endPrice = priceRange.max;
             }
-
-            // 价格筛选
-            if (priceRange.type && priceRange.type !== 'unlimited') {
-                if (item.retailPrice < priceRange.min || item.retailPrice > priceRange.max) {
-                    return false;
-                }
-            }
-
-            return true;
+        }
+        
+        return params;
+    },
+    
+    /**
+     * 处理车辆数据格式
+     */
+    processVehicleData(vehicleList) {
+        return vehicleList.map(vehicle => {
+            // 转换数据格式以适配car-card组件
+            return {
+                // 基础ID字段，car-card组件需要carId字段
+                id: vehicle.id,
+                carId: vehicle.id,
+                
+                // 车辆基本信息
+                name: vehicle.name || `${vehicle.brand} ${vehicle.series} ${vehicle.variant}`,
+                brand: vehicle.brand,
+                series: vehicle.series,
+                model: vehicle.variant, // car-card组件使用model字段，接口返回的是variant
+                variant: vehicle.variant,
+                
+                // 车辆详细信息
+                age: vehicle.age,
+                registrationDate: vehicle.licenseDate, // car-card组件期望registrationDate字段
+                licenseDate: vehicle.licenseDate, // 保留原字段名
+                mileage: vehicle.mileage,
+                color: vehicle.color,
+                transferCount: vehicle.transferCount,
+                
+                // 价格信息，car-card组件期望retailPrice字段
+                retailPrice: vehicle.sellPrice, // car-card组件使用retailPrice字段
+                sellPrice: vehicle.sellPrice, // 保留原字段名
+                floorPrice: vehicle.floorPrice,
+                
+                // 状态和收藏信息
+                status: vehicle.status,
+                statusName: vehicle.statusName,
+                isFavorited: vehicle.favorStatus === 'FAVORITE',
+                favorStatus: vehicle.favorStatus,
+                
+                // 时间和联系信息
+                publishTime: vehicle.publishTime,
+                contactPhone: vehicle.contactPhone,
+                
+                // 图片信息
+                imageUrlList: vehicle.imageUrlList,
+                previewImage: vehicle.imageUrlList && vehicle.imageUrlList.length > 0 
+                    ? vehicle.imageUrlList[0].fileUrl 
+                    : '/assets/imgs/logo.png'
+            };
         });
-    },
-
-    /**
-     * 应用排序条件
-     */
-    applySorting(data) {
-        if (!this.data || !this.data.filterConditions) {
-            return data;
-        }
-
-        const { sortType } = this.data.filterConditions;
-
-        switch (sortType) {
-            case 'LATEST_PUBLISHED':
-                return data.sort((a, b) => new Date(b.publishTime) - new Date(a.publishTime));
-            case 'LOWEST_PRICE':
-                return data.sort((a, b) => a.retailPrice - b.retailPrice);
-            case 'HIGHEST_PRICE':
-                return data.sort((a, b) => b.retailPrice - a.retailPrice);
-            case 'SHORTEST_AGE':
-                return data.sort((a, b) => a.mileage - b.mileage);
-            default:
-                return data; // 智能排序保持原顺序
-        }
     },
 
     /**
@@ -551,6 +561,9 @@ Page({
         this.updateComputedData();
         this.loadVehicleList(true);
         this.saveFilterConditionsToStorage();
+        
+        // 关闭筛选下拉面板
+        this.selectComponent('#vehicleDropdownMenu').close();
     },
 
     onResetAge() {
@@ -638,6 +651,9 @@ Page({
         this.updateComputedData();
         this.loadVehicleList(true);
         this.saveFilterConditionsToStorage();
+        
+        // 关闭筛选下拉面板
+        this.selectComponent('#vehicleDropdownMenu').close();
     },
 
     onResetPrice() {
@@ -779,5 +795,87 @@ Page({
         this.updateComputedData();
         this.loadVehicleList(true);
         this.saveFilterConditionsToStorage();
+    },
+
+    /**
+     * 车辆卡片点击事件
+     * @param {Object} event 事件对象
+     */
+    onVehicleCardTap(event) {
+        const { vehicleData } = event.detail;
+        if (!vehicleData || !vehicleData.id) {
+            console.error('车辆数据无效:', vehicleData);
+            return;
+        }
+
+        console.log('点击车辆卡片:', vehicleData.id);
+
+        // 跳转到车辆详情页
+        wx.navigateTo({
+            url: `/pages/car-detail/car-detail?carId=${vehicleData.id}`,
+            success: () => {
+                console.log('跳转到车辆详情页面成功:', vehicleData.id);
+            },
+            fail: (error) => {
+                console.error('跳转到车辆详情页面失败:', error);
+                wx.showToast({
+                    title: '页面跳转失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            }
+        });
+    },
+
+    /**
+     * 车辆收藏状态切换
+     * 使用独立的收藏API，不依赖car-card组件的实现
+     * @param {Object} event 事件对象
+     */
+    onVehicleFavoriteToggle(event) {
+        const { vehicleData, isFavorited } = event.detail;
+        
+        if (!vehicleData || !vehicleData.id) {
+            console.error('vehicles: 车辆数据无效');
+            return;
+        }
+        
+        console.log('vehicles: 切换收藏状态:', { carId: vehicleData.id, isFavorited });
+        
+        // 调用收藏API
+        const apiCall = isFavorited ? vehicleApi.favorCar(vehicleData.id) : vehicleApi.cancelFavorCar(vehicleData.id);
+        
+        apiCall
+            .then(() => {
+                console.log('vehicles: 收藏操作成功');
+                
+                // 更新本地数据
+                const vehicleList = [...this.data.vehicleList];
+                const vehicleIndex = vehicleList.findIndex((vehicle) => vehicle.id === vehicleData.id);
+                
+                if (vehicleIndex !== -1) {
+                    vehicleList[vehicleIndex].isFavorited = isFavorited;
+                    this.setData({ vehicleList });
+                }
+                
+                // 显示成功提示
+                wx.showToast({
+                    title: isFavorited ? '已收藏' : '已取消收藏',
+                    icon: 'success',
+                    duration: 1500
+                });
+            })
+            .catch((error) => {
+                console.error('vehicles: 收藏操作失败:', error);
+                
+                // 收藏失败，恢复原状态（需要通知car-card组件）
+                // 这里可以通过事件或其他方式通知组件恢复状态
+                
+                wx.showToast({
+                    title: error.userMessage || '操作失败',
+                    icon: 'none',
+                    duration: 2000
+                });
+            });
     }
 });

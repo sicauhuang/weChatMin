@@ -55,8 +55,8 @@ module.exports = {
 
     // 上传配置
     uploadConfig: {
-        maxFileSize: 5 * 1024 * 1024,     // 5MB
-        maxFileCount: 5,                   // 最多5个文件
+        maxFileSize: 5 * 1024 * 1024, // 5MB
+        maxFileCount: 5, // 最多5个文件
         supportedTypes: ['png', 'jpg', 'jpeg'],
         corsOrigin: 'https://cos.ap-beijing.myqcloud.com'
     },

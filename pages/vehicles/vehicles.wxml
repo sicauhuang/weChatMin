@@ -16,7 +16,7 @@
 
   <!-- 筛选工具栏 -->
   <view class="vehicles-filter-bar">
-    <van-dropdown-menu class="vehicle-filter-menu">
+    <van-dropdown-menu id="vehicleDropdownMenu" class="vehicle-filter-menu">
       <!-- 排序方式 -->
       <van-dropdown-item
         value="{{filterConditions.sortType}}"
@@ -33,6 +33,7 @@
 
       <!-- 车龄筛选 -->
       <van-dropdown-item
+        id="ageDropdownItem"
         title="{{ageTitle}}"
         bind:open="onAgeDropdownOpen"
         bind:close="onAgeDropdownClose"
@@ -92,6 +93,7 @@
 
       <!-- 价格筛选 -->
       <van-dropdown-item
+        id="priceDropdownItem"
         title="{{priceTitle}}"
         bind:open="onPriceDropdownOpen"
         bind:close="onPriceDropdownClose"

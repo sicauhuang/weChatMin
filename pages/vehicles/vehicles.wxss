@@ -34,7 +34,7 @@
 .vehicles-age-panel {
     padding: var(--theme-spacing-xxl);
     background-color: var(--theme-bg-card);
-    max-height: 500rpx;
+    max-height: 600rpx;
     overflow-y: auto;
 }
 
@@ -46,14 +46,16 @@
 }
 
 .vehicles-age-option {
-    flex: 0 0 calc(50% - var(--theme-spacing-md) / 2);
-    padding: var(--theme-spacing-lg);
+    flex: 0 0 110rpx; /* 改为auto自适应宽度 */
+    min-width: fit-content; /* 确保最小宽度适应内容 */
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xl); /* 左右增加padding */
     border: 2rpx solid var(--theme-border-light);
-    border-radius: var(--theme-radius-sm);
+    border-radius: var(--theme-radius-xxl);
     text-align: center;
     font-size: var(--theme-font-size-sm);
     color: var(--theme-text-primary);
     background-color: var(--theme-bg-card);
+    white-space: nowrap; /* 防止文字换行 */
     transition: all var(--theme-duration-base) var(--theme-ease-out);
 }
 
@@ -97,7 +99,7 @@
 .vehicles-price-panel {
     padding: var(--theme-spacing-xxl);
     background-color: var(--theme-bg-card);
-    max-height: 500rpx;
+    max-height: 600rpx;
     overflow-y: auto;
 }
 
@@ -109,14 +111,16 @@
 }
 
 .vehicles-price-option {
-    flex: 0 0 calc(50% - var(--theme-spacing-md) / 2);
-    padding: var(--theme-spacing-lg);
+    flex: 0 0 110rpx; /* 改为auto自适应宽度 */
+    min-width: fit-content; /* 确保最小宽度适应内容 */
+    padding: var(--theme-spacing-lg) var(--theme-spacing-xl); /* 左右增加padding */
     border: 2rpx solid var(--theme-border-light);
-    border-radius: var(--theme-radius-sm);
+    border-radius: var(--theme-radius-xxl);
     text-align: center;
     font-size: var(--theme-font-size-sm);
     color: var(--theme-text-primary);
     background-color: var(--theme-bg-card);
+    white-space: nowrap; /* 防止文字换行 */
     transition: all var(--theme-duration-base) var(--theme-ease-out);
 }
 
@@ -237,7 +241,9 @@
 @media (max-width: 375px) {
     .vehicles-age-option,
     .vehicles-price-option {
-        flex: 0 0 100%;
+        /* 小屏幕保持自适应宽度，但减少padding */
+        padding-left: var(--theme-spacing-lg);
+        padding-right: var(--theme-spacing-lg);
     }
 
     .vehicles-filter-tags {
@@ -250,7 +256,9 @@
 @media (min-width: 376px) and (max-width: 414px) {
     .vehicles-age-option,
     .vehicles-price-option {
-        flex: 0 0 calc(33.333% - var(--theme-spacing-md) * 2 / 3);
+        /* 中等屏幕保持自适应宽度 */
+        padding-left: var(--theme-spacing-xl);
+        padding-right: var(--theme-spacing-xl);
     }
 }
 
@@ -258,7 +266,9 @@
 @media (min-width: 415px) {
     .vehicles-age-option,
     .vehicles-price-option {
-        flex: 0 0 calc(25% - var(--theme-spacing-md) * 3 / 4);
+        /* 大屏幕保持自适应宽度，可以适当增加padding */
+        padding-left: var(--theme-spacing-xxl);
+        padding-right: var(--theme-spacing-xxl);
     }
 }
 
