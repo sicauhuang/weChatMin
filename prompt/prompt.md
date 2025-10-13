@@ -1836,3 +1836,92 @@ export interface CarModelResponse {
 #### 模拟票页面优化
 
 在模拟票右上角显示一个无边框的按钮，功能是获取主页查询的系统信息中的模拟考试电话，点击按钮后直接拨打电话。
+
+#### vehicles页面品牌筛选组件调整
+
+在tabBar的vehicles页面中，筛选的品牌使用的vehicle-picker组件，但是在业务上不适用，需要基于vehicle-picker组件进行改造。
+
+- 需求：
+为了不影响其他使用了vehicle-picker的页面，现在在components目录中，我基于vehicle-picker组件代码copy了一份新的组件为series-picker，在vehicles页面中的品牌下拉后续将替换为series-picker。
+1、series-picker组件的功能与vehicle-picker组件基本相同，也是左侧是品牌菜单，右侧是选项，但不同的时：右侧不在显示款式，只显示车型。
+2、车型作为右侧的选项，需要支持多选
+3、在headers中需要在右侧添加确认按钮，在点击确认按钮后，将选中的车型信息返回给父组件。
+4、选中的车型选项，再次点击后允许取消选择。
+
+逻辑：
+1、数据来源保持不变，只需要基于当前数据模型进行UI与功能的调整
+2、接口定义参考：/Users/xiaofeng/WeChatProjects/miniprogram-1/prompt/fileUpload.md
+  接口路径是：/api/mp/car/query-brand-dropdown-list
+  章节是：品牌车型组件数据接口对接
+
+vehicles页面查询列表参数更新：
+- request：
+```
+/**
+ * 分页查询请求参数。
+ *
+ * MpQueryOnSaleCarPageRequest
+ */
+export interface Request {
+    /**
+     * 基准id，只查询id小于等于基准id的数据，防止分页查询到重复数据。
+     * 第一页数据时，baseId传null，接口返回第一页数据的第一个id。
+     * 非第一页数据时，传入第一页数据接口返回的baseId，接口直接原值返回baseId。
+     */
+    baseId?: number;
+    /**
+     * 品牌筛选。可以为空。
+     */
+    brand?: string;
+    /**
+     * 车龄范围筛选-结束年龄，单位：年。可以为空。
+     */
+    endAge?: number;
+    /**
+     * 价格范围筛选-结束价格，单位：万元。可以为空。
+     */
+    endPrice?: number;
+    /**
+     * 关键词搜索（名称、品牌、车系、款式）。可以为空。
+     */
+    keyword?: string;
+    /**
+     * 页码，从1开始。
+     */
+    pageNum?: number;
+    /**
+     * 每页数量，默认50条。
+     */
+    pageSize?: number;
+    /**
+     * 批量筛选车系。可以为空。
+     */
+    seriesList?: string[];
+    /**
+     *
+     * 排序方式：LATEST_PUBLISHED-最新上架，LOWEST_PRICE-价格最低，HIGHEST_PRICE-价格最高，SHORTEST_AGE-车龄最短，SMART-智能排序。默认：LATEST_PUBLISHED。
+     */
+    sortType?: SortType;
+    /**
+     * 车龄范围筛选-开始年龄，单位：年。可以为空。
+     */
+    startAge?: number;
+    /**
+     * 价格范围筛选-开始价格，单位：万元。可以为空。
+     */
+    startPrice?: number;
+    [property: string]: any;
+}
+
+/**
+ *
+ * 排序方式：LATEST_PUBLISHED-最新上架，LOWEST_PRICE-价格最低，HIGHEST_PRICE-价格最高，SHORTEST_AGE-车龄最短，SMART-智能排序。默认：LATEST_PUBLISHED。
+ */
+export enum SortType {
+    HighestPrice = "HIGHEST_PRICE",
+    LatestPublished = "LATEST_PUBLISHED",
+    LowestPrice = "LOWEST_PRICE",
+    ShortestAge = "SHORTEST_AGE",
+    Smart = "SMART",
+}
+```

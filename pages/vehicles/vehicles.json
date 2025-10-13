@@ -1,7 +1,7 @@
 {
     "usingComponents": {
         "car-card": "/components/car-card/car-card",
-        "vehicle-picker": "/components/vehicle-picker/vehicle-picker",
+        "series-picker": "/components/series-picker/series-picker",
         "van-search": "/@vant/weapp/search/index",
         "van-dropdown-menu": "/@vant/weapp/dropdown-menu/index",
         "van-dropdown-item": "/@vant/weapp/dropdown-item/index",
@@ -12,6 +12,6 @@
         "van-empty": "/@vant/weapp/empty/index"
     },
     "navigationBarTitleText": "买车",
-    "enablePullDownRefresh": true,
+    "enablePullDownRefresh": false,
     "onReachBottomDistance": 50
 }

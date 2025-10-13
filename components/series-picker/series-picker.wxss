@@ -1,0 +1,447 @@
+/* series-picker.wxss */
+
+/*
+ * 样式隔离保护：确保组件样式完全隔离，避免外部样式污染
+ * 使用 styleIsolation: "isolated" 配置 + 样式重置 + 命名空间保护
+ */
+
+/* 为Vant组件添加特定前缀避免样式冲突 */
+.series-picker-popup .van-popup {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-family: inherit !important;
+    /* 重置可能被外部影响的样式 */
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* 强化Vant组件样式隔离 */
+.series-picker-cell-group,
+.series-picker-cell-group.van-cell-group {
+    margin: 0 !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    /* 重置外部可能的样式污染 */
+    position: static !important;
+    z-index: auto !important;
+    transform: none !important;
+    /* Vant组件的CSS变量覆盖 */
+    --van-cell-group-background-color: transparent !important;
+    --van-cell-border-color: var(--theme-border-light) !important;
+    --van-cell-group-inset-padding: 0 !important;
+    --van-cell-group-inset-border-radius: 0 !important;
+}
+
+.series-picker-cell-group .van-cell-group__title {
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: transparent !important;
+    border: none !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+}
+
+.series-picker-cell-group .van-cell-group__title::before {
+    display: none !important;
+}
+
+.series-picker-item,
+.series-picker-item.van-cell {
+    padding: 0 !important;
+    background-color: var(--theme-bg-white) !important;
+    border-bottom: 1rpx solid var(--theme-border-light) !important;
+    margin: 0 !important;
+    border-radius: var(--theme-radius-sm) !important;
+    margin-bottom: var(--theme-spacing-xs) !important;
+    border: 1px solid transparent !important;
+    transition: all var(--theme-duration-base) var(--theme-ease-out) !important;
+    box-shadow: none !important;
+}
+
+.series-picker-item:last-child,
+.series-picker-item.van-cell:last-child {
+    border-bottom: none !important;
+}
+
+.series-picker-item .van-cell__title {
+    color: var(--theme-text-primary) !important;
+    font-weight: var(--theme-font-weight-normal) !important;
+    margin: 0 !important;
+}
+
+.series-picker-item .van-cell__value {
+    color: var(--theme-text-secondary) !important;
+}
+
+.series-picker-item .van-cell__right-icon {
+    color: var(--theme-text-tertiary) !important;
+}
+
+/* 组件样式命名空间：series-picker- */
+.series-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 88rpx;
+    background: var(--theme-bg-white);
+    position: relative;
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-right: var(--theme-font-size-xl);
+}
+
+.series-picker-header-left {
+    width: 88rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.series-picker-header-title {
+    text-align: center;
+    font-size: var(--theme-font-size-lg);
+    font-weight: var(--theme-font-weight-medium);
+    color: var(--theme-text-primary);
+    /* 防止外部样式污染 */
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.series-picker-header-right {
+    width: 88rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+    margin-right: 40rpx;
+}
+
+.series-picker-confirm-btn {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-color-primary);
+    font-weight: var(--theme-font-weight-medium);
+    padding: var(--theme-spacing-xs) var(--theme-spacing-sm);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.series-picker-content {
+    display: flex;
+    height: calc(100% - 88rpx);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 左侧品牌菜单 - 添加命名空间前缀 */
+.series-picker-brand-menu {
+    width: 30%;
+    background: var(--theme-bg-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--theme-spacing-lg);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.series-picker-brand-item {
+    width: 100%;
+    height: 88rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 0;
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.series-picker-brand-item.active {
+    background: var(--theme-bg-white);
+    position: relative;
+}
+
+.series-picker-vehicle-brand-wrapper {
+    width: 100%;
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.series-picker-brand-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6rpx;
+    height: 48rpx;
+    background: var(--theme-color-primary) !important;
+    border-radius: 0 var(--theme-radius-xs) var(--theme-radius-xs) 0;
+}
+
+.series-picker-brand-item.active .series-picker-brand-name {
+    color: var(--theme-color-primary);
+    font-weight: var(--theme-font-weight-medium);
+}
+
+.series-picker-brand-name {
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-text-secondary);
+    text-align: center;
+    transition: color var(--theme-duration-base) var(--theme-ease-out);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* 右侧车系列表 - 添加命名空间前缀 */
+.series-picker-series-list {
+    width: 70%;
+    background: var(--theme-bg-white);
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: var(--theme-spacing-lg);
+    padding-left: var(--theme-spacing-lg);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.series-picker-series-container {
+    width: 100%;
+    padding: 0 var(--theme-spacing-xl);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 选中状态提示 - 添加命名空间前缀 */
+.series-picker-selected-tip {
+    background: var(--theme-color-warning-light);
+    border: 1rpx solid var(--theme-color-warning);
+    border-radius: var(--theme-radius-sm);
+    padding: var(--theme-spacing-sm) var(--theme-spacing-md);
+    margin-bottom: var(--theme-spacing-lg);
+    font-size: var(--theme-font-size-sm);
+    color: var(--theme-color-warning-dark);
+    text-align: center;
+    font-weight: var(--theme-font-weight-medium);
+    /* 防止外部样式污染 */
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.series-picker-series-item {
+    border-radius: var(--theme-radius-sm) !important;
+    margin-bottom: var(--theme-spacing-xs) !important;
+    border: 1px solid transparent !important;
+    transition: all var(--theme-duration-base) var(--theme-ease-out) !important;
+    box-shadow: none !important;
+    /* 防止外部样式污染 */
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+}
+
+/* 去除van-cell-group的默认阴影效果 - 使用命名空间前缀 */
+.series-picker-series-container .van-cell-group {
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+    /* 覆盖可能的Vant默认样式 */
+    --van-cell-group-background-color: transparent;
+    --van-cell-group-inset-padding: 0;
+    --van-cell-group-inset-border-radius: 0;
+    --van-cell-group-inset-title-padding: 0;
+}
+
+/* 去除van-cell的默认阴影效果 - 使用命名空间前缀 */
+.series-picker-series-container .van-cell {
+    box-shadow: none !important;
+    border: none !important;
+    background: var(--theme-bg-white) !important;
+    /* 覆盖可能的Vant默认样式 */
+    --van-cell-background-color: var(--theme-bg-white);
+    --van-cell-border-color: transparent;
+    --van-cell-border-width: 0;
+}
+
+
+/* 普通状态样式 */
+.series-picker-cell-normal {
+    border-color: transparent !important;
+    background: var(--theme-bg-white) !important;
+    /* Vant组件CSS变量覆盖 */
+    --van-cell-background-color: var(--theme-bg-white) !important;
+    --van-cell-border-color: transparent !important;
+}
+
+.series-picker-cell-normal .van-cell__title {
+    color: var(--theme-text-primary) !important;
+    font-weight: var(--theme-font-weight-normal) !important;
+}
+
+
+/* 选中状态样式 - 使用custom-class */
+.series-picker-cell-selected {
+  border-color: var(--theme-color-primary-light) !important;
+  background: var(--theme-color-primary-light) !important;
+  position: relative !important;
+  /* Vant组件CSS变量覆盖 */
+  --van-cell-background-color: var(--theme-color-primary-light) !important;
+  --van-cell-border-color: var(--theme-color-primary-light) !important;
+}
+
+.series-picker-cell-selected .van-cell__title {
+  color: var(--theme-color-primary) !important;
+  font-weight: var(--theme-font-weight-medium) !important;
+}
+
+/* 保留原有的选择器作为备用 */
+.series-picker-series-item.selected {
+    border-color: var(--theme-color-primary-light) !important;
+    background: var(--theme-color-primary-light) !important;
+    position: relative;
+}
+
+.series-picker-series-item.selected .van-cell__title {
+    color: var(--theme-color-primary) !important;
+    font-weight: var(--theme-font-weight-medium) !important;
+}
+
+.series-picker-selected-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.series-picker-selected-icon-van-icon {
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+    font-size: 40rpx;
+}
+
+.series-picker-empty-tip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200rpx;
+    color: var(--theme-text-tertiary);
+    font-size: var(--theme-font-size-sm);
+    /* 防止外部样式污染 */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* 加载状态 - 使用命名空间前缀 */
+.series-picker-brand-menu .van-loading {
+    margin-top: var(--theme-spacing-xl);
+}
+
+/* 确定按钮样式 - 使用命名空间前缀 */
+.series-picker-header-right .van-button {
+    background: var(--theme-color-primary) !important;
+    border-color: var(--theme-color-primary) !important;
+    color: var(--theme-bg-white) !important;
+    font-size: var(--theme-font-size-sm) !important;
+    font-weight: var(--theme-font-weight-medium) !important;
+    border-radius: var(--theme-radius-sm) !important;
+    padding: var(--theme-spacing-xs) var(--theme-spacing-md) !important;
+    min-width: 120rpx !important;
+    height: 64rpx !important;
+}
+
+.series-picker-header-right .van-button--disabled {
+    background: var(--theme-bg-disabled) !important;
+    border-color: var(--theme-bg-disabled) !important;
+    color: var(--theme-text-disabled) !important;
+    opacity: 1 !important;
+}
+
+/* 点击反馈效果 - 使用命名空间前缀 */
+.series-picker-brand-item:active {
+    background: var(--theme-bg-active);
+}
+
+.series-picker-series-item:active {
+    background: var(--theme-bg-active) !important;
+}
+
+.series-picker-series-item.selected:active {
+    background: var(--theme-color-primary-active) !important;
+}
+
+/* 新增：custom-class的点击反馈效果 */
+.series-picker-cell-selected:active {
+    background: var(--theme-color-primary-active) !important;
+    --van-cell-background-color: var(--theme-color-primary-active) !important;
+}
+
+.series-picker-cell-normal:active {
+    background: var(--theme-bg-active) !important;
+    --van-cell-background-color: var(--theme-bg-active) !important;
+}
+
+/* 滚动条样式优化 - 使用命名空间前缀 */
+.series-picker-brand-menu::-webkit-scrollbar,
+.series-picker-series-list::-webkit-scrollbar {
+    width: 8rpx;
+}
+
+.series-picker-brand-menu::-webkit-scrollbar-thumb,
+.series-picker-series-list::-webkit-scrollbar-thumb {
+    background: var(--theme-border-light);
+    border-radius: var(--theme-radius-xs);
+}
+
+.series-picker-brand-menu::-webkit-scrollbar-track,
+.series-picker-series-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* 动画优化 - 使用命名空间前缀 */
+.series-picker-brand-item,
+.series-picker-series-item,
+.series-picker-selected-icon {
+    transition: all var(--theme-duration-base) var(--theme-ease-out);
+}

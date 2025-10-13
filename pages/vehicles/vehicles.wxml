@@ -1,12 +1,7 @@
 <!--pages/vehicles/vehicles.wxml-->
 <view class="vehicles-page">
-  <!-- 加载状态 -->
-  <view class="vehicles__loading" wx:if="{{loading && !isLoggedIn}}">
-    <text class="vehicles__loading-text">加载中...</text>
-  </view>
-
-  <!-- 未登录状态 -->
-  <view class="vehicles__login-prompt" wx:elif="{{!isLoggedIn && !loading}}">
+  <!-- 未登录状态 - 只在非初始化状态下显示 -->
+  <view class="vehicles__login-prompt" wx:if="{{!isLoggedIn}}">
     <view class="vehicles__login-card">
       <text class="iconfont icon-cheyuan vehicles__login-icon"></text>
       <text class="vehicles__login-text">登录后查看车源信息</text>
@@ -173,14 +168,15 @@
 
   <!-- 筛选条件回显 -->
   <view class="vehicles-filter-tags" wx:if="{{hasActiveFilters}}">
+
     <van-tag
-      wx:if="{{filterConditions.brandInfo.brandName}}"
+      wx:if="{{filterConditions.seriesFilter}}"
       type="primary"
       size="medium"
       closeable
-      bind:close="onClearBrand"
+      bind:close="onClearSeries"
     >
-      {{filterConditions.brandInfo.brandName}} {{filterConditions.brandInfo.seriesName}}
+      {{filterConditions.seriesFilter.displayText}}
     </van-tag>
 
     <van-tag
@@ -206,7 +202,7 @@
     <van-tag
       type="default"
       size="medium"
-      bind:click="onClearAllFilters"
+      bind:tap="onClearAllFilters"
     >
       清空全部
     </van-tag>
@@ -226,6 +222,9 @@
       scroll-y="true"
       enhanced="true"
       show-scrollbar="false"
+      refresher-enabled="true"
+      refresher-triggered="{{refresherTriggered}}"
+      bindrefresherrefresh="onRefresherRefresh"
       bindscrolltolower="onReachBottom"
     >
       <car-card
@@ -263,26 +262,18 @@
         image="search"
         description="{{filterConditions.keyword || hasActiveFilters ? '暂无符合条件的车辆' : '暂无车辆信息'}}"
       >
-        <van-button
-          wx:if="{{hasActiveFilters}}"
-          round
-          type="primary"
-          class="vehicles-empty__button"
-          bind:click="onClearAllFilters"
-        >
-          清空筛选条件
-        </van-button>
       </van-empty>
     </view>
   </view>
 
-  <!-- 车型选择器 -->
-  <vehicle-picker
-    show="{{showVehiclePicker}}"
-    title="选择车型"
-    bind:onConfirm="onVehiclePickerConfirm"
-    bind:onCancel="onVehiclePickerCancel"
-    bind:onClose="onVehiclePickerClose"
+  <!-- 车系选择器 -->
+  <series-picker
+    id="seriesPicker"
+    show="{{showSeriesPicker}}"
+    title="选择车系"
+    bind:onConfirm="onSeriesPickerConfirm"
+    bind:onCancel="onSeriesPickerCancel"
+    bind:onClose="onSeriesPickerClose"
   />
   </view>
 </view>

@@ -11,73 +11,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    // 核销优化：简化数据结构，只保留扫码后的票据
+    // 扫码后的票据数据
     scannedTickets: [], // 扫描的所有票据（包含助考员票和学员票）
     studentTicketCount: 0, // 学员票数量统计
 
     // 核销状态
     canVerify: false, // 是否可以核销
-    verifyLoading: false, // 核销中状态
-
-    // 开发模式：mock数据开关
-    isDevelopMode: true, // 设置为false可关闭mock数据
-    mockScannedTickets: [
-      // 助考员票
-      {
-        type: 'assist-ticket',
-        userId: 'assistant_001',
-        assistantName: '王助考',
-        assistantPhone: '137****7777',
-        workNumber: 'ZK001',
-        department: '考试管理部',
-        expireTime: Date.now() + 3 * 60 * 1000
-      },
-      // 学员票1
-      {
-        type: 'mock-ticket',
-        ticketId: 'MT202410060001',
-        studentName: '张三',
-        studentPhone: '138****8888',
-        packageName: '科目二模拟考试套餐A',
-        idCard: '110101199001011234',
-        simulationArea: 'A区3号场地',
-        appointmentDate: '2024-10-06 14:00',
-        drivingSchool: '阳光驾校',
-        coachName: '李师傅',
-        coachPhone: '139****9999',
-        expireTime: Date.now() + 3 * 60 * 1000
-      },
-      // 学员票2
-      {
-        type: 'mock-ticket',
-        ticketId: 'MT202410060002',
-        studentName: '李四',
-        studentPhone: '136****6666',
-        packageName: '科目三模拟考试套餐B',
-        idCard: '110101199002022345',
-        simulationArea: 'B区1号场地',
-        appointmentDate: '2024-10-06 15:30',
-        drivingSchool: '蓝天驾校',
-        coachName: '张教练',
-        coachPhone: '138****7777',
-        expireTime: Date.now() + 3 * 60 * 1000
-      },
-      // 学员票3
-      {
-        type: 'mock-ticket',
-        ticketId: 'MT202410060003',
-        studentName: '王五',
-        studentPhone: '135****5555',
-        packageName: 'VIP模拟考试套餐',
-        idCard: '110101199003033456',
-        simulationArea: 'C区2号场地',
-        appointmentDate: '2024-10-06 16:00',
-        drivingSchool: '阳光驾校',
-        coachName: '刘师傅',
-        coachPhone: '137****8888',
-        expireTime: Date.now() + 3 * 60 * 1000
-      }
-    ]
+    verifyLoading: false // 核销中状态
   },
 
   /**
@@ -128,8 +68,7 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    console.log('上拉加载更多');
-    this.loadMoreData();
+    // 核销页面不需要加载更多功能
   },
 
   /**
@@ -149,78 +88,6 @@ Page({
     console.log('初始化模拟票核销页面');
     // 这里可以添加页面初始化逻辑
     // 比如检查权限、获取用户信息等
-
-    // 开发模式：加载mock数据
-    if (this.data.isDevelopMode) {
-      this.loadMockData();
-    }
-  },
-
-  /**
-   * 加载Mock数据（仅开发模式）
-   */
-  loadMockData() {
-    console.log('🔧 开发模式：加载Mock数据');
-
-    const mockData = [...this.data.mockScannedTickets];
-
-    // 为Mock数据添加扫码时间戳（模拟不同的扫码时间）
-    mockData.forEach((ticket, index) => {
-      ticket.scanTime = Date.now() - (mockData.length - index) * 1000; // 模拟不同时间扫码
-    });
-
-    // 核销优化：对Mock数据进行排序，确保助考员票据在最后
-    const sortedMockData = this.sortScannedTickets(mockData);
-
-    this.setData({
-      scannedTickets: sortedMockData
-    });
-
-    // 更新核销状态
-    this.updateVerifyStatus();
-
-    console.log('✅ Mock数据加载完成，包含：');
-    console.log('- 助考员票：', sortedMockData.filter(t => t.type === 'assist-ticket').length, '张');
-    console.log('- 学员票：', sortedMockData.filter(t => t.type === 'mock-ticket').length, '张');
-    console.log('- 助考员票已排在最后');
-
-    wx.showToast({
-      title: '已加载Mock数据',
-      icon: 'success',
-      duration: 1500
-    });
-  },
-
-  /**
-   * 切换开发模式
-   */
-  toggleDevelopMode() {
-    const newMode = !this.data.isDevelopMode;
-
-    // 先更新开发模式状态
-    this.setData({
-      isDevelopMode: newMode
-    });
-
-    if (newMode) {
-      // 开启开发模式：加载并排序Mock数据
-      this.loadMockData();
-    } else {
-      // 关闭开发模式：清空数据
-      this.setData({
-        scannedTickets: [],
-        canVerify: false,
-        studentTicketCount: 0
-      });
-
-      wx.showToast({
-        title: '已关闭开发模式',
-        icon: 'success',
-        duration: 1500
-      });
-    }
-
-    console.log('🔧 开发模式已', newMode ? '开启' : '关闭');
   },
 
   /**
@@ -228,14 +95,7 @@ Page({
    */
   async refreshData() {
     try {
-      this.setData({
-        loading: true
-      });
-
       console.log('刷新核销票据数据');
-
-      // 模拟刷新数据
-      await this.simulateDataRefresh();
 
       // 停止下拉刷新
       wx.stopPullDownRefresh();
@@ -253,78 +113,7 @@ Page({
         icon: 'none',
         duration: 2000
       });
-    } finally {
-      this.setData({
-        loading: false
-      });
     }
-  },
-
-  /**
-   * 加载更多数据
-   */
-  async loadMoreData() {
-    if (!this.data.hasMore || this.data.loading) {
-      return;
-    }
-
-    try {
-      this.setData({
-        loading: true
-      });
-
-      console.log('加载更多核销票据数据');
-
-      // 模拟加载更多数据
-      await this.simulateLoadMore();
-
-    } catch (error) {
-      console.error('加载更多数据失败:', error);
-      wx.showToast({
-        title: '加载失败',
-        icon: 'none',
-        duration: 2000
-      });
-    } finally {
-      this.setData({
-        loading: false
-      });
-    }
-  },
-
-  /**
-   * 模拟数据刷新
-   */
-  simulateDataRefresh() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('模拟数据刷新完成');
-        resolve();
-      }, 1000);
-    });
-  },
-
-  /**
-   * 模拟加载更多数据
-   */
-  simulateLoadMore() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // 模拟没有更多数据
-        this.setData({
-          hasMore: false
-        });
-
-        wx.showToast({
-          title: '没有更多数据',
-          icon: 'none',
-          duration: 1500
-        });
-
-        console.log('模拟加载更多完成');
-        resolve();
-      }, 1000);
-    });
   },
 
   /**
@@ -556,9 +345,8 @@ Page({
     const assistantTickets = scannedTickets.filter(ticket => ticket.type === 'assist-ticket');
     const studentTickets = scannedTickets.filter(ticket => ticket.type === 'mock-ticket');
 
-    const canVerify = assistantTickets.length === 1 &&
-                     studentTickets.length >= 1 &&
-                     studentTickets.length <= 4;
+    // 修改核销条件：只需要有学员票即可，助考员票为可选
+    const canVerify = studentTickets.length >= 1 && studentTickets.length <= 4;
 
     this.setData({ canVerify });
 
@@ -579,9 +367,7 @@ Page({
 
     if (!this.data.canVerify) {
       let message = '';
-      if (assistantTickets.length === 0) {
-        message = '请先扫描助考员二维码';
-      } else if (studentTickets.length === 0) {
+      if (studentTickets.length === 0) {
         message = '请至少扫描一张学员票';
       } else if (studentTickets.length > 4) {
         message = '学员票数量不能超过4张';
@@ -602,9 +388,14 @@ Page({
 
     // 构建确认信息
     const studentNames = studentTickets.map(t => t.studentName).join('、');
-    const assistantName = assistantTickets[0].assistantName;
 
-    const content = `确认核销以下票据？\n\n助考员：${assistantName}\n学员：${studentNames}`;
+    let content = `确认核销以下票据？\n\n学员：${studentNames}`;
+
+    // 如果有助考员票，则显示助考员信息
+    if (assistantTickets.length > 0) {
+      const assistantName = assistantTickets[0].assistantName;
+      content = `确认核销以下票据？\n\n助考员：${assistantName}\n学员：${studentNames}`;
+    }
 
     wx.showModal({
       content,
@@ -640,9 +431,26 @@ Page({
       const assistantTickets = scannedTickets.filter(ticket => ticket.type === 'assist-ticket');
       const studentTickets = scannedTickets.filter(ticket => ticket.type === 'mock-ticket');
 
-      const response = await request.post('/api/ticket/verify', {
-        assistantUserId: assistantTickets[0].userId,
-        ticketIdList: studentTickets.map(t => t.ticketId)
+      // 修改参数处理：助考员票为可选，没有时传undefined
+      const assistantUserId = assistantTickets.length > 0
+        ? String(assistantTickets[0].userId || '')
+        : undefined;
+      const ticketIdList = studentTickets.map(t => String(t.ticketId || ''));
+
+      // 数据有效性检查
+      if (ticketIdList.some(id => !id)) {
+        throw new Error('存在无效的票据ID');
+      }
+
+      console.log('核销请求参数:', {
+        assistantUserId,
+        ticketIdList
+      });
+
+      // 调用正确的核销接口
+      const response = await request.post('/api/mp/ticket/verify-ticket', {
+        assistantUserId: assistantUserId,
+        ticketIdList: ticketIdList
       }, {
         needAuth: true,
         showLoading: false
@@ -650,32 +458,42 @@ Page({
 
       wx.hideLoading();
 
-      if (response.success) {
-        wx.showToast({
-          title: '核销成功',
-          icon: 'success',
-          duration: 2000
-        });
+      console.log('核销接口响应:', response);
 
-        // 核销优化：清空扫码数据
-        this.setData({
-          scannedTickets: [],
-          canVerify: false,
-          studentTicketCount: 0
-        });
+      // 由于使用了新的request.js，成功的响应会直接返回data部分
+      // 对于ApiResultVoid类型，data为null，所以response可能为null或undefined
+      wx.showToast({
+        title: '核销成功',
+        icon: 'success',
+        duration: 2000
+      });
 
-        console.log('核销成功，已清空扫码数据');
-      } else {
-        throw new Error(response.message || '核销失败');
-      }
+      // 核销优化：清空扫码数据
+      this.setData({
+        scannedTickets: [],
+        canVerify: false,
+        studentTicketCount: 0
+      });
+
+      console.log('核销成功，已清空扫码数据');
 
     } catch (error) {
       wx.hideLoading();
       console.error('核销失败:', error);
 
+      // 根据错误类型显示不同的提示
+      let errorMessage = '核销失败';
+      if (error.code === 'NETWORK_ERROR') {
+        errorMessage = '网络连接失败，请检查网络后重试';
+      } else if (error.code === 'NO_REFRESH_TOKEN' || error.code === 'REFRESH_TOKEN_FAILED') {
+        errorMessage = '登录已过期，请重新登录';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
       wx.showModal({
         title: '核销失败',
-        content: error.message || '网络错误，请稍后重试',
+        content: errorMessage,
         showCancel: false,
         confirmText: '确定'
       });

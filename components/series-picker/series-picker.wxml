@@ -1,0 +1,89 @@
+<!--series-picker.wxml-->
+<wxs module="tools">
+function isSelected(selectedIds, targetId) {
+  if (!selectedIds || !targetId) return false;
+  for (var i = 0; i < selectedIds.length; i++) {
+    if (selectedIds[i] === targetId) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getSelectedClass(selectedIds, targetId) {
+  return isSelected(selectedIds, targetId) ? 'series-picker-cell-selected' : 'series-picker-cell-normal';
+}
+
+module.exports = {
+  isSelected: isSelected,
+  getSelectedClass: getSelectedClass
+};
+</wxs>
+
+<van-popup
+  show="{{show}}"
+  position="bottom"
+  custom-style="height: 100%; background: var(--theme-bg-secondary);"
+  custom-class="series-picker-popup"
+  bind:close="onClose">
+
+  <!-- 顶部操作栏 -->
+  <view class="series-picker-header">
+    <view class="series-picker-header-left">
+      <van-icon name="cross" size="18" bind:click="onCancel" />
+    </view>
+    <view class="series-picker-header-title">{{title}}</view>
+    <view class="series-picker-header-right">
+      <van-button
+        type="primary"
+        size="small"
+        bind:click="onConfirm"
+        disabled="{{selectedSeriesIds.length === 0}}">
+        确定
+      </van-button>
+    </view>
+  </view>
+
+  <!-- 主体内容区 -->
+  <view class="series-picker-content">
+    <!-- 左侧品牌菜单 -->
+    <view class="series-picker-brand-menu">
+      <van-loading wx:if="{{loading}}" type="spinner" size="20" color="var(--theme-color-primary)" />
+      <view wx:else class="series-picker-vehicle-brand-wrapper">
+        <view
+          wx:for="{{brandList}}"
+          wx:key="brandId"
+          class="series-picker-brand-item {{selectedBrandId === item.brandId ? 'active' : ''}}"
+          bind:tap="onBrandSelect"
+          data-brand="{{item}}">
+          <text class="series-picker-brand-name">{{item.brandName}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 右侧车系列表 -->
+    <view class="series-picker-series-list">
+      <view wx:if="{{selectedBrand && selectedBrand.seriesList}}" class="series-picker-series-container">
+        <!-- 车系选择列表 -->
+        <van-cell-group custom-class="series-picker-cell-group">
+          <van-cell
+            wx:for="{{selectedBrand.seriesList}}"
+            wx:key="seriesId"
+            title="{{item.seriesName}}"
+            is-link="{{false}}"
+            custom-class="{{tools.getSelectedClass(selectedSeriesIds, item.seriesId)}}"
+            bind:click="onSeriesSelect"
+            data-series="{{item}}">
+            <!-- 选中状态图标 -->
+            <view wx:if="{{tools.isSelected(selectedSeriesIds, item.seriesId)}}" slot="right-icon" class="series-picker-selected-icon">
+              <van-icon name="success" color="var(--theme-color-primary)" class="series-picker-selected-icon-van-icon" />
+            </view>
+          </van-cell>
+        </van-cell-group>
+      </view>
+      <view wx:else class="series-picker-empty-tip">
+        <text>请先选择品牌</text>
+      </view>
+    </view>
+  </view>
+</van-popup>

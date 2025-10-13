@@ -1,7 +1,7 @@
 <!--pages/mock-tickets/mock-tickets.wxml-->
 <view class="mock-tickets">
   <!-- 右上角电话按钮 -->
-  <view class="mock-tickets__phone-btn" bindtap="callMockExamPhone" wx:if="{{mockExamPhone}}">
+  <view class="mock-tickets__phone-btn" bindtap="callMockExamPhone" wx:if="{{mockExamPhone&&isLoggedIn}}">
     <text class="iconfont icon-dianhua dianhua-iconfont"></text>
     <text>我要模拟</text>
   </view>

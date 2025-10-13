@@ -1,346 +1,346 @@
 /* pages/car-detail/car-detail.wxss */
 
 .car-detail-page {
-  height: 100vh;
-  background-color: #f5f5f5;
-  padding-bottom: 120rpx;
+    height: 100vh;
+    background-color: #f5f5f5;
+    padding-bottom: 120rpx;
 }
 
 /* 加载状态 */
 .loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 
 .loading-text {
-  font-size: 32rpx;
-  color: #666;
+    font-size: 32rpx;
+    color: #666;
 }
 
 /* 页面容器 */
 .detail-container {
-  height: 100vh;
+    height: 100vh;
 }
 
 /* 图片轮播区域 */
 .detail-images {
-  position: relative;
-  height: 500rpx;
-  background-color: #000;
+    position: relative;
+    height: 500rpx;
+    background-color: #000;
 }
 
 .images-swiper {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .swiper-image {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .image-counter {
-  position: absolute;
-  bottom: 20rpx;
-  right: 20rpx;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
-  font-size: 24rpx;
+    position: absolute;
+    bottom: 20rpx;
+    right: 20rpx;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
 }
 
 /* 车辆标题和价格 */
 .detail-header {
-  background-color: #fff;
-  padding: 30rpx;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20rpx;
+    background-color: #fff;
+    padding: 30rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20rpx;
 }
 
 .detail-header__main {
-  flex: 1;
-  margin-right: 20rpx;
+    flex: 1;
+    margin-right: 20rpx;
 }
 
 .detail-header__title {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10rpx;
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10rpx;
 }
 
 .detail-header__subtitle {
-  font-size: 28rpx;
-  color: #666;
+    font-size: 28rpx;
+    color: #666;
 }
 
 .detail-header__price {
-  display: flex;
-  align-items: baseline;
+    display: flex;
+    align-items: baseline;
 }
 
 .detail-header__price-text {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #ff4d4f;
+    font-size: 48rpx;
+    font-weight: bold;
+    color: #ff4d4f;
 }
 
 .detail-header__price-unit {
-  font-size: 24rpx;
-  color: #ff4d4f;
-  margin-left: 8rpx;
+    font-size: 24rpx;
+    color: #ff4d4f;
+    margin-left: 8rpx;
 }
 
 /* Tab栏 */
 .detail-tabs {
-  background-color: #fff;
-  display: flex;
-  margin-bottom: 20rpx;
+    background-color: #fff;
+    display: flex;
+    margin-bottom: 20rpx;
 }
 
 .detail-tabs__item {
-  flex: 1;
-  text-align: center;
-  padding: 30rpx 0;
-  position: relative;
+    flex: 1;
+    text-align: center;
+    padding: 30rpx 0;
+    position: relative;
 }
 
 .detail-tabs__item.active {
-  color: #1890ff;
+    color: var(--theme-color-primary-light);
 }
 
 .detail-tabs__item.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60rpx;
-  height: 4rpx;
-  background-color: #1890ff;
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60rpx;
+    height: 4rpx;
+    background-color: var(--theme-color-primary);
 }
 
 .detail-tabs__text {
-  font-size: 32rpx;
-  font-weight: 500;
+    font-size: 32rpx;
+    font-weight: 500;
 }
 
 /* 详情卡片 */
 .detail-card {
-  background-color: #fff;
-  margin-bottom: 20rpx;
+    background-color: #fff;
+    margin-bottom: 20rpx;
 }
 
 .detail-card__header {
-  padding: 30rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+    padding: 30rpx;
+    border-bottom: 1rpx solid #f0f0f0;
 }
 
 .detail-card__title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
 }
 
 /* 详情表格 */
 .detail-table {
-  padding: 0 30rpx;
+    padding: 0 30rpx;
 }
 
 .detail-table__row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30rpx 0;
-  border-bottom: 1rpx solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30rpx 0;
+    border-bottom: 1rpx solid #f0f0f0;
 }
 
 .detail-table__row:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 .detail-table__label {
-  font-size: 28rpx;
-  color: #666;
-  flex-shrink: 0;
-  width: 200rpx;
+    font-size: 28rpx;
+    color: #666;
+    flex-shrink: 0;
+    width: 200rpx;
 }
 
 .detail-table__value {
-  font-size: 28rpx;
-  color: #333;
-  text-align: right;
-  flex: 1;
-  word-break: break-all;
+    font-size: 28rpx;
+    color: #333;
+    text-align: right;
+    flex: 1;
+    word-break: break-all;
 }
 
 /* 车辆实拍 */
 .detail-photos {
-  padding: 30rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
+    padding: 30rpx;
+    display: flex;
+    flex-direction: column;
+    gap: 20rpx;
 }
 
 .detail-photos__item {
-  width: 100%;
-  height: 400rpx;
-  border-radius: 12rpx;
-  overflow: hidden;
+    width: 100%;
+    height: 400rpx;
+    border-radius: 12rpx;
+    overflow: hidden;
 }
 
 .detail-photos__image {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 /* 占位空间 */
 .detail-spacer {
-  height: 100rpx;
+    height: 100rpx;
 }
 
 /* 底部操作按钮 */
 .detail-actions {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #fff;
-  padding: 20rpx 30rpx;
-  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 20rpx;
-  z-index: 100;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    padding: 20rpx 30rpx;
+    box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 20rpx;
+    z-index: 100;
 }
 
 .detail-actions__button {
-  height: 80rpx;
-  border-radius: 40rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28rpx;
-  border: none;
-  position: relative;
-  white-space: nowrap;
+    height: 80rpx;
+    border-radius: 40rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28rpx;
+    border: none;
+    position: relative;
+    white-space: nowrap;
 }
 
 .detail-actions__button::after {
-  border: none;
+    border: none;
 }
 
 .detail-actions__button-icon {
-  margin-right: 10rpx;
-  font-size: 32rpx;
+    margin-right: 10rpx;
+    font-size: 32rpx;
 }
 
 /* 收藏按钮 */
 .detail-actions__button--favorite {
-  flex: 0 0 auto;
-  min-width: 160rpx;
-  padding: 0 30rpx;
-  background-color: #f5f5f5;
-  color: #666;
+    flex: 0 0 auto;
+    min-width: 160rpx;
+    padding: 0 30rpx;
+    background-color: #f5f5f5;
+    color: #666;
 }
 
 .detail-actions__button--favorite.favorited {
-  background-color: #fff2e8;
-  color: #ff8c00;
+    background-color: #fff2e8;
+    color: #ff8c00;
 }
 
 /* 查看底价按钮 */
 .detail-actions__button--price {
-  flex: 0 0 auto;
-  min-width: 180rpx;
-  padding: 0 30rpx;
-  background-color: #1890ff;
-  color: #fff;
+    flex: 0 0 auto;
+    min-width: 180rpx;
+    padding: 0 30rpx;
+    background-color: #1890ff;
+    color: #fff;
 }
 
 /* 联系卖家按钮 */
 .detail-actions__button--contact {
-  flex: 1;
-  background-color: #52c41a;
-  color: #fff;
+    flex: 1;
+    background-color: #52c41a;
+    color: #fff;
 }
 
 /* 底价弹窗 */
 .floor-price-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
 }
 
 .floor-price-modal__content {
-  background-color: #fff;
-  border-radius: 20rpx;
-  width: 600rpx;
-  max-width: 90%;
-  overflow: hidden;
+    background-color: #fff;
+    border-radius: 20rpx;
+    width: 600rpx;
+    max-width: 90%;
+    overflow: hidden;
 }
 
 .floor-price-modal__header {
-  padding: 40rpx 30rpx 20rpx;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1rpx solid #f0f0f0;
+    padding: 40rpx 30rpx 20rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1rpx solid #f0f0f0;
 }
 
 .floor-price-modal__title {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: #333;
+    font-size: 32rpx;
+    font-weight: bold;
+    color: #333;
 }
 
 .floor-price-modal__close {
-  font-size: 32rpx;
-  color: #999;
-  padding: 10rpx;
+    font-size: 32rpx;
+    color: #999;
+    padding: 10rpx;
 }
 
 .floor-price-modal__body {
-  padding: 40rpx 30rpx;
-  text-align: center;
+    padding: 40rpx 30rpx;
+    text-align: center;
 }
 
 .floor-price-info {
-  margin-bottom: 30rpx;
+    margin-bottom: 30rpx;
 }
 
 .floor-price-info__label {
-  font-size: 28rpx;
-  color: #666;
-  margin-bottom: 20rpx;
-  display: block;
+    font-size: 28rpx;
+    color: #666;
+    margin-bottom: 20rpx;
+    display: block;
 }
 
 .floor-price-info__value {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #ff4d4f;
+    font-size: 48rpx;
+    font-weight: bold;
+    color: #ff4d4f;
 }
 
 .floor-price-info__note {
-  font-size: 24rpx;
-  color: #999;
-  line-height: 1.5;
+    font-size: 24rpx;
+    color: #999;
+    line-height: 1.5;
 }

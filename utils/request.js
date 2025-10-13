@@ -181,19 +181,19 @@ function handleAuthError(originalOptions, resolve, reject) {
     if (!refreshTokenValue) {
         // 没有刷新token，清除认证信息并跳转到登录页
         console.warn('没有刷新令牌，跳转到登录页');
-        
+
         // 显示统一的认证过期提示
         wx.showToast({
             title: '登录已过期，请重新登录',
             icon: 'none',
             duration: 2000
         });
-        
+
         // 延迟跳转，确保Toast显示
         setTimeout(() => {
             redirectToLogin();
         }, 2000);
-        
+
         reject({
             code: 'NO_REFRESH_TOKEN',
             message: '登录已过期，请重新登录'
@@ -210,19 +210,19 @@ function handleAuthError(originalOptions, resolve, reject) {
         })
         .catch((err) => {
             console.error('token刷新失败:', err);
-            
+
             // 显示统一的认证失败提示
             wx.showToast({
                 title: '登录已过期，请重新登录',
                 icon: 'none',
                 duration: 2000
             });
-            
+
             // 延迟跳转和清除认证信息
             setTimeout(() => {
                 redirectToLogin();
             }, 2000);
-            
+
             reject({
                 code: 'REFRESH_TOKEN_FAILED',
                 message: '登录已过期，请重新登录'
@@ -239,9 +239,9 @@ function handleError(error, reject, options = {}) {
 
     // 获取是否需要显示错误提示（默认显示）
     const { showErrorToast = true } = options;
-    
+
     let userMessage = '';
-    
+
     // 根据错误类型决定用户提示消息
     switch (error.code) {
         case 'NETWORK_ERROR':

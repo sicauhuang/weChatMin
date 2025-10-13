@@ -1,6 +1,7 @@
 // pages/vehicles/vehicles.js
 const vehicleApi = require('../../utils/vehicle-api.js');
 const auth = require('../../utils/auth.js');
+const storage = require('../../utils/storage.js');
 
 Page({
     /**
@@ -37,9 +38,11 @@ Page({
         // UI状态
         loading: false,
         refreshing: false,
+        refresherTriggered: false, // 滚动列表下拉刷新状态
         loadingMore: false,
         hasMore: true,
-        showVehiclePicker: false,
+        showSeriesPicker: false,
+        initializing: true, // 添加初始化状态标识
 
         // 分页信息
         pagination: {
@@ -104,10 +107,9 @@ Page({
             SHORTEST_AGE: '车龄最短'
         },
 
-        // 登录状态
-        isLoggedIn: false
+        // 登录状态 - 从本地存储初始化，避免UI闪烁
+        isLoggedIn: storage.isLoggedIn()
     },
-
 
     /**
      * 生命周期函数--监听页面加载
@@ -162,6 +164,99 @@ Page({
         setTimeout(() => {
             wx.stopPullDownRefresh();
         }, 1000);
+    },
+
+    /**
+     * 滚动列表下拉刷新事件处理
+     */
+    onRefresherRefresh() {
+        console.log('vehicles: 滚动列表下拉刷新');
+
+        // 设置刷新状态
+        this.setData({
+            refresherTriggered: true
+        });
+
+        // 检查登录状态
+        const isLoggedIn = auth.checkLoginStatus();
+        if (!isLoggedIn) {
+            // 未登录状态，直接结束刷新
+            setTimeout(() => {
+                this.setData({
+                    refresherTriggered: false
+                });
+            }, 1000);
+            return;
+        }
+
+        // 执行数据刷新
+        this.loadVehicleListWithRefresher(true);
+    },
+
+    /**
+     * 带refresher状态管理的车辆列表加载方法
+     */
+    loadVehicleListWithRefresher(refresh = false) {
+        if (refresh) {
+            this.setData({
+                'pagination.pageNum': 1,
+                'pagination.baseId': null
+            });
+        }
+
+        // 构建请求参数
+        const params = this.buildApiParams();
+
+        console.log('vehicles: refresher请求车辆列表参数:', params);
+
+        // 调用真实API
+        vehicleApi
+            .queryOnSaleCarPage(params)
+            .then((response) => {
+                console.log('vehicles: refresher车辆列表响应:', response);
+
+                // 处理响应数据
+                const { list = [], total = 0, pageNum, pageSize, baseId } = response;
+
+                // 转换数据格式
+                const processedList = this.processVehicleData(list);
+
+                // 计算是否还有更多数据
+                const hasMore = pageNum * pageSize < total;
+
+                this.setData({
+                    vehicleList: processedList,
+                    refresherTriggered: false, // 结束刷新状态
+                    hasMore,
+                    'pagination.total': total,
+                    'pagination.pageNum': pageNum + 1,
+                    'pagination.baseId': baseId
+                });
+
+                this.updateComputedData();
+            })
+            .catch((error) => {
+                console.error('vehicles: refresher车辆列表请求失败:', error);
+
+                this.setData({
+                    refresherTriggered: false // 结束刷新状态
+                });
+
+                // 根据错误类型显示不同提示
+                if (error.code === 'NETWORK_ERROR') {
+                    wx.showToast({
+                        title: '网络连接失败',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                } else {
+                    wx.showToast({
+                        title: error.userMessage || '刷新失败',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                }
+            });
     },
 
     /**
@@ -293,8 +388,15 @@ Page({
             params.brand = brandInfo.brandName;
         }
 
-        // 车系筛选
-        if (brandInfo.seriesName) {
+        // 车系筛选 - 支持多选车系
+        if (
+            filterConditions.seriesFilter &&
+            filterConditions.seriesFilter.selectedSeriesIds.length > 0
+        ) {
+            // 如果有车系筛选，使用车系ID数组
+            params.seriesIds = filterConditions.seriesFilter.selectedSeriesIds;
+        } else if (brandInfo.seriesName) {
+            // 兼容原有的单选车系
             params.series = brandInfo.seriesName;
         }
 
@@ -388,9 +490,9 @@ Page({
 
         const { brandInfo, ageRange, priceRange } = this.data.filterConditions;
 
-        // 直接计算是否有激活的筛选条件
+        // 直接计算是否有激活的筛选条件（不包含品牌筛选条件）
         const hasActiveFilters = !!(
-            brandInfo.brandName ||
+            this.data.filterConditions.seriesFilter ||
             (ageRange.type && ageRange.type !== 'unlimited') ||
             (priceRange.type && priceRange.type !== 'unlimited')
         );
@@ -403,6 +505,14 @@ Page({
             hasActiveFilters,
             ageDisplayText,
             priceDisplayText
+        });
+        
+        // 添加调试日志
+        console.log('更新计算属性:', {
+            seriesFilter: this.data.filterConditions.seriesFilter,
+            ageRangeType: ageRange.type,
+            priceRangeType: priceRange.type,
+            hasActiveFilters: hasActiveFilters
         });
     },
 
@@ -647,6 +757,7 @@ Page({
     onClearAllFilters() {
         this.setData({
             'filterConditions.keyword': '',
+            'filterConditions.sortType': 'SMART', // 重置为默认排序
             'filterConditions.brandInfo': {
                 brandId: '',
                 brandName: '',
@@ -655,6 +766,7 @@ Page({
                 modelId: '',
                 modelName: ''
             },
+            'filterConditions.seriesFilter': null,
             'filterConditions.ageRange': {
                 min: 0,
                 max: 0,
@@ -666,8 +778,21 @@ Page({
                 type: 'unlimited'
             }
         });
+        
+        // 重置series-picker组件的内部状态
+        const seriesPicker = this.selectComponent('#seriesPicker');
+        if (seriesPicker) {
+            seriesPicker.resetSelection();
+        }
+        
         this.updateComputedData();
         this.loadVehicleList(true);
+        
+        // 添加调试日志
+        console.log('清空所有筛选条件后的数据:', {
+            filterConditions: this.data.filterConditions,
+            hasActiveFilters: this.data.hasActiveFilters
+        });
     },
 
     /**
@@ -725,42 +850,13 @@ Page({
     onBrandBeforeToggle(e) {
         const { status, callback } = e.detail;
         if (status) {
-            // 当尝试打开下拉面板时，阻止默认行为，改为显示 vehicle-picker
-            this.setData({ showVehiclePicker: true });
+            // 当尝试打开下拉面板时，阻止默认行为，改为显示 series-picker
+            this.setData({ showSeriesPicker: true });
             callback(false); // 阻止下拉面板展开
         } else {
             // 关闭操作，允许正常关闭
             callback(true);
         }
-    },
-
-    onShowVehiclePicker() {
-        this.setData({ showVehiclePicker: true });
-    },
-
-    onVehiclePickerConfirm(e) {
-        const { brandInfo, seriesInfo, modelInfo } = e.detail;
-        this.setData({
-            'filterConditions.brandInfo': {
-                brandId: brandInfo.brandId,
-                brandName: brandInfo.brandName,
-                seriesId: seriesInfo.seriesId,
-                seriesName: seriesInfo.seriesName,
-                modelId: modelInfo.modelId,
-                modelName: modelInfo.modelName
-            },
-            showVehiclePicker: false
-        });
-        this.updateComputedData();
-        this.loadVehicleList(true);
-    },
-
-    onVehiclePickerCancel() {
-        this.setData({ showVehiclePicker: false });
-    },
-
-    onVehiclePickerClose() {
-        this.setData({ showVehiclePicker: false });
     },
 
     onClearBrand() {
@@ -848,5 +944,70 @@ Page({
                 });
             }
         });
+    },
+
+    /**
+     * 车系筛选相关事件
+     */
+    onShowSeriesPicker() {
+        this.setData({ showSeriesPicker: true });
+    },
+
+    onSeriesPickerConfirm(e) {
+        const { brandInfo, seriesList, selectedSeriesIds, displayText } = e.detail;
+
+        // 判断是否选择了车系
+        if (selectedSeriesIds && selectedSeriesIds.length > 0) {
+            // 有选择车系，使用车系筛选
+            this.setData({
+                'filterConditions.brandInfo.brandId': brandInfo.brandId,
+                'filterConditions.brandInfo.brandName': brandInfo.brandName,
+                'filterConditions.seriesFilter': {
+                    selectedSeriesIds: selectedSeriesIds,
+                    seriesList: seriesList,
+                    displayText: displayText
+                },
+                showSeriesPicker: false
+            });
+
+            console.log('车系筛选确认:', {
+                brandName: brandInfo.brandName,
+                selectedCount: selectedSeriesIds.length,
+                displayText: displayText
+            });
+        } else {
+            // 只选择了品牌，没有选择车系，使用品牌筛选
+            this.setData({
+                'filterConditions.brandInfo.brandId': brandInfo.brandId,
+                'filterConditions.brandInfo.brandName': brandInfo.brandName,
+                'filterConditions.brandInfo.seriesId': '',
+                'filterConditions.brandInfo.seriesName': '',
+                'filterConditions.seriesFilter': null,
+                showSeriesPicker: false
+            });
+
+            console.log('品牌筛选确认:', {
+                brandName: brandInfo.brandName
+            });
+        }
+
+        this.updateComputedData();
+        this.loadVehicleList(true);
+    },
+
+    onSeriesPickerCancel() {
+        this.setData({ showSeriesPicker: false });
+    },
+
+    onSeriesPickerClose() {
+        this.setData({ showSeriesPicker: false });
+    },
+
+    onClearSeries() {
+        this.setData({
+            'filterConditions.seriesFilter': null
+        });
+        this.updateComputedData();
+        this.loadVehicleList(true);
     }
 });

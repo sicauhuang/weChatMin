@@ -199,7 +199,7 @@ Page({
             carName: name || basicInfo.name || '',
             brandModel: brandModel,
             modelId: basicInfo.modelId || null,
-            carAge: basicInfo.age || '',
+            carAge: basicInfo.age ?? '',
             color: basicInfo.color || '',
             mileage: basicInfo.mileage || '',
             transferCount: basicInfo.transferCount || '',
@@ -210,8 +210,8 @@ Page({
             modifications: basicInfo.modifyItems || '',
 
             // 售卖信息映射
-            lowPrice: basicInfo.floorPrice || '',
-            sellPrice: basicInfo.sellPrice || '',
+            lowPrice: basicInfo.floorPrice ?? '',
+            sellPrice: basicInfo.sellPrice ?? '',
             contactInfo: basicInfo.contactPhone || '',
 
             // 图片数据将在handleImageDataLoad中单独处理
