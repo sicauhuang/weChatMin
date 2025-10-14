@@ -1,17 +1,20 @@
 <!-- 二维码组件 -->
-<view class="qr-code">
+<view class="qr-code" style="min-height: {{containerSize}}px;">
   <!-- 二维码显示区域 - 始终存在 -->
   <view class="qr-code__container">
-    <view class="qr-code__canvas-wrapper" bindtap="onQRCodeTap">
+    <view class="qr-code__canvas-wrapper"
+          style="min-width: {{containerSize}}px; min-height: {{containerSize}}px;"
+          bindtap="onQRCodeTap">
       <canvas
         class="qr-code__canvas"
         canvas-id="{{canvasId}}"
-        width="{{size}}"
-        height="{{size}}">
+        width="{{canvasSize}}"
+        height="{{canvasSize}}"
+        style="width: {{canvasSize}}px; height: {{canvasSize}}px;">
       </canvas>
 
       <!-- 刷新提示（仅在可刷新且非加载状态时显示） -->
-      <view class="qr-code__refresh-hint" wx:if="{{refreshable}}">
+      <view class="qr-code__refresh-hint" wx:if="{{refreshable && !loading}}">
         <text class="qr-code__refresh-text">点击刷新</text>
       </view>
     </view>

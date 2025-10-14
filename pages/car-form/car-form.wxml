@@ -47,16 +47,6 @@
         <view slot="button" class="field-unit">年</view>
       </van-field>
 
-      <!-- 车辆颜色 -->
-      <van-field
-        value="{{formData.color}}"
-        placeholder="请输入"
-        label="车辆颜色"
-        required
-        border="{{false}}"
-        data-field="color"
-        bind:change="onInputChange" />
-
       <!-- 里程数 -->
       <van-field
         value="{{formData.mileage}}"
@@ -71,6 +61,16 @@
       >
         <view slot="button" class="field-unit">万公里</view>
       </van-field>
+
+      <!-- 车辆颜色 -->
+      <van-field
+        value="{{formData.color}}"
+        placeholder="请输入"
+        label="车辆颜色"
+        required
+        border="{{false}}"
+        data-field="color"
+        bind:change="onInputChange" />
 
       <!-- 过户次数 -->
       <van-field
@@ -140,7 +140,6 @@
     <van-cell-group title="售卖信息" border="{{false}}">
       <!-- 底价（审批模式下隐藏） -->
       <van-field
-        wx:if="{{mode !== 'approval'}}"
         value="{{formData.lowPrice}}"
         placeholder="请输入"
         label="底价"
@@ -182,13 +181,13 @@
     </van-cell-group>
 
     <!-- 车辆照片 -->
-    <van-cell-group title="车辆照片（最多5张）" border="{{false}}">
+    <van-cell-group title="车辆照片（最多20张）" border="{{false}}">
       <van-cell>
       <van-uploader
         file-list="{{imageList}}"
         bind:after-read="onImageUpload"
         bind:delete="onImageDelete"
-        max-count="5"
+        max-count="20"
         multiple="{{true}}"
         preview-size="180rpx"
         upload-text="添加照片" />
@@ -246,7 +245,7 @@
       loading="{{submitting}}"
       class="submit-button"
       bind:click="onSave">
-      {{mode === 'edit' ? '更新' : '保存'}}
+      {{mode === 'edit' ? '更新' : '发布'}}
     </van-button>
   </view>
 
@@ -266,6 +265,7 @@
   <vehicle-picker
     show="{{showVehiclePicker}}"
     title="选择车型"
+    default-value="{{vehicleDefaultValue}}"
     bind:onConfirm="onVehicleConfirm"
     bind:onCancel="onVehicleCancel"
     bind:onClose="hideVehiclePicker" />

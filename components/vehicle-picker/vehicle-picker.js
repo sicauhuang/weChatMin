@@ -189,7 +189,28 @@ Component({
      */
     lifetimes: {
         attached() {
+            // 组件初始化时加载数据
             this.loadVehicleData();
+        }
+    },
+
+    /**
+     * 数据监听器
+     */
+    observers: {
+        'show': function(show) {
+            if (show) {
+                // 组件打开时重新加载数据
+                console.log('vehicle-picker组件打开，重新加载数据');
+                this.loadVehicleData();
+            }
+        },
+        'defaultValue': function(defaultValue) {
+            // 监听defaultValue变化，在数据加载完成后设置默认选中状态
+            if (defaultValue && Object.keys(defaultValue).length > 0 && this.data.brandList.length > 0) {
+                console.log('defaultValue变化，设置默认选中状态:', defaultValue);
+                this.setDefaultSelection();
+            }
         }
     },
 
@@ -201,7 +222,24 @@ Component({
          * 加载车型数据
          */
         loadVehicleData() {
-            this.setData({ loading: true });
+            // 只有在没有defaultValue的情况下才重置选中状态
+            const hasDefaultValue = this.data.defaultValue && Object.keys(this.data.defaultValue).length > 0;
+
+            if (!hasDefaultValue) {
+                // 重置选中状态，避免显示过期的选中项
+                this.setData({
+                    loading: true,
+                    selectedBrandId: '',
+                    selectedBrand: null,
+                    selectedSeriesId: '',
+                    selectedModelId: ''
+                });
+            } else {
+                // 有默认值时只设置loading状态
+                this.setData({
+                    loading: true
+                });
+            }
 
             // 调用真实接口获取品牌数据
             queryBrandDropdownList()

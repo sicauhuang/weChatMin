@@ -24,8 +24,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 460rpx;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 加载状态覆盖层 */
@@ -90,8 +91,7 @@
   border-radius: var(--theme-radius-lg);
   transition: all var(--theme-duration-base) var(--theme-ease-out);
   position: relative;
-  min-width: 420rpx;
-  min-height: 420rpx;
+  box-sizing: border-box;
 }
 
 .qr-code__canvas-wrapper:active {
@@ -102,13 +102,11 @@
 
 /* 二维码画布 */
 .qr-code__canvas {
-  width: 400rpx;
-  height: 400rpx;
   border-radius: var(--theme-radius-sm);
   background-color: #ffffff;
   display: block;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
-  border: 1rpx solid var(--theme-border-light);
+  box-sizing: border-box;
+  /* 尺寸通过内联样式动态设置 */
 }
 
 /* 刷新提示 */

@@ -58,6 +58,9 @@ Page({
         scrollTop: 0, // 用于scroll-view的滚动定位
         approvalAction: '', // 审批操作类型：APPROVED | REJECTED
 
+        // 车型选择器的默认值
+        vehicleDefaultValue: {},
+
         // 上传状态
         uploadProgress: {
             show: false,
@@ -193,6 +196,21 @@ Page({
             const parts = [modelInfo.series, modelInfo.variant].filter(Boolean);
             brandModel = parts.join(' ');
         }
+
+        // 构建车型选择器的默认值
+        const vehicleDefaultValue = {};
+        if (basicInfo.modelId && modelInfo) {
+            vehicleDefaultValue.brandId = modelInfo.brandId || modelInfo.brand;
+            vehicleDefaultValue.seriesId = modelInfo.seriesId || modelInfo.series;
+            vehicleDefaultValue.modelId = basicInfo.modelId;
+
+            console.log('构建车型选择器默认值:', vehicleDefaultValue);
+        }
+
+        // 设置车型选择器的默认值到页面数据中
+        this.setData({
+            vehicleDefaultValue: vehicleDefaultValue
+        });
 
         return {
             // 车辆信息映射

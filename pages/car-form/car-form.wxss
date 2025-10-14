@@ -6,6 +6,7 @@
     position: relative;
 }
 
+
 /* 加载状态 */
 .loading-overlay {
     position: fixed;
@@ -50,6 +51,13 @@
     color: #323233;
     font-size: 28rpx;
 }
+.car-form-page .van-field__label {
+  color: #323233;
+  font-size: 28rpx;
+  font-weight: 400;
+}
+
+
 
 .car-brandModel .van-cell__value,
 .car-plateDate .van-cell__value {

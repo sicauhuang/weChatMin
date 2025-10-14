@@ -17,7 +17,7 @@
           <image
             class="swiper-image"
             src="{{item.fileUrl}}"
-            mode="aspectFill" />
+            mode="scaleToFill" />
         </swiper-item>
       </swiper>
 

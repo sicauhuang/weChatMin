@@ -18,7 +18,7 @@ Component({
             value: 'general' // 'user-profile', 'mock-ticket', 'general'
         },
 
-        // 二维码大小
+        // 二维码大小（基础尺寸，会根据设备自动调整）
         size: {
             type: Number,
             value: 360
@@ -38,7 +38,22 @@ Component({
         loading: false,
         error: false,
         errorMessage: '',
-        canvasId: `qr-canvas-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        canvasId: `qr-canvas-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        // 设备适配相关数据
+        deviceInfo: null,
+        actualSize: 360,
+        canvasSize: 360,
+        containerSize: 400
+    },
+
+    /**
+     * 组件生命周期
+     */
+    lifetimes: {
+        attached() {
+            // 组件初始化时获取设备信息并计算尺寸
+            this.initDeviceInfo();
+        }
     },
 
     /**
@@ -59,6 +74,89 @@ Component({
      * 组件的方法列表
      */
     methods: {
+        /**
+         * 初始化设备信息并计算适配尺寸
+         */
+        initDeviceInfo() {
+            try {
+                const systemInfo = wx.getSystemInfoSync();
+                const deviceInfo = {
+                    screenWidth: systemInfo.screenWidth,
+                    screenHeight: systemInfo.screenHeight,
+                    windowWidth: systemInfo.windowWidth,
+                    windowHeight: systemInfo.windowHeight,
+                    pixelRatio: systemInfo.pixelRatio || 1,
+                    platform: systemInfo.platform
+                };
+
+                console.log('设备信息:', deviceInfo);
+
+                // 计算适配尺寸
+                const sizes = this.calculateAdaptiveSizes(deviceInfo);
+
+                this.setData({
+                    deviceInfo: deviceInfo,
+                    actualSize: sizes.actualSize,
+                    canvasSize: sizes.canvasSize,
+                    containerSize: sizes.containerSize
+                });
+
+                console.log('计算的尺寸:', sizes);
+            } catch (error) {
+                console.error('获取设备信息失败:', error);
+                // 使用默认尺寸
+                this.setData({
+                    actualSize: this.properties.size,
+                    canvasSize: this.properties.size,
+                    containerSize: this.properties.size + 40
+                });
+            }
+        },
+
+        /**
+         * 计算适配尺寸
+         * @param {Object} deviceInfo 设备信息
+         * @returns {Object} 计算后的尺寸信息
+         */
+        calculateAdaptiveSizes(deviceInfo) {
+            const { windowWidth } = deviceInfo;
+            const baseSize = this.properties.size;
+
+            // 计算可用宽度（留出边距）
+            const availableWidth = windowWidth * 0.7; // 使用80%的屏幕宽度
+            const maxSize = Math.min(availableWidth, 500); // 最大不超过500rpx
+            const minSize = 280; // 最小280rpx
+
+            // 根据屏幕宽度调整尺寸
+            let adaptiveSize = baseSize;
+
+            if (windowWidth < 320) {
+                // 小屏设备
+                adaptiveSize = minSize;
+            } else if (windowWidth > 414) {
+                // 大屏设备，适当增大
+                adaptiveSize = Math.min(maxSize, baseSize * 1.1);
+            } else {
+                // 中等屏幕，使用基础尺寸或根据屏幕比例调整
+                adaptiveSize = Math.min(maxSize, Math.max(minSize, availableWidth * 0.7));
+            }
+
+            // 确保尺寸是偶数，避免渲染问题
+            adaptiveSize = Math.floor(adaptiveSize / 2) * 2;
+
+            // Canvas尺寸与显示尺寸保持一致，weapp-qrcode会自动处理像素比
+            const canvasSize = adaptiveSize;
+
+            // 容器尺寸稍大一些，留出内边距
+            const containerSize = adaptiveSize + 40;
+
+            return {
+                actualSize: adaptiveSize,
+                canvasSize: canvasSize,
+                containerSize: containerSize
+            };
+        },
+
         /**
          * 生成二维码
          */
@@ -105,10 +203,10 @@ Component({
                 await qrcode.generateQRCode({
                     text: encodedData,
                     canvasId: this.data.canvasId,
-                    size: this.data.size,
+                    size: this.data.canvasSize, // 使用计算出的Canvas尺寸
                     context: this,
                     callback: () => {
-                        console.log('二维码生成完成');
+                        console.log('二维码生成完成，使用尺寸:', this.data.canvasSize);
                         this.setData({
                             loading: false,
                             error: false
@@ -117,7 +215,8 @@ Component({
                         // 触发生成完成事件
                         this.triggerEvent('qr-generated', {
                             canvasId: this.data.canvasId,
-                            size: this.data.size,
+                            size: this.data.actualSize,
+                            canvasSize: this.data.canvasSize,
                             data: this.data.qrData,
                             type: this.data.qrType
                         });
